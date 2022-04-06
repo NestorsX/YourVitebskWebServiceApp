@@ -38,6 +38,18 @@ namespace MyVitebskWebServiceApp.Controllers
             return new ObjectResult(user);
         }
 
+        [HttpGet("auth/{username}/{password}")]
+        public async Task<ActionResult<User>> Get(string username, string password)
+        {
+            User user = await _context.Users.FirstOrDefaultAsync(x => x.Email == username && x.Password == password);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return new ObjectResult(user);
+        }
+
         // Inserts user into table (api/users)
         [HttpPost]
         public async Task<ActionResult<User>> Post(User user)
