@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyVitebskWebServiceApp", "MyVitebskWebServiceApp\MyVitebskWebServiceApp.csproj", "{28E79254-4523-4FDF-8973-074DE7BFB52B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YourVitebskWebServiceApp", "YourVitebskWebServiceApp\YourVitebskWebServiceApp.csproj", "{28E79254-4523-4FDF-8973-074DE7BFB52B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -2,18 +2,18 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using MyVitebskWebServiceApp.Models;
 using System.Threading.Tasks;
+using YourVitebskWebServiceApp.Models;
 
-namespace MyVitebskWebServiceApp.Controllers
+namespace YourVitebskWebServiceApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private MyVitebskDBContext _context;
+        private readonly YourVitebskDBContext _context;
 
-        public UsersController(MyVitebskDBContext context)
+        public UsersController(YourVitebskDBContext context)
         {
             _context = context;
         }
