@@ -1,4 +1,4 @@
-﻿namespace YourVitebskWebServiceApp
+﻿namespace YourVitebskWebServiceApp.Models
 {
     public class Service
     {

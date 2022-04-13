@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using YourVitebskWebServiceApp.Models;
 
 namespace YourVitebskWebServiceApp
 {

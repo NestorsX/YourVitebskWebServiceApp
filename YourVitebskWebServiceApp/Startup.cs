@@ -26,7 +26,7 @@ namespace YourVitebskWebServiceApp
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "YourVitebskWebServiceApp", Version = "v1" });
             });
 
-            //services.AddDbContext<YourVitebskDBContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
+            services.AddDbContext<YourVitebskDBContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
