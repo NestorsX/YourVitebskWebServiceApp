@@ -18,11 +18,22 @@ namespace YourVitebskWebServiceApp.Controllers
             _context = context;
         }
 
+        private async Task<UserDatum> GetUserDataForUser(User user)
+        {
+            return await _context.UserData.FirstOrDefaultAsync(x => x.UserId == user.UserId);
+        }
+
         // Gets the list of all users
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> Get()
         {
-            return await _context.Users.ToListAsync();
+            IEnumerable<User> users = await _context.Users.ToListAsync();
+            foreach (User user in users)
+            {
+                user.UserDatum = await GetUserDataForUser(user);
+            }
+
+            return new ObjectResult(users);
         }
 
         // Gets one user by id (api/users/1)
@@ -35,6 +46,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return NotFound();
             }
 
+            user.UserDatum = await GetUserDataForUser(user);
             return new ObjectResult(user);
         }
 
@@ -47,6 +59,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return NotFound();
             }
 
+            user.UserDatum = await GetUserDataForUser(user);
             return new ObjectResult(user);
         }
 
@@ -59,7 +72,14 @@ namespace YourVitebskWebServiceApp.Controllers
                 return BadRequest();
             }
 
+            UserDatum userDatum = user.UserDatum;
+            user.UserId = null;
+            user.UserDatum = null;
             _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            userDatum.UserDataId = null;
+            userDatum.UserId = (int)user.UserId;
+            _context.UserData.Add(userDatum);
             await _context.SaveChangesAsync();
             return Ok(user);
         }
@@ -91,6 +111,12 @@ namespace YourVitebskWebServiceApp.Controllers
             if (user == null)
             {
                 return NotFound();
+            }
+
+            user.UserDatum = await GetUserDataForUser(user);
+            if (user.UserDatum != null)
+            {
+                _context.UserData.Remove(user.UserDatum);
             }
 
             _context.Users.Remove(user);
