@@ -98,7 +98,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return NotFound();
             }
 
-            _context.Update(user);
+            _context.Users.Update(user);
             await _context.SaveChangesAsync();
             return Ok(user);
         }

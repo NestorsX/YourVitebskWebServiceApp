@@ -1,3 +1,28 @@
-﻿<h2>Главная</h2>
+﻿@model IEnumerable<YourVitebskWebServiceApp.Models.User>
+@{
+    ViewData["Title"] = "Пользователи";
+}
+<h2>@ViewData["Title"]</h2>
+<p>
+    <a asp-controller="Home" asp-action="Create">Добавить</a>
+</p>
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>Email</th>
+        <th></th>
+    </tr>
+ 
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.UserId</td>
+            <td>@item.Email</td>
 
-<a asp-action="Logout" asp-controller="Account">Выход</a>
+            <td>
+                <a asp-controller="Home" asp-action="Edit" asp-route-id="@item.UserId">Изменить</a> |
+                <a asp-controller="Home" asp-action="Delete" asp-route-id="@item.UserId">Удалить</a>
+            </td>
+        </tr>
+    }
+</table>
