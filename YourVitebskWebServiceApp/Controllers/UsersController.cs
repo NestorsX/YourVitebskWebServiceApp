@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using YourVitebskWebServiceApp.Models;
 
 namespace YourVitebskWebServiceApp.Controllers
 {

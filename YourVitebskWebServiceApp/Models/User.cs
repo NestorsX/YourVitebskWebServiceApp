@@ -1,4 +1,4 @@
-﻿namespace YourVitebskWebServiceApp.Models
+﻿namespace YourVitebskWebServiceApp
 {
     public class User
     {
