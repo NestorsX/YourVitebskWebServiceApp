@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using YourVitebskWebServiceApp.Interfaces;
+using YourVitebskWebServiceApp.Models;
 
 namespace YourVitebskWebServiceApp.Controllers
 {
     [Authorize]
-    public class HomeController : Controller
+    public class CommentController : Controller
     {
         public IActionResult Index()
         {

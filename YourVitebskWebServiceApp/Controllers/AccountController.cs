@@ -31,7 +31,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
+                User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password && u.RoleId == 2);
                 if (user != null)
                 {
                     await Authenticate(model.Email);

@@ -7,7 +7,7 @@ namespace YourVitebskWebServiceApp.Models
         [Key]
         public int? ServiceId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Необходимо ввести название сервиса")]
         public string Name { get; set; }
     }
 }

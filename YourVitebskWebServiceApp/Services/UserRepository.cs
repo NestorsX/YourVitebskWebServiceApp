@@ -1,14 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using YourVitebskWebServiceApp.Controllers;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
 
 namespace YourVitebskWebServiceApp.Services
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : IRepository<User>
     {
         private readonly YourVitebskDBContext _context;
 
@@ -17,19 +14,37 @@ namespace YourVitebskWebServiceApp.Services
             _context = context;
         }
 
-        public IEnumerable<User> GetUsers()
+        private UserDatum GetUserData(int userId)
         {
-            return _context.Users.ToList();
+            return _context.UserData.FirstOrDefault(x => x.UserId == userId);
+        }
+
+        public IEnumerable<User> Get()
+        {
+            IEnumerable<User> users = _context.Users.ToList().OrderBy(x => x.UserId);
+            foreach (User user in users)
+            {
+                user.UserDatum = GetUserData((int)user.UserId);
+            }
+            
+            return users;
         }
 
         public User Get(int id)
         {
-            return _context.Users.FirstOrDefault(x => x.UserId == id);
+            User user = _context.Users.FirstOrDefault(x => x.UserId == id);
+            user.UserDatum = GetUserData((int)user.UserId);
+            return user;
         }
 
         public void Create(User user)
         {
+            UserDatum userData = user.UserDatum;
+            user.UserDatum = null;
             _context.Users.Add(user);
+            _context.SaveChanges();
+            userData.UserId = user.UserId;
+            _context.UserData.Add(userData);
             _context.SaveChanges();
         }
 
@@ -41,7 +56,13 @@ namespace YourVitebskWebServiceApp.Services
 
         public void Delete(int id)
         {
-            _context.Users.Remove(Get(id));
+            User user = Get(id);
+            if (user.UserDatum != null)
+            {
+                _context.UserData.Remove(user.UserDatum);
+            }
+
+            _context.Users.Remove(user);
             _context.SaveChanges();
         }
     }

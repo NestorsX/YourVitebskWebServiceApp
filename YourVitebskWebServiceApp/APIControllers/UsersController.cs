@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using YourVitebskWebServiceApp.Models;
 
-namespace YourVitebskWebServiceApp.Controllers
+namespace YourVitebskWebServiceApp.APIControllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -78,7 +78,7 @@ namespace YourVitebskWebServiceApp.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             userDatum.UserDataId = null;
-            userDatum.UserId = (int)user.UserId;
+            userDatum.UserId = user.UserId;
             _context.UserData.Add(userDatum);
             await _context.SaveChangesAsync();
             return Ok(user);
@@ -107,7 +107,7 @@ namespace YourVitebskWebServiceApp.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<User>> Delete(int id)
         {
-            User user = _context.Users.FirstOrDefault(x => x.UserId == id);
+            User user = await _context.Users.FirstOrDefaultAsync(x => x.UserId == id);
             if (user == null)
             {
                 return NotFound();

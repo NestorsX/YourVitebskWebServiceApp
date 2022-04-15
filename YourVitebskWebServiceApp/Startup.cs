@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using YourVitebskWebServiceApp.Interfaces;
+using YourVitebskWebServiceApp.Models;
 using YourVitebskWebServiceApp.Services;
 
 namespace YourVitebskWebServiceApp
@@ -28,7 +29,10 @@ namespace YourVitebskWebServiceApp
                 options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
             });
 
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IRepository<User>, UserRepository>();
+            services.AddScoped<IRepository<Role>, RoleRepository>();
+            services.AddScoped<IRepository<Service>, ServiceRepository>();
+            //services.AddScoped<IRepository<Comment>, CommentRepository>();
             services.AddControllersWithViews();
             services.AddSwaggerGen(c =>
             {
