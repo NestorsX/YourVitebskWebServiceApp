@@ -22,7 +22,7 @@
             <label asp-for="RoleId">Роль</label>
             <select asp-for="RoleId" class="form-control form-control-sm" >
                 <option value="0">Выберите роль</option>
-                @foreach (YourVitebskWebServiceApp.Models.Role role in ViewBag.Roles)
+                @foreach (Role role in ViewBag.Roles)
                 {
                     if ((int)ViewData["RoleId"] == role.RoleId)
                     {

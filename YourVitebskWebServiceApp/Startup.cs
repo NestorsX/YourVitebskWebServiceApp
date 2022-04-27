@@ -32,7 +32,7 @@ namespace YourVitebskWebServiceApp
             services.AddScoped<IRepository<User>, UserRepository>();
             services.AddScoped<IRepository<Role>, RoleRepository>();
             services.AddScoped<IRepository<Service>, ServiceRepository>();
-            //services.AddScoped<IRepository<Comment>, CommentRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddControllersWithViews();
             services.AddSwaggerGen(c =>
             {

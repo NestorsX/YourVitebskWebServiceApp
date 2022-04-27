@@ -1,0 +1,30 @@
+﻿@model YourVitebskWebServiceApp.Models.Comment
+@{
+    ViewData["Title"] = "Удаление комментария";
+}
+<h2>@ViewData["Title"]</h2>
+
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>Сервис</th>
+        <th>Пользователь</th>
+        <th>Комментарий</th>
+    </tr>
+    <tr>
+        <td>@Model.CommentId</td>
+        <td>@ViewData["Service"]</td>
+        <td>@ViewData["UserName"]</td>
+        <td>@Model.Message</td>
+    </tr>
+</table>
+ 
+<form asp-action="Delete" asp-controller="Comment" method="post">
+    <div class="form-group">
+        <input type="submit" class="btn btn-outline-secondary" value="Удалить" />
+    </div>
+</form>
+
+<div>
+    <a asp-controller="Comment" asp-action="Index">Вернуться к списку</a>
+</div>

@@ -100,6 +100,7 @@ namespace YourVitebskWebServiceApp.Controllers
         [HttpPost]
         public ActionResult Edit(User newUser)
         {
+            ViewBag.Roles = _context.Roles;
             User user = _repository.Get((int)newUser.UserId);
             if (_context.Users.FirstOrDefault(x => x.Email == newUser.Email && newUser.Email != user.Email) != null)
             {
@@ -108,6 +109,7 @@ namespace YourVitebskWebServiceApp.Controllers
 
             if (newUser.RoleId == 0)
             {
+                ViewData["RoleId"] = 0;
                 ModelState.AddModelError("RoleId", "Выберите роль");
             }
 
