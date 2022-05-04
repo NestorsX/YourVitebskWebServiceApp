@@ -1,0 +1,26 @@
+﻿@model YourVitebskWebServiceApp.Models.Service
+@{
+    ViewData["Title"] = "Удаление сервиса";
+}
+<h2>@ViewData["Title"]</h2>
+
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>Сервис</th>
+    </tr>
+    <tr>
+        <td>@Model.ServiceId</td>
+        <td>@Model.Name</td>
+    </tr>
+</table>
+ 
+<form asp-controller="Services" asp-action="Delete" method="post">
+    <div class="form-group">
+        <input type="submit" class="btn btn-outline-secondary" value="Удалить" />
+    </div>
+</form>
+
+<div>
+    <a asp-controller="Services" asp-action="Index">Вернуться к списку</a>
+</div>

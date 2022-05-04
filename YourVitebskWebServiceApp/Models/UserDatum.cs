@@ -18,7 +18,6 @@ namespace YourVitebskWebServiceApp.Models
         public string LastName { get; set; }
 
         [Phone(ErrorMessage = "Неверный формат телефона")]
-        [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
     }
 }

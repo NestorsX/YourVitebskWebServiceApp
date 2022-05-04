@@ -1,0 +1,26 @@
+﻿@model YourVitebskWebServiceApp.Models.Role
+@{
+    ViewData["Title"] = "Удаление роли";
+}
+<h2>@ViewData["Title"]</h2>
+
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>Роль</th>
+    </tr>
+    <tr>
+        <td>@Model.RoleId</td>
+        <td>@Model.Name</td>
+    </tr>
+</table>
+ 
+<form asp-action="Delete" asp-controller="Roles" method="post">
+    <div class="form-group">
+        <input type="submit" class="btn btn-outline-secondary" value="Удалить" />
+    </div>
+</form>
+
+<div>
+    <a asp-controller="Roles" asp-action="Index">Вернуться к списку</a>
+</div>

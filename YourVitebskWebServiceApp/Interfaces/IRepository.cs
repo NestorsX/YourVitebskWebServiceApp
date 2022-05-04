@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace YourVitebskWebServiceApp.Interfaces
 {
-    public interface IRepository<T>
+    public interface IRepository<T> : IDisposable
     {
-        IEnumerable<T> Get();
+        IEnumerable<IViewModel> Get();
 
         T Get(int id);
 

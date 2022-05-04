@@ -6,9 +6,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using YourVitebskWebServiceApp.APIServiceInterfaces;
+using YourVitebskWebServiceApp.APIServices;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
-using YourVitebskWebServiceApp.Services;
+using YourVitebskWebServiceApp.Repositories;
 
 namespace YourVitebskWebServiceApp
 {
@@ -23,16 +25,18 @@ namespace YourVitebskWebServiceApp
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IUsersService, UsersService>();
+
+            services.AddScoped<IRepository<User>, UsersRepository>();
+            services.AddScoped<IRepository<Role>, RolesRepository>();
+            services.AddScoped<IRepository<Service>, ServicesRepository>();
+            services.AddScoped<ICommentRepository, CommentsRepository>();
             services.AddDbContext<YourVitebskDBContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
             {
                 options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
             });
-
-            services.AddScoped<IRepository<User>, UserRepository>();
-            services.AddScoped<IRepository<Role>, RoleRepository>();
-            services.AddScoped<IRepository<Service>, ServiceRepository>();
-            services.AddScoped<ICommentRepository, CommentRepository>();
+            
             services.AddControllersWithViews();
             services.AddSwaggerGen(c =>
             {

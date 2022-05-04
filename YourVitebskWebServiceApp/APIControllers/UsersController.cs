@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using YourVitebskWebServiceApp.Models;
+using YourVitebskWebServiceApp.APIServiceInterfaces;
+using System;
 
 namespace YourVitebskWebServiceApp.APIControllers
 {
@@ -11,117 +11,86 @@ namespace YourVitebskWebServiceApp.APIControllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly YourVitebskDBContext _context;
+        private readonly IUsersService _usersService;
 
-        public UsersController(YourVitebskDBContext context)
+        public UsersController(IUsersService usersService)
         {
-            _context = context;
+            _usersService = usersService;
         }
 
-        private async Task<UserDatum> GetUserDataForUser(User user)
-        {
-            return await _context.UserData.FirstOrDefaultAsync(x => x.UserId == user.UserId);
-        }
-
-        // Gets the list of all users
+        // Gets all users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> Get()
+        public async Task<IEnumerable<User>> GetAllUsers()
         {
-            IEnumerable<User> users = await _context.Users.ToListAsync();
-            foreach (User user in users)
-            {
-                user.UserDatum = await GetUserDataForUser(user);
-            }
-
-            return new ObjectResult(users);
+            return await _usersService.GetAllUsers();
         }
 
-        // Gets one user by id (api/users/1)
+        // Gets user by id
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> Get(int id)
+        public async Task<ActionResult<User>> GetUser(int id)
         {
-            User user = await _context.Users.FirstOrDefaultAsync(x => x.UserId == id);
+            User user = await _usersService.GetById(id);
             if (user == null)
             {
-                return NotFound();
+                return NotFound("Пользователь не найден!");
             }
 
-            user.UserDatum = await GetUserDataForUser(user);
-            return new ObjectResult(user);
+            return Ok(user);
         }
 
-        [HttpGet("auth/{username}/{password}")]
-        public async Task<ActionResult<User>> Get(string username, string password)
+        // Gets user by email and password
+        [HttpGet("auth/{email}/{password}")]
+        public async Task<ActionResult<User>> AuthUser(string email, string password)
         {
-            User user = await _context.Users.FirstOrDefaultAsync(x => x.Email == username && x.Password == password);
-            if (user == null)
+            try
             {
-                return NotFound();
-            }
+                User user = await _usersService.GetByData(email, password);
+                if (user == null)
+                {
+                    return NotFound();
+                }
 
-            user.UserDatum = await GetUserDataForUser(user);
-            return new ObjectResult(user);
+                return Ok(user);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // Inserts user into table (api/users)
+        // Inserts user into db
         [HttpPost]
-        public async Task<ActionResult<User>> Post(User user)
+        public async Task<ActionResult<User>> CreateUser([FromBody] User user)
         {
-            if (user == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
-            UserDatum userDatum = user.UserDatum;
-            user.UserId = null;
-            user.UserDatum = null;
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            userDatum.UserDataId = null;
-            userDatum.UserId = user.UserId;
-            _context.UserData.Add(userDatum);
-            await _context.SaveChangesAsync();
-            return Ok(user);
+            try
+            {
+                User newUser = await _usersService.Create(user);
+                return Ok(newUser);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // Updates user (api/users)
+        // Updates user
         [HttpPut]
-        public async Task<ActionResult<User>> Put(User user)
+        public async Task<ActionResult> UpdateUser([FromBody] User user)
         {
-            if (user == null)
+            try
             {
-                return BadRequest();
+                await _usersService.Update(user);
+                return Ok();
             }
-
-            if (!_context.Users.Any(x => x.UserId == user.UserId))
+            catch (InvalidOperationException ex)
             {
-                return NotFound();
+                return BadRequest(ex.Message);
             }
-
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync();
-            return Ok(user);
-        }
-
-        // Deletes user by id
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<User>> Delete(int id)
-        {
-            User user = await _context.Users.FirstOrDefaultAsync(x => x.UserId == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            user.UserDatum = await GetUserDataForUser(user);
-            if (user.UserDatum != null)
-            {
-                _context.UserData.Remove(user.UserDatum);
-            }
-
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-            return Ok();
         }
     }
 }
