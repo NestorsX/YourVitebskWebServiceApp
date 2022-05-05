@@ -29,6 +29,7 @@ namespace YourVitebskWebServiceApp
 
             services.AddScoped<IRepository<User>, UsersRepository>();
             services.AddScoped<IRepository<Role>, RolesRepository>();
+            services.AddScoped<IRepository<Cafe>, CafesRepository>();
             services.AddScoped<IRepository<Service>, ServicesRepository>();
             services.AddScoped<ICommentRepository, CommentsRepository>();
             services.AddDbContext<YourVitebskDBContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
@@ -36,7 +37,7 @@ namespace YourVitebskWebServiceApp
             {
                 options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
             });
-            
+
             services.AddControllersWithViews();
             services.AddSwaggerGen(c =>
             {

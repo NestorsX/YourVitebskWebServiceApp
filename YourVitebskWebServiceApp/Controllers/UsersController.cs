@@ -38,6 +38,15 @@ namespace YourVitebskWebServiceApp.Controllers
                 ModelState.AddModelError("Email", "Email уже используется");
             }
 
+            if (newUser.Password == null)
+            {
+                ModelState.AddModelError("Password", "Необходимо указать пароль");
+            }
+            else if(newUser.Password.Length < 6)
+            {
+                ModelState.AddModelError("Password", "Длина пароля должна быть не менее 6 символов");
+            }
+
             if (newUser.RoleId == 0)
             {
                 ModelState.AddModelError("RoleId", "Выберите роль");
@@ -87,6 +96,7 @@ namespace YourVitebskWebServiceApp.Controllers
             User user = _repository.Get(id);
             if (user != null)
             {
+                user.Password = null;
                 ViewBag.Roles = _context.Roles;
                 ViewData["RoleId"] = user.RoleId;
                 return View(user);
@@ -98,11 +108,15 @@ namespace YourVitebskWebServiceApp.Controllers
         [HttpPost]
         public ActionResult Edit(User newUser)
         {
-            ViewBag.Roles = _context.Roles;
             User user = _repository.Get((int)newUser.UserId);
             if (_context.Users.FirstOrDefault(x => x.Email == newUser.Email && newUser.Email != user.Email) != null)
             {
                 ModelState.AddModelError("Email", "Email уже используется");
+            }
+
+            if (newUser.Password != null && newUser.Password.Length < 6)
+            {
+                ModelState.AddModelError("Password", "Длина пароля должна быть не менее 6 символов");
             }
 
             if (newUser.RoleId == 0)
@@ -122,7 +136,7 @@ namespace YourVitebskWebServiceApp.Controllers
             if (ModelState.IsValid)
             {
                 user.Email = newUser.Email;
-                user.Password = newUser.Password;
+                user.Password = newUser.Password == null ? user.Password : newUser.Password;
                 user.RoleId = newUser.RoleId;
                 user.UserDatum.FirstName = newUser.UserDatum.FirstName;
                 user.UserDatum.SecondName = newUser.UserDatum.SecondName;
@@ -132,6 +146,8 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.Roles = _context.Roles;
+            ViewData["RoleId"] = user.RoleId;
             return View(newUser);
         }
 

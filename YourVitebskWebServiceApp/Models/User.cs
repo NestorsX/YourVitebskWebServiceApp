@@ -11,8 +11,6 @@ namespace YourVitebskWebServiceApp.Models
         [EmailAddress(ErrorMessage = "Некорректный адрес")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Необходимо ввести пароль")]
-        [MinLength(6, ErrorMessage = "Длина пароля должна быть не менее 6 символов")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Необходимо указать роль")]

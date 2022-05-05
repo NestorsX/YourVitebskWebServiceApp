@@ -24,6 +24,6 @@ namespace YourVitebskWebServiceApp.Models
 
         public string ExternalLink { get; set; }
 
-        public double Rating { get; set; }
+        public double? Rating { get; set; }
     }
 }

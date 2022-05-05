@@ -1,0 +1,37 @@
+﻿@model IEnumerable<YourVitebskWebServiceApp.ViewModels.CafeViewModel>
+@{
+    ViewData["Title"] = "Кафе";
+}
+<h2>@ViewData["Title"]</h2>
+
+<table class="table table-striped">
+    <tr>
+        <th>ID</th>
+        <th>Тип</th>
+        <th>Название</th>
+        <th>Описание</th>
+        <th>Время работы</th>
+        <th>Адрес</th>
+        <th>Ссылка</th>
+        <th>Рейтинг</th>
+        <th><a asp-controller="Cafes" asp-action="Create">Добавить</a></th>
+    </tr>
+    
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.CafeId</td>
+            <td>@item.CafeType</td>
+            <td>@item.Title</td>
+            <td>@item.Description</td>
+            <td>@item.WorkingTime</td>
+            <td>@item.Address</td>
+            <td>@item.ExternalLink</td>
+            <td>@item.Rating</td>
+            <td>
+                <a asp-controller="Cafes" asp-action="Edit" asp-route-id="@item.CafeId">Изменить</a> |
+                <a asp-controller="Cafes" asp-action="Delete" asp-route-id="@item.CafeId">Удалить</a>
+            </td>
+        </tr>
+    }
+</table>

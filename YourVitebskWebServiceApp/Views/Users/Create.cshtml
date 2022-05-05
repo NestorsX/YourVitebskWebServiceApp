@@ -1,25 +1,30 @@
 ﻿@model YourVitebskWebServiceApp.Models.User
-@{
-    ViewData["Title"] = "Новый пользователь";
-}
 
-<h2>@ViewData["Title"]</h2>
+<div class="row mb-3">
+    <div class="col-auto me-auto">
+        <h2>Добавление пользователя</h2>
+    </div>
+    <div class="col-auto">
+        <a asp-controller="Users" asp-action="Index">Вернуться к списку</a>
+    </div>
+</div>
  
 <form asp-action="Create" asp-controller="Users" method="post" enctype="multipart/form-data">
     <div class="validation" asp-validation-summary="ModelOnly"></div>
     <div>
-        <div class="form-group">
-            <label asp-for="Email">Email<i>*</i></label>
-            <input type="text" asp-for="Email" class="form-control form-control-sm" />
-            <span asp-validation-for="Email"></span>
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label">Email<i>*</i></label>
+            <input type="email" asp-for="Email" class="form-control form-control-sm" placeholder="example@mail.com" />
+            <span class="badge bg-danger" asp-validation-for="Email"></span>
         </div>
-        <div class="form-group">
-            <label asp-for="Password">Пароль<i>*</i></label>
-            <input type="text" asp-for="Password" class="form-control form-control-sm" />
-            <span asp-validation-for="Password"></span>
+        <div class="mb-3">
+            <label asp-for="Password" class="form-label">Пароль<i>*</i></label>
+            <input type="text" asp-for="Password" class="form-control form-control-sm" aria-describedby="passwordNotify" />
+            <div id="passwordNotify" class="form-text">Пароль должен быть не короче 6 символов</div>
+            <span class="badge bg-danger" asp-validation-for="Password"></span>
         </div>
-        <div class="form-group">
-            <label asp-for="RoleId">Роль<i>*</i></label>
+        <div class="mb-3">
+            <label asp-for="RoleId" class="form-label">Роль<i>*</i></label>
             <select asp-for="RoleId" class="form-control form-control-sm" >
                 <option value="0">Выберите роль</option>
                 @foreach (YourVitebskWebServiceApp.Models.Role role in ViewBag.Roles)
@@ -27,40 +32,36 @@
                     <option value="@role.RoleId">@role.Name</option>
                 }
             </select>
-            <span asp-validation-for="RoleId"></span>
+            <span class="badge bg-danger" asp-validation-for="RoleId"></span>
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="UserDatum.FirstName">Имя<i>*</i></label>
             <input type="text" asp-for="UserDatum.FirstName" class="form-control  form-control-sm" />
-            <span asp-validation-for="UserDatum.FirstName"></span>
+            <span class="badge bg-danger" asp-validation-for="UserDatum.FirstName"></span>
 
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="UserDatum.SecondName">Отчество</label>
             <input type="text" asp-for="UserDatum.SecondName" class="form-control  form-control-sm" />
-            <span asp-validation-for="UserDatum.SecondName"></span>
+            <span class="badge bg-danger" asp-validation-for="UserDatum.SecondName"></span>
 
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="UserDatum.LastName">Фамилия<i>*</i></label>
             <input type="text" asp-for="UserDatum.LastName" class="form-control  form-control-sm" />
-            <span asp-validation-for="UserDatum.LastName"></span>
+            <span class="badge bg-danger" asp-validation-for="UserDatum.LastName"></span>
 
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="UserDatum.PhoneNumber">Телефон</label>
-            <input type="text" asp-for="UserDatum.PhoneNumber" class="form-control  form-control-sm" id="Phone"/>
-            <span asp-validation-for="UserDatum.PhoneNumber"></span>
+            <input type="text" asp-for="UserDatum.PhoneNumber" class="form-control  form-control-sm" placeholder="+375(__)___-__-__" id="Phone"/>
+            <span class="badge bg-danger" asp-validation-for="UserDatum.PhoneNumber"></span>
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <input type="submit" value="Сохранить" class="btn btn-outline-secondary" />
         </div>
     </div>
 </form>
- 
-<div>
-    <a asp-controller="Users" asp-action="Index">Вернуться к списку</a>
-</div>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/plugins/jquery.maskedinput.js"></script>

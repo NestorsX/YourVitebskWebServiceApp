@@ -7,7 +7,7 @@ namespace YourVitebskWebServiceApp.Models
         [Key]
         public int? CafeTypeId { get; set; }
 
-        [Required(ErrorMessage = "Необходимо ввести тип общепита")]
+        [Required(ErrorMessage = "Необходимо указать тип зведения")]
         public string Name { get; set; }
     }
 }

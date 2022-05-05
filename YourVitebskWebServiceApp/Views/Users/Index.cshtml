@@ -1,43 +1,47 @@
 ﻿@model IEnumerable<YourVitebskWebServiceApp.ViewModels.UserViewModel>
-@{
-    ViewData["Title"] = "Пользователи";
-}
-<h2>@ViewData["Title"]</h2>
 
-<table class="table">
-    <tr>
-        <th>ID</th>
-        <th>Email</th>
-        <th>Роль</th>
-        <th>Имя</th>
-        <th>Отчество</th>
-        <th>Фамилия</th>
-        <th>Телефон</th>
-        <th><a asp-controller="Users" asp-action="Create">Добавить</a></th>
-    </tr>
-    
-    @foreach (var item in Model)
-    {
+<div class="mb-3">
+    <h2>Пользователи</h2>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped align-middle">
         <tr>
-            <td>@item.UserId</td>
-            <td>@item.Email</td>
-            <td>@item.Role</td>
-            <td>@item.FirstName</td>
-            <td>@item.SecondName</td>
-            <td>@item.LastName</td>
-            <td>@item.PhoneNumber</td>
-
-            @if (item.UserId != 1)
-            {
-                <td>
-                    <a asp-controller="Users" asp-action="Edit" asp-route-id="@item.UserId">Изменить</a> |
-                    <a asp-controller="Users" asp-action="Delete" asp-route-id="@item.UserId">Удалить</a>
-                </td>
-            }
-            else
-            {
-                <td>-</td>
-            }
+            <th>ID</th>
+            <th>Email</th>
+            <th>Роль</th>
+            <th>Имя</th>
+            <th>Отчество</th>
+            <th>Фамилия</th>
+            <th>Телефон</th>
+            <th><a class="btn btn-outline-dark" asp-controller="Users" asp-action="Create">Добавить</a></th>
         </tr>
-    }
-</table>
+    
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.UserId</td>
+                <td>@item.Email</td>
+                <td>@item.Role</td>
+                <td>@item.FirstName</td>
+                <td>@item.SecondName</td>
+                <td>@item.LastName</td>
+                <td>@item.PhoneNumber</td>
+
+                @if (item.UserId != 1)
+                {
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a class="btn btn-outline-dark" asp-controller="Users" asp-action="Edit" asp-route-id="@item.UserId">Изменить</a>
+                            <a class="btn btn-outline-danger" asp-controller="Users" asp-action="Delete" asp-route-id="@item.UserId">Удалить</a>
+                        </div>
+                    </td>
+                }
+                else
+                {
+                    <td></td>
+                }
+            </tr>
+        }
+    </table>
+</div>
