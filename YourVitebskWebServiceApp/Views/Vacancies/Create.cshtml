@@ -1,0 +1,50 @@
+﻿@model YourVitebskWebServiceApp.Models.Vacancy
+
+<div class="row mb-3">
+    <div class="col-auto me-auto">
+        <h2>Добавление вакансии</h2>
+        <div class="form-text"><i>*</i> - обязательные поля</div>
+    </div>
+    <div class="col-auto">
+        <a asp-controller="Vacancies" asp-action="Index">Вернуться к списку</a>
+    </div>
+</div>
+ 
+<form asp-action="Create" asp-controller="Vacancies" method="post" enctype="multipart/form-data">
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
+    <div>
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label">Название<i>*</i></label>
+            <input type="text" asp-for="Title" class="form-control form-control-sm" />
+            <span class="badge bg-danger" asp-validation-for="Title"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Описание<i>*</i></label>
+            <textarea asp-for="Description" class="form-control form-control-sm" ></textarea>
+            <span class="badge bg-danger" asp-validation-for="Description"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Salary" class="form-label">Предполагаемая з/п<i>*</i></label>
+            <input type="text" asp-for="Salary" class="form-control form-control-sm" placeholder="от 1000 б.р." id="DateTime"/>
+            <span class="badge bg-danger" asp-validation-for="Salary"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="CompanyName" class="form-label">Компания-наниматель<i>*</i></label>
+            <input type="text" asp-for="CompanyName" class="form-control form-control-sm" placeholder="ООО &#34;Разработка&#34;" id="DateTime"/>
+            <span class="badge bg-danger" asp-validation-for="CompanyName"></span>
+        </div>
+         <div class="mb-3">
+            <label asp-for="Contacts" class="form-label">Контакты<i>*</i></label>
+            <textarea asp-for="Contacts" class="form-control form-control-sm" placeholder="Email: example@mail.com&#10;Телефон: 8(800)555-35-35" ></textarea>
+            <span class="badge bg-danger" asp-validation-for="Contacts"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Address" class="form-label">Адрес<i>*</i></label>
+            <input type="text" asp-for="Address" class="form-control form-control-sm" placeholder="ул. Ленина, 29" />
+            <span class="badge bg-danger" asp-validation-for="Address"></span>
+        </div>
+        <div class="mb-3">
+            <input type="submit" value="Сохранить" class="btn btn-outline-secondary" />
+        </div>
+    </div>
+</form>

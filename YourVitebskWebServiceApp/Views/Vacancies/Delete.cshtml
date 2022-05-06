@@ -1,0 +1,41 @@
+﻿@model YourVitebskWebServiceApp.Models.Vacancy
+
+<div class="row mb-3">
+    <div class="col-auto me-auto">
+        <h2>Удаление вакансии</h2>
+    </div>
+    <div class="col-auto">
+        <a asp-controller="Vacancies" asp-action="Index">Вернуться к списку</a>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped align-middle">
+        <tr>
+            <th>ID</th>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>З/п</th>
+            <th>Компания-наниматель</th>
+            <th>Контакты</th>
+            <th>Адрес</th>
+            <th>Дата публикации</th>
+        </tr>
+        <tr>
+            <td>@Model.VacancyId</td>
+            <td>@Model.Title</td>
+            <td>@Model.Description</td>
+            <td>@Model.Salary</td>
+            <td>@Model.CompanyName</td>
+            <td>@Model.Contacts</td>
+            <td>@Model.Address</td>
+            <td>@Model.PublishDate.ToString("yyyy-MM-dd")</td>
+        </tr>
+    </table>
+</div>
+ 
+<form asp-action="Delete" asp-controller="Vacancies" method="post">
+    <div class="mb-3">
+        <input type="submit" class="btn btn-outline-danger" value="Удалить" />
+    </div>
+</form>

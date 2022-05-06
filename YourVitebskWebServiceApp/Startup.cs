@@ -33,6 +33,7 @@ namespace YourVitebskWebServiceApp
             services.AddScoped<IRepository<PosterType>, PosterTypesRepository>();
             services.AddScoped<IRepository<Cafe>, CafesRepository>();
             services.AddScoped<IRepository<CafeType>, CafeTypesRepository>();
+            services.AddScoped<IRepository<Vacancy>, VacanciesRepository>();
             services.AddScoped<ICommentRepository, CommentsRepository>();
             services.AddDbContext<YourVitebskDBContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>

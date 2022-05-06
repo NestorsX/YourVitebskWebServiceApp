@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using YourVitebskWebServiceApp.Interfaces;
 
 namespace YourVitebskWebServiceApp.Models
 {
-    public class Vacancy
+    public class Vacancy : IViewModel
     {
         [Key]
         public int? VacancyId { get; set; }
@@ -19,8 +21,12 @@ namespace YourVitebskWebServiceApp.Models
         [Required(ErrorMessage = "Необходимо указать компанию-нанимателя")]
         public string CompanyName { get; set; }
 
+        [Required(ErrorMessage = "Необходимо указать контактные данные")]
+        public string Contacts { get; set; }
+
         [Required(ErrorMessage = "Необходимо указать адрес")]
         public string Address { get; set; }
 
+        public DateTime PublishDate { get; set; }
     }
 }
