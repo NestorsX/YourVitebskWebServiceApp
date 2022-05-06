@@ -14,7 +14,7 @@
             <th>Отчество</th>
             <th>Фамилия</th>
             <th>Телефон</th>
-            <th><a class="btn btn-outline-dark" asp-controller="Users" asp-action="Create">Добавить</a></th>
+            <th><a class="btn btn-outline-dark float-end" asp-controller="Users" asp-action="Create">Добавить</a></th>
         </tr>
     
         @foreach (var item in Model)
@@ -31,7 +31,7 @@
                 @if (item.UserId != 1)
                 {
                     <td>
-                        <div class="btn-group" role="group">
+                        <div class="btn-group float-end" role="group">
                             <a class="btn btn-outline-dark" asp-controller="Users" asp-action="Edit" asp-route-id="@item.UserId">Изменить</a>
                             <a class="btn btn-outline-danger" asp-controller="Users" asp-action="Delete" asp-route-id="@item.UserId">Удалить</a>
                         </div>

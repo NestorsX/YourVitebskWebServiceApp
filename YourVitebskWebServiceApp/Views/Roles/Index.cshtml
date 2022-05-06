@@ -1,33 +1,37 @@
 ﻿@model IEnumerable<YourVitebskWebServiceApp.Models.Role>
-@{
-    ViewData["Title"] = "Роли";
-}
-<h2>@ViewData["Title"]</h2>
 
-<table class="table table-striped">
-    <tr>
-        <th>ID</th>
-        <th>Роль</th>
-        <th><a asp-controller="Roles" asp-action="Create">Добавить</a></th>
-    </tr>
-    
-    @foreach (var item in Model)
-    {
+<div class="mb-3">
+    <h2>Роли</h2>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped align-middle">
         <tr>
-            <td>@item.RoleId</td>
-            <td>@item.Name</td>
-
-            @if (item.RoleId != 1 && item.RoleId != 2)
-            {
-                <td>
-                    <a asp-controller="Roles" asp-action="Edit" asp-route-id="@item.RoleId">Изменить</a> |
-                    <a asp-controller="Roles" asp-action="Delete" asp-route-id="@item.RoleId">Удалить</a>
-                </td>
-            }
-            else
-            {
-                <td>-</td>
-            }
+            <th>ID</th>
+            <th>Роль</th>
+            <th><a class="btn btn-outline-dark float-end" asp-controller="Roles" asp-action="Create">Добавить</a></th>
         </tr>
-    }
-</table>
+    
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.RoleId</td>
+                <td>@item.Name</td>
+
+                @if (item.RoleId > 2)
+                {
+                    <td>
+                        <div class="btn-group float-end" role="group">
+                            <a class="btn btn-outline-dark" asp-controller="Roles" asp-action="Edit" asp-route-id="@item.RoleId">Изменить</a>
+                            <a class="btn btn-outline-danger" asp-controller="Roles" asp-action="Delete" asp-route-id="@item.RoleId">Удалить</a>
+                        </div>
+                    </td>
+                }
+                else
+                {
+                    <td></td>
+                }
+            </tr>
+        }
+    </table>
+</div>

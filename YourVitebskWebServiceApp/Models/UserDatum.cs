@@ -14,7 +14,7 @@ namespace YourVitebskWebServiceApp.Models
 
         public string SecondName { get; set; }
 
-        [Required(ErrorMessage = "Необходимо ввести Фамилию")]
+        [Required(ErrorMessage = "Необходимо ввести фамилию")]
         public string LastName { get; set; }
 
         [Phone(ErrorMessage = "Неверный формат телефона")]

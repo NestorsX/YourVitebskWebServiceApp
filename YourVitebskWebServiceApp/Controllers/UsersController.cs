@@ -42,10 +42,6 @@ namespace YourVitebskWebServiceApp.Controllers
             {
                 ModelState.AddModelError("Password", "Необходимо указать пароль");
             }
-            else if(newUser.Password.Length < 6)
-            {
-                ModelState.AddModelError("Password", "Длина пароля должна быть не менее 6 символов");
-            }
 
             if (newUser.RoleId == 0)
             {
@@ -112,11 +108,6 @@ namespace YourVitebskWebServiceApp.Controllers
             if (_context.Users.FirstOrDefault(x => x.Email == newUser.Email && newUser.Email != user.Email) != null)
             {
                 ModelState.AddModelError("Email", "Email уже используется");
-            }
-
-            if (newUser.Password != null && newUser.Password.Length < 6)
-            {
-                ModelState.AddModelError("Password", "Длина пароля должна быть не менее 6 символов");
             }
 
             if (newUser.RoleId == 0)
