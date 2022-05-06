@@ -1,0 +1,64 @@
+﻿@model YourVitebskWebServiceApp.Models.Cafe
+
+<div class="row mb-3">
+    <div class="col-auto me-auto">
+        <h2>Редактирование заведения</h2>
+    </div>
+    <div class="col-auto">
+        <a asp-controller="Cafes" asp-action="Index">Вернуться к списку</a>
+    </div>
+</div>
+ 
+<form asp-action="Edit" asp-controller="Cafes" method="post" enctype="multipart/form-data">
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
+    <div>
+        <input type="hidden" asp-for="CafeId" />
+       <div class="mb-3">
+            <label asp-for="CafeTypeId" class="form-label">Тип заведения<i>*</i></label>
+            <select asp-for="CafeTypeId" class="form-control form-control-sm" >
+                <option value="0">Выберите тип заведения</option>
+                @foreach (CafeType cafeType in ViewBag.CafeTypes)
+                {
+                    @if ((int)ViewData["CafeTypeId"] == cafeType.CafeTypeId)
+                    {
+                        <option value="@cafeType.CafeTypeId" selected>@cafeType.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@cafeType.CafeTypeId">@cafeType.Name</option>
+                    }
+                }
+            </select>
+            <span class="badge bg-danger" asp-validation-for="CafeTypeId"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label">Название<i>*</i></label>
+            <input type="text" asp-for="Title" class="form-control form-control-sm" />
+            <span class="badge bg-danger" asp-validation-for="Title"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Описание<i>*</i></label>
+            <textarea asp-for="Description" class="form-control form-control-sm" ></textarea>
+            <span class="badge bg-danger" asp-validation-for="Description"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="WorkingTime" class="form-label">Время работы<i>*</i></label>
+            <textarea asp-for="WorkingTime" class="form-control form-control-sm" ></textarea>
+            <span class="badge bg-danger" asp-validation-for="WorkingTime"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Address" class="form-label">Адрес<i>*</i></label>
+            <input type="text" asp-for="Address" class="form-control form-control-sm" />
+            <span class="badge bg-danger" asp-validation-for="Address"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="ExternalLink" class="form-label">Ссылка</label>
+            <input type="url" asp-for="ExternalLink" class="form-control form-control-sm" aria-describedby="linkNotify" />
+            <div id="linkNotify" class="form-text">Ссылка на внешний ресурс</div>
+            <span class="badge bg-danger" asp-validation-for="ExternalLink"></span>
+        </div>
+        <div class="mb-3">
+            <input type="submit" value="Сохранить" class="btn btn-outline-secondary" />
+        </div>
+    </div>
+</form>

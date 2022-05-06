@@ -32,7 +32,6 @@ namespace YourVitebskWebServiceApp.Controllers
         [HttpPost]
         public IActionResult CreateAsync(User newUser)
         {
-            ViewBag.Roles = _context.Roles;
             if (_context.Users.FirstOrDefault(x => x.Email == newUser.Email) != null)
             {
                 ModelState.AddModelError("Email", "Email уже используется");
@@ -79,6 +78,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.Roles = _context.Roles;
             return View(newUser);
         }
 
@@ -112,7 +112,6 @@ namespace YourVitebskWebServiceApp.Controllers
 
             if (newUser.RoleId == 0)
             {
-                ViewData["RoleId"] = 0;
                 ModelState.AddModelError("RoleId", "Выберите роль");
             }
 

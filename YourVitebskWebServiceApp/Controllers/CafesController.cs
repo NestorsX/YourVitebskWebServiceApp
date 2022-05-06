@@ -32,7 +32,6 @@ namespace YourVitebskWebServiceApp.Controllers
         [HttpPost]
         public IActionResult CreateAsync(Cafe newCafe)
         {
-            ViewBag.CafeTypes = _context.CafeTypes;
             if (_context.Cafes.FirstOrDefault(x => x.Title == newCafe.Title) != null)
             {
                 ModelState.AddModelError("Title", "Заведение с таким именем уже используется");
@@ -61,6 +60,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.CafeTypes = _context.CafeTypes;
             return View(newCafe);
         }
 
@@ -80,7 +80,6 @@ namespace YourVitebskWebServiceApp.Controllers
         [HttpPost]
         public ActionResult Edit(Cafe newCafe)
         {
-            ViewBag.CafeTypes = _context.CafeTypes;
             Cafe cafe = _repository.Get((int)newCafe.CafeId);
             if (_context.Cafes.FirstOrDefault(x => x.Title == newCafe.Title && newCafe.Title != cafe.Title) != null)
             {
@@ -89,7 +88,6 @@ namespace YourVitebskWebServiceApp.Controllers
 
             if (newCafe.CafeTypeId == 0)
             {
-                ViewData["CafeTypeId"] = 0;
                 ModelState.AddModelError("CafeTypeId", "Выберите тип заведения");
             }
 
@@ -105,6 +103,8 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.CafeTypes = _context.CafeTypes;
+            ViewData["CafeTypeId"] = newCafe.CafeTypeId;
             return View(newCafe);
         }
 
