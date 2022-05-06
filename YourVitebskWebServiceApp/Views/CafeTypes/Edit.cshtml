@@ -1,20 +1,20 @@
-﻿@model YourVitebskWebServiceApp.Models.Role
+﻿@model YourVitebskWebServiceApp.Models.CafeType
 
 <div class="row mb-3">
     <div class="col-auto me-auto">
-        <h2>Редактирование роли</h2>
+        <h2>Редактирование типа заведения</h2>
     </div>
     <div class="col-auto">
-        <a asp-controller="Roles" asp-action="Index">Вернуться к списку</a>
+        <a asp-controller="CafeTypes" asp-action="Index">Вернуться к списку</a>
     </div>
 </div>
 
-<form asp-action="Edit" asp-controller="Roles" method="post" enctype="multipart/form-data">
+<form asp-action="Edit" asp-controller="CafeTypes" method="post" enctype="multipart/form-data">
     <div class="validation" asp-validation-summary="ModelOnly"></div>
     <div>
-        <input type="hidden" asp-for="RoleId" />
+        <input type="hidden" asp-for="CafeTypeId" />
         <div class="mb-3">
-            <label asp-for="Name" class="form-label">Роль<i>*</i></label>
+            <label asp-for="Name" class="form-label">Тип заведения<i>*</i></label>
             <input type="text" asp-for="Name" class="form-control form-control-sm" />
             <span class="badge bg-danger" asp-validation-for="Name"></span>
         </div>
@@ -23,3 +23,5 @@
         </div>
     </div>
 </form>
+ 
+ 
