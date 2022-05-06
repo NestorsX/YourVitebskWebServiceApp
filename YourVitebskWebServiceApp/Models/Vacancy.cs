@@ -7,7 +7,7 @@ namespace YourVitebskWebServiceApp.Models
         [Key]
         public int? VacancyId { get; set; }
 
-        [Required(ErrorMessage = "Необходимо заголовок вакансии")]
+        [Required(ErrorMessage = "Необходимо указать заголовок вакансии")]
         public string Title { get; set; }
 
         [Required(ErrorMessage = "Необходимо указать описание")]

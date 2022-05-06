@@ -1,0 +1,29 @@
+﻿@model IEnumerable<YourVitebskWebServiceApp.Models.PosterType>
+
+<div class="mb-3">
+    <h2>Типы искусства</h2>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped align-middle">
+        <tr>
+            <th>ID</th>
+            <th>Тип искусства</th>
+            <th><a class="btn btn-outline-dark float-end" asp-controller="PosterTypes" asp-action="Create">Добавить</a></th>
+        </tr>
+    
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.PosterTypeId</td>
+                <td>@item.Name</td>
+                <td>
+                    <div class="btn-group float-end" role="group">
+                        <a class="btn btn-outline-dark" asp-controller="PosterTypes" asp-action="Edit" asp-route-id="@item.PosterTypeId">Изменить</a>
+                        <a class="btn btn-outline-danger" asp-controller="PosterTypes" asp-action="Delete" asp-route-id="@item.PosterTypeId">Удалить</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </table>
+</div>

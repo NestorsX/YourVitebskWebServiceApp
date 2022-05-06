@@ -9,12 +9,12 @@ namespace YourVitebskWebServiceApp.Models
 
         public int? UserId { get; set; }
 
-        [Required(ErrorMessage = "Необходимо ввести имя")]
+        [Required(ErrorMessage = "Необходимо указать имя")]
         public string FirstName { get; set; }
 
         public string SecondName { get; set; }
 
-        [Required(ErrorMessage = "Необходимо ввести фамилию")]
+        [Required(ErrorMessage = "Необходимо указать фамилию")]
         public string LastName { get; set; }
 
         [Phone(ErrorMessage = "Неверный формат телефона")]

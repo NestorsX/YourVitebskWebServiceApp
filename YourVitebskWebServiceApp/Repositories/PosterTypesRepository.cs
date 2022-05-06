@@ -6,41 +6,41 @@ using YourVitebskWebServiceApp.Models;
 
 namespace YourVitebskWebServiceApp.Repositories
 {
-    public class CafeTypesRepository : IRepository<CafeType>
+    public class PosterTypesRepository : IRepository<PosterType>
     {
         private readonly YourVitebskDBContext _context;
         private bool _disposed = false;
 
-        public CafeTypesRepository(YourVitebskDBContext context)
+        public PosterTypesRepository(YourVitebskDBContext context)
         {
             _context = context;
         }
 
         public IEnumerable<IViewModel> Get()
         {
-            return _context.CafeTypes.ToList().OrderBy(x => x.CafeTypeId);
+            return _context.PosterTypes.ToList().OrderBy(x => x.PosterTypeId);
         }
 
-        public CafeType Get(int id)
+        public PosterType Get(int id)
         {
-            return _context.CafeTypes.FirstOrDefault(x => x.CafeTypeId == id);
+            return _context.PosterTypes.FirstOrDefault(x => x.PosterTypeId == id);
         }
 
-        public void Create(CafeType cafeType)
+        public void Create(PosterType posterType)
         {
-            _context.CafeTypes.Add(cafeType);
+            _context.PosterTypes.Add(posterType);
             _context.SaveChanges();
         }
 
-        public void Update(CafeType cafeType)
+        public void Update(PosterType posterType)
         {
-            _context.CafeTypes.Update(cafeType);
+            _context.PosterTypes.Update(posterType);
             _context.SaveChanges();
         }
 
         public void Delete(int id)
         {
-            _context.CafeTypes.Remove(Get(id));
+            _context.PosterTypes.Remove(Get(id));
             _context.SaveChanges();
         }
 

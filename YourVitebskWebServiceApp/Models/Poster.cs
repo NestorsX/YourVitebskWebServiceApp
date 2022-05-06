@@ -11,7 +11,7 @@ namespace YourVitebskWebServiceApp.Models
         [Required(ErrorMessage = "Необходимо указать тип искусства")]
         public int PosterTypeId { get; set; }
 
-        [Required(ErrorMessage = "Необходимо название события")]
+        [Required(ErrorMessage = "Необходимо указать название афиши")]
         public string Title { get; set; }
 
         [Required(ErrorMessage = "Необходимо указать описание")]

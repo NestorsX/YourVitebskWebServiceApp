@@ -7,7 +7,7 @@ namespace YourVitebskWebServiceApp.Models
         [Key]
         public int? UserId { get; set; }
 
-        [Required(ErrorMessage = "Необходимо ввести email")]
+        [Required(ErrorMessage = "Необходимо указать email")]
         [EmailAddress(ErrorMessage = "Некорректный адрес")]
         public string Email { get; set; }
 

@@ -8,7 +8,7 @@ namespace YourVitebskWebServiceApp.Models
         [Key]
         public int? RoleId { get; set; }
 
-        [Required(ErrorMessage = "Необходимо ввести название роли")]
+        [Required(ErrorMessage = "Необходимо указать название роли")]
         public string Name { get; set; }
     }
 }
