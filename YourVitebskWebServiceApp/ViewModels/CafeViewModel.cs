@@ -2,7 +2,7 @@
 
 namespace YourVitebskWebServiceApp.ViewModels
 {
-    public class CafeViewModel :IViewModel
+    public class CafeViewModel : IViewModel
     {
         public int? CafeId { get; set; }
         public string CafeType { get; set; }

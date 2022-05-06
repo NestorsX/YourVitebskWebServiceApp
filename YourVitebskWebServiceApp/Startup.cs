@@ -29,6 +29,7 @@ namespace YourVitebskWebServiceApp
 
             services.AddScoped<IRepository<User>, UsersRepository>();
             services.AddScoped<IRepository<Role>, RolesRepository>();
+            services.AddScoped<IRepository<Poster>, PostersRepository>();
             services.AddScoped<IRepository<Cafe>, CafesRepository>();
             services.AddScoped<IRepository<CafeType>, CafeTypesRepository>();
             services.AddScoped<ICommentRepository, CommentsRepository>();

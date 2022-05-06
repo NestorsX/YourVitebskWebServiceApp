@@ -1,0 +1,41 @@
+﻿@model YourVitebskWebServiceApp.Models.Poster
+@{
+    ViewData["Date"] = ((DateTime)Model.DateTime).ToString("yyyy-MM-dd HH:mm");
+}
+<div class="row mb-3">
+    <div class="col-auto me-auto">
+        <h2>Удаление афиши</h2>
+    </div>
+    <div class="col-auto">
+        <a asp-controller="Posters" asp-action="Index">Вернуться к списку</a>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped align-middle">
+        <tr>
+            <th>ID</th>
+            <th>Тип</th>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>Дата и время</th>
+            <th>Адрес</th>
+            <th>Ссылка</th>
+        </tr>
+        <tr>
+            <td>@Model.PosterId</td>
+            <td>@ViewData["PosterType"]</td>
+            <td>@Model.Title</td>
+            <td>@Model.Description</td>
+            <td>@ViewData["Date"]</td>
+            <td>@Model.Address</td>
+            <td>@Model.ExternalLink</td>
+        </tr>
+    </table>
+</div>
+ 
+<form asp-action="Delete" asp-controller="Posters" method="post">
+    <div class="mb-3">
+        <input type="submit" class="btn btn-outline-danger" value="Удалить" />
+    </div>
+</form>

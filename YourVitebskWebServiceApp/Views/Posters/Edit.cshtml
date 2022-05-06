@@ -1,40 +1,40 @@
-﻿@model YourVitebskWebServiceApp.Models.Cafe
+﻿@model YourVitebskWebServiceApp.ViewModels.PosterViewModel
 
 <div class="row mb-3">
     <div class="col-auto me-auto">
-        <h2>Редактирование заведения</h2>
+        <h2>Редактирование афиши</h2>
         <div class="form-text"><i>*</i> - обязательные поля</div>
     </div>
     <div class="col-auto">
-        <a asp-controller="Cafes" asp-action="Index">Вернуться к списку</a>
+        <a asp-controller="Posters" asp-action="Index">Вернуться к списку</a>
     </div>
 </div>
  
-<form asp-action="Edit" asp-controller="Cafes" method="post" enctype="multipart/form-data">
+<form asp-action="Edit" asp-controller="Posters" method="post" enctype="multipart/form-data">
     <div class="validation" asp-validation-summary="ModelOnly"></div>
     <div>
-        <input type="hidden" asp-for="CafeId" />
+        <input type="hidden" asp-for="PosterId" />
        <div class="mb-3">
-            <label asp-for="CafeTypeId" class="form-label">Тип заведения<i>*</i></label>
-            <select asp-for="CafeTypeId" class="form-control form-control-sm" >
-                <option value="0">Выберите тип заведения</option>
-                @foreach (CafeType cafeType in ViewBag.CafeTypes)
+            <label asp-for="PosterTypeId" class="form-label">Тип искусства<i>*</i></label>
+            <select asp-for="PosterTypeId" class="form-control form-control-sm" >
+                <option value="0">Выберите тип искусства</option>
+                @foreach (PosterType posterType in ViewBag.PosterTypes)
                 {
-                    @if ((int)ViewData["CafeTypeId"] == cafeType.CafeTypeId)
+                    @if ((int)ViewData["PosterTypeId"] == posterType.PosterTypeId)
                     {
-                        <option value="@cafeType.CafeTypeId" selected>@cafeType.Name</option>
+                        <option value="@posterType.PosterTypeId" selected>@posterType.Name</option>
                     }
                     else
                     {
-                        <option value="@cafeType.CafeTypeId">@cafeType.Name</option>
+                        <option value="@posterType.PosterTypeId">@posterType.Name</option>
                     }
                 }
             </select>
-            <span class="badge bg-danger" asp-validation-for="CafeTypeId"></span>
+           <span class="badge bg-danger" asp-validation-for="PosterTypeId"></span>
         </div>
         <div class="mb-3">
             <label asp-for="Title" class="form-label">Название<i>*</i></label>
-            <input type="text" asp-for="Title" class="form-control form-control-sm" />
+            <input type="datetime" asp-for="Title" class="form-control form-control-sm" />
             <span class="badge bg-danger" asp-validation-for="Title"></span>
         </div>
         <div class="mb-3">
@@ -43,9 +43,9 @@
             <span class="badge bg-danger" asp-validation-for="Description"></span>
         </div>
         <div class="mb-3">
-            <label asp-for="WorkingTime" class="form-label">Время работы<i>*</i></label>
-            <textarea asp-for="WorkingTime" class="form-control form-control-sm" placeholder="Будни: 8:00 - 17:00&#10;Выходные: 10:00 - 15:00"></textarea>
-            <span class="badge bg-danger" asp-validation-for="WorkingTime"></span>
+            <label asp-for="DateTime" class="form-label">Дата и время<i>*</i></label>
+            <input type="text" asp-for="DateTime" class="form-control form-control-sm" placeholder="год/месяц/день часы:минуты" id="DateTime"/>
+            <span class="badge bg-danger" asp-validation-for="DateTime"></span>
         </div>
         <div class="mb-3">
             <label asp-for="Address" class="form-label">Адрес<i>*</i></label>
@@ -63,3 +63,9 @@
         </div>
     </div>
 </form>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/plugins/jquery.maskedinput.js"></script>
+<script type="text/javascript">
+    $("#DateTime").mask("9999/99/99 99:99");
+</script>

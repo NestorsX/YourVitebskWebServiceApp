@@ -3,12 +3,13 @@
 <div class="row mb-3">
     <div class="col-auto me-auto">
         <h2>Добавление пользователя</h2>
+        <div class="form-text"><i>*</i> - обязательные поля</div>
     </div>
     <div class="col-auto">
         <a asp-controller="Users" asp-action="Index">Вернуться к списку</a>
     </div>
 </div>
- 
+
 <form asp-action="Create" asp-controller="Users" method="post" enctype="multipart/form-data">
     <div class="validation" asp-validation-summary="ModelOnly"></div>
     <div>
