@@ -40,7 +40,7 @@ namespace YourVitebskWebServiceApp.APIControllers
 
         // Gets user by email and password
         [HttpGet("auth/{email}/{password}")]
-        public async Task<ActionResult<User>> AuthUser(string email, string password)
+        public async Task<IActionResult> AuthUser(string email, string password)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace YourVitebskWebServiceApp.APIControllers
 
         // Inserts user into db
         [HttpPost]
-        public async Task<ActionResult<User>> CreateUser([FromBody] User user)
+        public async Task<IActionResult> CreateUser([FromBody] User user)
         {
             if (!ModelState.IsValid)
             {
@@ -80,7 +80,7 @@ namespace YourVitebskWebServiceApp.APIControllers
 
         // Updates user
         [HttpPut]
-        public async Task<ActionResult> UpdateUser([FromBody] User user)
+        public async Task<IActionResult> UpdateUser([FromBody] User user)
         {
             try
             {

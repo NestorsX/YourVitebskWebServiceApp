@@ -11,6 +11,7 @@ using YourVitebskWebServiceApp.APIServices;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
 using YourVitebskWebServiceApp.Repositories;
+using YourVitebskWebServiceApp.ViewModels;
 
 namespace YourVitebskWebServiceApp
 {
@@ -26,6 +27,7 @@ namespace YourVitebskWebServiceApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IService<CafeViewModel>, CafesService>();
 
             services.AddScoped<IRepository<User>, UsersRepository>();
             services.AddScoped<IRepository<Role>, RolesRepository>();
