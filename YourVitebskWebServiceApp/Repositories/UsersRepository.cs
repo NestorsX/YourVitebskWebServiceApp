@@ -8,7 +8,7 @@ using YourVitebskWebServiceApp.ViewModels;
 
 namespace YourVitebskWebServiceApp.Repositories
 {
-    public class UsersRepository : IRepository<User>
+    public class UsersRepository : IUserRepository
     {
         private readonly YourVitebskDBContext _context;
         private bool _disposed = false;
@@ -18,7 +18,7 @@ namespace YourVitebskWebServiceApp.Repositories
             _context = context;
         }
 
-        public IEnumerable<IViewModel> Get()
+        public IEnumerable<UserViewModel> Get()
         {
             IEnumerable<UserViewModel> result = new List<UserViewModel>();
             IEnumerable<User> users = _context.Users.Include(x => x.UserDatum).ToList().OrderBy(x => x.UserId);
@@ -28,6 +28,7 @@ namespace YourVitebskWebServiceApp.Repositories
                 {
                     UserId = (int)user.UserId,
                     Email = user.Email,
+                    RoleId = user.RoleId,
                     Role = _context.Roles.First(x => x.RoleId == user.RoleId).Name,
                     FirstName = user.UserDatum.FirstName,
                     SecondName = user.UserDatum.SecondName,
@@ -39,7 +40,24 @@ namespace YourVitebskWebServiceApp.Repositories
             return result;
         }
 
-        public User Get(int id)
+        public UserViewModel Get(int id)
+        {
+            User user = GetUser(id);
+            var result = new UserViewModel()
+            {
+                UserId = (int)user.UserId,
+                Email = user.Email,
+                Role = _context.Roles.First(x => x.RoleId == user.RoleId).Name,
+                FirstName = user.UserDatum.FirstName,
+                SecondName = user.UserDatum.SecondName,
+                LastName = user.UserDatum.LastName,
+                PhoneNumber = user.UserDatum.PhoneNumber
+            };
+
+            return result;
+        }
+
+        public User GetUser(int id)
         {
             return _context.Users.Include(x => x.UserDatum).FirstOrDefault(x => x.UserId == id);
         }
@@ -63,7 +81,7 @@ namespace YourVitebskWebServiceApp.Repositories
 
         public void Delete(int id)
         {
-            User user = Get(id);
+            User user = GetUser(id);
             if (user.UserDatum != null)
             {
                 _context.UserData.Remove(user.UserDatum);

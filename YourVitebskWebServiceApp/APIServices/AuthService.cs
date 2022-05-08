@@ -22,7 +22,7 @@ namespace YourVitebskWebServiceApp.APIServices
             _context = context;
         }
 
-        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        public static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             if (string.IsNullOrEmpty(password))
             {
@@ -36,7 +36,7 @@ namespace YourVitebskWebServiceApp.APIServices
             }
         }
 
-        private static bool VerifyPassword(string password, byte[] passwordHash, byte[] passwordSalt)
+        public static bool VerifyPassword(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512(passwordSalt))
             {
@@ -62,7 +62,7 @@ namespace YourVitebskWebServiceApp.APIServices
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddDays(30),
+                expires: DateTime.Now.AddDays(1),
                 signingCredentials: credentials
             );
 

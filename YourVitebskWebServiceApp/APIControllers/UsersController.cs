@@ -4,11 +4,13 @@ using System.Threading.Tasks;
 using YourVitebskWebServiceApp.Models;
 using YourVitebskWebServiceApp.APIServiceInterfaces;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace YourVitebskWebServiceApp.APIControllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUsersService _usersService;

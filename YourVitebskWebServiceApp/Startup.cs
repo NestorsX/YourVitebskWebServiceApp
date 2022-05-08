@@ -30,7 +30,7 @@ namespace YourVitebskWebServiceApp
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IService<CafeViewModel>, CafesService>();
 
-            services.AddScoped<IRepository<User>, UsersRepository>();
+            services.AddScoped<IUserRepository, UsersRepository>();
             services.AddScoped<IRepository<Role>, RolesRepository>();
             services.AddScoped<IRepository<Poster>, PostersRepository>();
             services.AddScoped<IRepository<PosterType>, PosterTypesRepository>();

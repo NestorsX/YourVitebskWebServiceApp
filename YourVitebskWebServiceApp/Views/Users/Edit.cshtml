@@ -1,4 +1,4 @@
-﻿@model YourVitebskWebServiceApp.Models.User
+﻿@model YourVitebskWebServiceApp.ViewModels.UserViewModel
 
 <div class="row mb-3">
     <div class="col-auto me-auto">
@@ -19,12 +19,12 @@
             <input type="email" asp-for="Email" class="form-control form-control-sm" placeholder="example@mail.com" />
             <span class="badge bg-danger" asp-validation-for="Email"></span>
         </div>
-        @*<div class="mb-3">
+        <div class="mb-3">
             <label asp-for="Password" class="form-label">Пароль<i>*</i></label>
             <input type="text" asp-for="Password" class="form-control form-control-sm" aria-describedby="passwordNotify" />
             <div id="passwordNotify" class="form-text">Пароль должен быть не короче 6 символов. Если вы не хотите изменять пароль, оставьте поле пустым</div>
             <span class="badge bg-danger" asp-validation-for="Password"></span>
-        </div>*@
+        </div>
         <div class="mb-3">
             <label asp-for="RoleId" class="form-label">Роль<i>*</i></label>
             <select asp-for="RoleId" class="form-control form-control-sm" >
@@ -44,27 +44,27 @@
             <span class="badge bg-danger" asp-validation-for="RoleId"></span>
         </div>
         <div class="mb-3">
-            <label asp-for="UserDatum.FirstName" class="form-label">Имя<i>*</i></label>
-            <input type="text" asp-for="UserDatum.FirstName" class="form-control form-control-sm" />
-            <span class="badge bg-danger" asp-validation-for="UserDatum.FirstName"></span>
+            <label asp-for="FirstName" class="form-label">Имя<i>*</i></label>
+            <input type="text" asp-for="FirstName" class="form-control form-control-sm" />
+            <span class="badge bg-danger" asp-validation-for="FirstName"></span>
 
         </div>
         <div class="mb-3">
-            <label asp-for="UserDatum.SecondName" class="form-label">Отчество</label>
-            <input type="text" asp-for="UserDatum.SecondName" class="form-control form-control-sm" />
-            <span class="badge bg-danger" asp-validation-for="UserDatum.SecondName"></span>
+            <label asp-for="SecondName" class="form-label">Отчество</label>
+            <input type="text" asp-for="SecondName" class="form-control form-control-sm" />
+            <span class="badge bg-danger" asp-validation-for="SecondName"></span>
 
         </div>
         <div class="mb-3">
-            <label asp-for="UserDatum.LastName" class="form-label">Фамилия<i>*</i></label>
-            <input type="text" asp-for="UserDatum.LastName" class="form-control form-control-sm" />
-            <span class="badge bg-danger" asp-validation-for="UserDatum.LastName"></span>
+            <label asp-for="LastName" class="form-label">Фамилия<i>*</i></label>
+            <input type="text" asp-for="LastName" class="form-control form-control-sm" />
+            <span class="badge bg-danger" asp-validation-for="LastName"></span>
 
         </div>
         <div class="mb-3">
-            <label asp-for="UserDatum.PhoneNumber" class="form-label">Телефон</label>
-            <input type="text" asp-for="UserDatum.PhoneNumber" class="form-control form-control-sm" placeholder="+375(__)___-__-__" id="Phone"/>
-            <span class="badge bg-danger" asp-validation-for="UserDatum.PhoneNumber"></span>
+            <label asp-for="PhoneNumber" class="form-label">Телефон</label>
+            <input type="text" asp-for="PhoneNumber" class="form-control form-control-sm" placeholder="+375(__)___-__-__" id="Phone"/>
+            <span class="badge bg-danger" asp-validation-for="PhoneNumber"></span>
         </div>
         <div class="mb-3">
             <input type="submit" value="Сохранить" class="btn btn-outline-secondary" />

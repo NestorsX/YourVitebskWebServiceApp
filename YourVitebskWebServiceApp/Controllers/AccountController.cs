@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using YourVitebskWebServiceApp.APIServices;
 using YourVitebskWebServiceApp.Models;
 using YourVitebskWebServiceApp.ViewModels;
 
@@ -32,8 +34,8 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email /*&& u.Password == model.Password*/ && u.RoleId == 2);
-                if (user != null)
+                User user = await _context.Users.FirstOrDefaultAsync(x => x.Email == model.Email && x.RoleId == 2);
+                if (user != null && AuthService.VerifyPassword(model.Password, user.PasswordHash, user.PasswordSalt))
                 {
                     await Authenticate(model.Email);
                     return RedirectToAction("Index", "Home");
