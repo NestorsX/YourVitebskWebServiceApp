@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
+using YourVitebskWebServiceApp.ViewModels;
 
 namespace YourVitebskWebServiceApp.Controllers
 {
@@ -30,17 +31,17 @@ namespace YourVitebskWebServiceApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateAsync(User newUser)
+        public IActionResult CreateAsync(UserViewModel newUser)
         {
             if (_context.Users.FirstOrDefault(x => x.Email == newUser.Email) != null)
             {
                 ModelState.AddModelError("Email", "Email уже используется");
             }
 
-            if (newUser.Password == null)
-            {
-                ModelState.AddModelError("Password", "Необходимо указать пароль");
-            }
+            //if (newUser.Password == null)
+            //{
+            //    ModelState.AddModelError("Password", "Необходимо указать пароль");
+            //}
 
             if (newUser.RoleId == 0)
             {
@@ -61,7 +62,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 {
                     UserId = null,
                     Email = newUser.Email,
-                    Password = newUser.Password,
+                    //Password = newUser.Password,
                     RoleId = newUser.RoleId,
                     UserDatum = new UserDatum
                     {
@@ -92,7 +93,7 @@ namespace YourVitebskWebServiceApp.Controllers
             User user = _repository.Get(id);
             if (user != null)
             {
-                user.Password = null;
+                //user.Password = null;
                 ViewBag.Roles = _context.Roles;
                 ViewData["RoleId"] = user.RoleId;
                 return View(user);
@@ -126,7 +127,7 @@ namespace YourVitebskWebServiceApp.Controllers
             if (ModelState.IsValid)
             {
                 user.Email = newUser.Email;
-                user.Password = newUser.Password == null ? user.Password : newUser.Password;
+                //user.Password = newUser.Password == null ? user.Password : newUser.Password;
                 user.RoleId = newUser.RoleId;
                 user.UserDatum.FirstName = newUser.UserDatum.FirstName;
                 user.UserDatum.SecondName = newUser.UserDatum.SecondName;

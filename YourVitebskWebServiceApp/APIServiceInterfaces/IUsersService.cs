@@ -8,8 +8,6 @@ namespace YourVitebskWebServiceApp.APIServiceInterfaces
     {
         public Task<IEnumerable<User>> GetAllUsers();
         public Task<User> GetById(int id);
-        public Task<User> GetByData(string email, string password);
-        public Task<User> Create(User newUser);
         public Task Update(User newUser);
     }
 }

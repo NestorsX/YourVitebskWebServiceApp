@@ -38,46 +38,6 @@ namespace YourVitebskWebServiceApp.APIControllers
             return Ok(user);
         }
 
-        // Gets user by email and password
-        [HttpGet("auth/{email}/{password}")]
-        public async Task<IActionResult> AuthUser(string email, string password)
-        {
-            try
-            {
-                User user = await _usersService.GetByData(email, password);
-                if (user == null)
-                {
-                    return NotFound();
-                }
-
-                return Ok(user);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        // Inserts user into db
-        [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] User user)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                User newUser = await _usersService.Create(user);
-                return Ok(newUser);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
         // Updates user
         [HttpPut]
         public async Task<IActionResult> UpdateUser([FromBody] User user)

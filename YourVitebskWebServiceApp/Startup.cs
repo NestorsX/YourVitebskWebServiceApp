@@ -26,6 +26,7 @@ namespace YourVitebskWebServiceApp
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IService<CafeViewModel>, CafesService>();
 
