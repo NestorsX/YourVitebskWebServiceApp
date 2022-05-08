@@ -5,12 +5,13 @@ using YourVitebskWebServiceApp.Models;
 using YourVitebskWebServiceApp.APIServiceInterfaces;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace YourVitebskWebServiceApp.APIControllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UsersController : ControllerBase
     {
         private readonly IUsersService _usersService;
@@ -49,9 +50,9 @@ namespace YourVitebskWebServiceApp.APIControllers
                 await _usersService.Update(user);
                 return Ok();
             }
-            catch (InvalidOperationException ex)
+            catch (ArgumentException e)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(e.Message);
             }
         }
     }

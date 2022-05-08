@@ -10,29 +10,28 @@ using YourVitebskWebServiceApp.APIServiceInterfaces;
 using YourVitebskWebServiceApp.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Microsoft.Extensions.Configuration;
 
 namespace YourVitebskWebServiceApp.APIServices
 {
     public class AuthService : IAuthService
     {
         private readonly YourVitebskDBContext _context;
+        private readonly IConfiguration _configuration;
 
-        public AuthService(YourVitebskDBContext context)
+        public AuthService(YourVitebskDBContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         public static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
-            if (string.IsNullOrEmpty(password))
-            {
-                throw new ArgumentNullException(nameof(password), "Password argument cannot be null or empty");
-            }
-
             using (var hmac = new HMACSHA512())
             {
                 passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
             }
         }
 
@@ -40,14 +39,14 @@ namespace YourVitebskWebServiceApp.APIServices
         {
             using (var hmac = new HMACSHA512(passwordSalt))
             {
-                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
                 return computedHash.SequenceEqual(passwordHash);
             }
         }
 
-        private string CreateToken(User user)
+        public string CreateToken(User user)
         {
-            List<Claim> claims = new List<Claim>()
+            var claims = new List<Claim>()
             {
                 new Claim(nameof(user.UserId), user.UserId.ToString()),
                 new Claim(nameof(user.Email), user.Email),
@@ -58,7 +57,7 @@ namespace YourVitebskWebServiceApp.APIServices
                 new Claim(nameof(user.UserDatum.PhoneNumber), user.UserDatum.PhoneNumber)
             };
 
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("this is my custom Secret key for authentication"));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var token = new JwtSecurityToken(
                 claims: claims,
@@ -69,7 +68,7 @@ namespace YourVitebskWebServiceApp.APIServices
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public async Task<string> Register(UserDTO userData)
+        public async Task<string> Register(UserRegisterDTO userData)
         {
             using (var transaction = _context.Database.BeginTransaction())
             {
@@ -129,7 +128,7 @@ namespace YourVitebskWebServiceApp.APIServices
             }
         }
 
-        public async Task<string> Login(UserDTO userData)
+        public async Task<string> Login(UserLoginDTO userData)
         {
             User user = await _context.Users.Include(x => x.UserDatum).FirstOrDefaultAsync(x => x.Email == userData.Email);
             if (user == null)

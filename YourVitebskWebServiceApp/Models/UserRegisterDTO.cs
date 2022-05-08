@@ -2,7 +2,7 @@
 
 namespace YourVitebskWebServiceApp.Models
 {
-    public class UserDTO
+    public class UserRegisterDTO
     {
         [EmailAddress(ErrorMessage = "Некорректный адрес")]
         public string Email { get; set; }

@@ -7,7 +7,7 @@ namespace YourVitebskWebServiceApp.APIServiceInterfaces
 {
     public interface IAuthService
     {
-        public Task<string> Register(UserDTO userData);
-        public Task<string> Login(UserDTO userData);
+        public Task<string> Register(UserRegisterDTO userData);
+        public Task<string> Login(UserLoginDTO userData);
     }
 }

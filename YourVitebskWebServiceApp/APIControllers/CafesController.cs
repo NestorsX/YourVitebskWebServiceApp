@@ -3,11 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using YourVitebskWebServiceApp.APIServiceInterfaces;
 using YourVitebskWebServiceApp.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace YourVitebskWebServiceApp.APIControllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CafesController : ControllerBase
     {
         private readonly IService<CafeViewModel> _cafesService;

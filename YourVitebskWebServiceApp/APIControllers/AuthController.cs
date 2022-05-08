@@ -18,7 +18,7 @@ namespace YourVitebskWebServiceApp.APIControllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<string>> Register(UserDTO user)
+        public async Task<ActionResult<string>> Register(UserRegisterDTO user)
         {
             if (string.IsNullOrEmpty(user.Email) 
                 || string.IsNullOrEmpty(user.Password) 
@@ -40,7 +40,7 @@ namespace YourVitebskWebServiceApp.APIControllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(UserDTO user)
+        public async Task<ActionResult<string>> Login(UserLoginDTO user)
         {
             if (string.IsNullOrEmpty(user.Email))
             {
