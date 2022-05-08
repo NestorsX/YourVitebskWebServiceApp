@@ -1,6 +1,4 @@
-﻿using YourVitebskWebServiceApp.Interfaces;
-
-namespace YourVitebskWebServiceApp.Models
+﻿namespace YourVitebskWebServiceApp.Models
 {
     public class Service
     {

@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Http;
 using YourVitebskWebServiceApp.APIServiceInterfaces;
 using YourVitebskWebServiceApp.Models;
 using YourVitebskWebServiceApp.ViewModels;
