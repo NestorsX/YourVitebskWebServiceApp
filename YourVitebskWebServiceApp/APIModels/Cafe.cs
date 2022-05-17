@@ -1,8 +1,8 @@
 ﻿using YourVitebskWebServiceApp.Interfaces;
 
-namespace YourVitebskWebServiceApp.ViewModels
+namespace YourVitebskWebServiceApp.APIModels
 {
-    public class Cafe : IViewModel
+    public class Cafe
     {
         public int? CafeId { get; set; }
         public string CafeType { get; set; }

@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using YourVitebskWebServiceApp.APIServiceInterfaces;
-using YourVitebskWebServiceApp.Models;
 
 namespace YourVitebskWebServiceApp.APIServices
 {
@@ -16,35 +16,75 @@ namespace YourVitebskWebServiceApp.APIServices
             _context = context;
         }
 
-        public async Task<IEnumerable<User>> GetAllUsers()
+        public async Task<IEnumerable<APIModels.User>> GetAllUsers()
         {
-            return await _context.Users.Include(x => x.UserDatum).ToListAsync();
+            IEnumerable<APIModels.User> result = new List<APIModels.User>();
+            IEnumerable<Models.User> users = await _context.Users.Include(x => x.UserDatum).ToListAsync();
+            foreach (var user in users)
+            {
+                result = result.Append(new APIModels.User()
+                {
+                    UserId = (int)user.UserId,
+                    Email = user.Email,
+                    Password = null,
+                    FirstName = user.UserDatum.FirstName,
+                    SecondName = user.UserDatum.SecondName,
+                    LastName = user.UserDatum.LastName,
+                    PhoneNumber = user.UserDatum.PhoneNumber
+                });
+            }
+
+            return result;
         }
 
-        public async Task<User> GetById(int id)
+        public async Task<APIModels.User> GetById(int id)
         {
+            Models.User user = await _context.Users.Include(x => x.UserDatum).FirstOrDefaultAsync(x => x.UserId == id);
+            var result = new APIModels.User()
+            {
+                UserId = (int)user.UserId,
+                Email = user.Email,
+                Password = null,
+                FirstName = user.UserDatum.FirstName,
+                SecondName = user.UserDatum.SecondName,
+                LastName = user.UserDatum.LastName,
+                PhoneNumber = user.UserDatum.PhoneNumber
+            };
 
-            return await _context.Users.Include(x => x.UserDatum).FirstOrDefaultAsync(x => x.UserId == id);
+            return result;
         }
 
-        public async Task Update(User newUser)
+        public async Task Update(APIModels.User newUser)
         {
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
                 {
+                    Models.User user = await _context.Users.Include(x => x.UserDatum).FirstOrDefaultAsync(x => x.UserId == newUser.UserId);
                     if (await _context.Users.AnyAsync(x => x.Email == newUser.Email && x.UserId != newUser.UserId))
                     {
                         throw new InvalidOperationException("Пользователь с таким email уже существует!");
                     }
 
-                    if (newUser.UserDatum.PhoneNumber != null && await _context.UserData.AnyAsync(x => x.PhoneNumber == newUser.UserDatum.PhoneNumber && x.UserId != newUser.UserId))
+                    if (newUser.PhoneNumber != null && await _context.UserData.AnyAsync(x => x.PhoneNumber == newUser.PhoneNumber && x.UserId != newUser.UserId))
                     {
                         throw new InvalidOperationException("Этот номер телефона уже привязан к другому аккаунту");
                     }
 
-                    _context.Entry(newUser).State = EntityState.Modified;
-                    _context.Entry(newUser.UserDatum).State = EntityState.Modified;
+                    if (!string.IsNullOrEmpty(newUser.Password))
+                    {
+                        AuthService.CreatePasswordHash(newUser.Password, out byte[] hash, out byte[] salt);
+                        user.PasswordHash = hash;
+                        user.PasswordSalt = salt;
+                    }
+
+                    user.Email = newUser.Email;
+                    user.UserDatum.FirstName = newUser.FirstName;
+                    user.UserDatum.SecondName = newUser.SecondName;
+                    user.UserDatum.LastName = newUser.LastName;
+                    user.UserDatum.PhoneNumber = newUser.PhoneNumber;
+                    _context.Entry(user).State = EntityState.Modified;
+                    _context.Entry(user.UserDatum).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
                     transaction.Commit();
                 }

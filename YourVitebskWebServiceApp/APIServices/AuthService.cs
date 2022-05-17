@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using YourVitebskWebServiceApp.APIModels;
 
 namespace YourVitebskWebServiceApp.APIServices
 {
@@ -44,13 +45,12 @@ namespace YourVitebskWebServiceApp.APIServices
             }
         }
 
-        public string CreateToken(User user)
+        public string CreateToken(Models.User user)
         {
             var claims = new List<Claim>()
             {
                 new Claim(nameof(user.UserId), user.UserId.ToString()),
                 new Claim(nameof(user.Email), user.Email),
-                new Claim(nameof(user.RoleId), user.RoleId.ToString()),
                 new Claim(nameof(user.UserDatum.FirstName), user.UserDatum.FirstName),
                 new Claim(nameof(user.UserDatum.SecondName), user.UserDatum.SecondName),
                 new Claim(nameof(user.UserDatum.LastName), user.UserDatum.LastName),
@@ -93,7 +93,7 @@ namespace YourVitebskWebServiceApp.APIServices
                     }
 
                     CreatePasswordHash(userData.Password, out byte[] passwordHash, out byte[] passwordSalt);
-                    var user = new User
+                    var user = new Models.User
                     {
                         UserId = null,
                         Email = userData.Email,
@@ -130,7 +130,7 @@ namespace YourVitebskWebServiceApp.APIServices
 
         public async Task<string> Login(UserLoginDTO userData)
         {
-            User user = await _context.Users.Include(x => x.UserDatum).FirstOrDefaultAsync(x => x.Email == userData.Email);
+            Models.User user = await _context.Users.Include(x => x.UserDatum).FirstOrDefaultAsync(x => x.Email == userData.Email);
             if (user == null)
             {
                 throw new ArgumentException("Неверные логин и(или) пароль");

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using YourVitebskWebServiceApp.Models;
 using YourVitebskWebServiceApp.APIServiceInterfaces;
 using System;
+using YourVitebskWebServiceApp.APIModels;
 
 namespace YourVitebskWebServiceApp.APIControllers
 {
@@ -17,6 +17,7 @@ namespace YourVitebskWebServiceApp.APIControllers
             _authService = authService;
         }
 
+        // Register user
         [HttpPost("register")]
         public async Task<ActionResult<string>> Register(UserRegisterDTO user)
         {
@@ -25,41 +26,42 @@ namespace YourVitebskWebServiceApp.APIControllers
                 || string.IsNullOrEmpty(user.FirstName) 
                 || string.IsNullOrEmpty(user.LastName))
             {
-                return BadRequest("Заполните все обязательные поля");
+                return BadRequest(ResponseModel.CreateResponseWithError("Заполните все обязательные поля"));
             }
 
             try
             {
                 string token = await _authService.Register(user);
-                return Ok(token);
+                return Ok(ResponseModel.CreateResponseWithContent(token));
             }
             catch (ArgumentException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(ResponseModel.CreateResponseWithError(e.Message));
             }
         }
 
+        // Authenticate user
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(UserLoginDTO user)
+        public async Task<ActionResult<ResponseModel>> Login(UserLoginDTO user)
         {
             if (string.IsNullOrEmpty(user.Email))
             {
-                return BadRequest("Введите email");
+                return BadRequest(ResponseModel.CreateResponseWithError("Введите email"));
             }
 
             if (string.IsNullOrEmpty(user.Password))
             {
-                return BadRequest("Введите пароль");
+                return BadRequest(ResponseModel.CreateResponseWithError("Введите пароль"));
             }
 
             try
             {
                 string token = await _authService.Login(user);
-                return Ok(token);
+                return Ok(ResponseModel.CreateResponseWithContent(token));
             }
             catch (ArgumentException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(ResponseModel.CreateResponseWithError(e.Message));
             }
         }
     }

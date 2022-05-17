@@ -12,9 +12,9 @@ namespace YourVitebskWebServiceApp.Controllers
     public class PostersController : Controller
     {
         private readonly YourVitebskDBContext _context;
-        private readonly IRepository<Poster> _repository;
+        private readonly IRepository<Models.Poster> _repository;
 
-        public PostersController(YourVitebskDBContext context, IRepository<Poster> repository)
+        public PostersController(YourVitebskDBContext context, IRepository<Models.Poster> repository)
         {
             _context = context;
             _repository = repository;
@@ -32,7 +32,7 @@ namespace YourVitebskWebServiceApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateAsync(PosterViewModel newPoster)
+        public IActionResult CreateAsync(ViewModels.Poster newPoster)
         {
             if (_context.Posters.FirstOrDefault(x => x.Title == newPoster.Title) != null)
             {
@@ -56,7 +56,7 @@ namespace YourVitebskWebServiceApp.Controllers
 
             if (ModelState.IsValid)
             {
-                var Poster = new Poster
+                var Poster = new Models.Poster
                 {
                     PosterId = null,
                     PosterTypeId = newPoster.PosterTypeId,
@@ -77,10 +77,10 @@ namespace YourVitebskWebServiceApp.Controllers
 
         public ActionResult Edit(int id)
         {
-            Poster poster = _repository.Get(id);
+            Models.Poster poster = _repository.Get(id);
             if (poster != null)
             {
-                var viewModel = new PosterViewModel
+                var viewModel = new ViewModels.Poster
                 {
                     PosterId = poster.PosterId,
                     PosterTypeId = poster.PosterTypeId,
@@ -100,9 +100,9 @@ namespace YourVitebskWebServiceApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(PosterViewModel newPoster)
+        public ActionResult Edit(ViewModels.Poster newPoster)
         {
-            Poster Poster = _repository.Get((int)newPoster.PosterId);
+            Models.Poster Poster = _repository.Get((int)newPoster.PosterId);
             if (_context.Posters.FirstOrDefault(x => x.Title == newPoster.Title && newPoster.Title != Poster.Title) != null)
             {
                 ModelState.AddModelError("Title", "Афиша с таким именем уже используется");
@@ -144,7 +144,7 @@ namespace YourVitebskWebServiceApp.Controllers
         [ActionName("Delete")]
         public ActionResult ConfirmDelete(int id)
         {
-            Poster Poster = _repository.Get(id);
+            Models.Poster Poster = _repository.Get(id);
             if (Poster != null)
             {
                 ViewData["PosterType"] = _context.PosterTypes.First(x => x.PosterTypeId == Poster.PosterTypeId).Name;

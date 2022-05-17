@@ -7,7 +7,7 @@ using YourVitebskWebServiceApp.ViewModels;
 
 namespace YourVitebskWebServiceApp.Repositories
 {
-    public class PostersRepository : IRepository<Poster>
+    public class PostersRepository : IRepository<Models.Poster>
     {
         private readonly YourVitebskDBContext _context;
         private bool _disposed = false;
@@ -19,11 +19,11 @@ namespace YourVitebskWebServiceApp.Repositories
 
         public IEnumerable<IViewModel> Get()
         {
-            IEnumerable<PosterViewModel> result = new List<PosterViewModel>();
-            IEnumerable<Poster> posters = _context.Posters.ToList().OrderBy(x => x.PosterId);
-            foreach (Poster poster in posters)
+            IEnumerable<ViewModels.Poster> result = new List<ViewModels.Poster>();
+            IEnumerable<Models.Poster> posters = _context.Posters.ToList().OrderBy(x => x.PosterId);
+            foreach (Models.Poster poster in posters)
             {
-                result = result.Append(new PosterViewModel()
+                result = result.Append(new ViewModels.Poster()
                 {
                     PosterId = (int)poster.PosterId,
                     PosterType = _context.PosterTypes.First(x => x.PosterTypeId == poster.PosterTypeId).Name,
@@ -38,18 +38,18 @@ namespace YourVitebskWebServiceApp.Repositories
             return result;
         }
 
-        public Poster Get(int id)
+        public Models.Poster Get(int id)
         {
             return _context.Posters.FirstOrDefault(x => x.PosterId == id);
         }
 
-        public void Create(Poster poster)
+        public void Create(Models.Poster poster)
         {
             _context.Posters.Add(poster);
             _context.SaveChanges();
         }
 
-        public void Update(Poster poster)
+        public void Update(Models.Poster poster)
         {
             _context.Posters.Update(poster);
             _context.SaveChanges();

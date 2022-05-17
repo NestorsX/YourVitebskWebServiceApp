@@ -7,7 +7,7 @@ using YourVitebskWebServiceApp.ViewModels;
 
 namespace YourVitebskWebServiceApp.Repositories
 {
-    public class CafesRepository : IRepository<Cafe>
+    public class CafesRepository : IRepository<Models.Cafe>
     {
         private readonly YourVitebskDBContext _context;
         private bool _disposed = false;
@@ -19,11 +19,11 @@ namespace YourVitebskWebServiceApp.Repositories
 
         public IEnumerable<IViewModel> Get()
         {
-            IEnumerable<CafeViewModel> result = new List<CafeViewModel>();
-            IEnumerable<Cafe> cafes = _context.Cafes.ToList().OrderBy(x => x.CafeId);
-            foreach (Cafe cafe in cafes)
+            IEnumerable<ViewModels.Cafe> result = new List<ViewModels.Cafe>();
+            IEnumerable<Models.Cafe> cafes = _context.Cafes.ToList().OrderBy(x => x.CafeId);
+            foreach (Models.Cafe cafe in cafes)
             {
-                result = result.Append(new CafeViewModel()
+                result = result.Append(new ViewModels.Cafe()
                 {
                     CafeId = (int)cafe.CafeId,
                     CafeType = _context.CafeTypes.First(x => x.CafeTypeId == cafe.CafeTypeId).Name,
@@ -39,18 +39,18 @@ namespace YourVitebskWebServiceApp.Repositories
             return result;
         }
 
-        public Cafe Get(int id)
+        public Models.Cafe Get(int id)
         {
             return _context.Cafes.FirstOrDefault(x => x.CafeId == id);
         }
 
-        public void Create(Cafe cafe)
+        public void Create(Models.Cafe cafe)
         {
             _context.Cafes.Add(cafe);
             _context.SaveChanges();
         }
 
-        public void Update(Cafe cafe)
+        public void Update(Models.Cafe cafe)
         {
             _context.Cafes.Update(cafe);
             _context.SaveChanges();

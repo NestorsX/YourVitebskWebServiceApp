@@ -12,36 +12,36 @@ namespace YourVitebskWebServiceApp.APIControllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class CafesController : ControllerBase
+    public class PostersController : ControllerBase
     {
-        private readonly IService<Cafe> _cafesService;
+        private readonly IService<Poster> _postersService;
 
-        public CafesController(IService<Cafe> cafesService)
+        public PostersController(IService<Poster> postersService)
         {
-            _cafesService = cafesService;
+            _postersService = postersService;
         }
 
-        // Gets all cafes
-        [HttpGet("cafes/all")]
-        public async Task<ActionResult<IEnumerable<Cafe>>> GetAll()
+        // Gets all posters
+        [HttpGet("posters/all")]
+        public async Task<ActionResult<IEnumerable<Poster>>> GetAll()
         {
-            IEnumerable<Cafe> cafes = await _cafesService.GetAll();
-            if (cafes == null)
+            IEnumerable<Poster> posters = await _postersService.GetAll();
+            if (posters == null)
             {
                 return NotFound();
             }
 
-            return Ok(cafes);
+            return Ok(posters);
         }
 
-        // Gets cafe by id
-        [HttpGet("cafes/{id}")]
+        // Gets poster by id
+        [HttpGet("posters/{id}")]
         public async Task<ActionResult<ResponseModel>> Get(int id)
         {
             try
             {
-                Cafe cafe = await _cafesService.GetById(id);
-                return Ok(ResponseModel.CreateResponseWithContent(cafe));
+                Poster poster = await _postersService.GetById(id);
+                return Ok(ResponseModel.CreateResponseWithContent(poster));
             }
             catch (ArgumentException e)
             {

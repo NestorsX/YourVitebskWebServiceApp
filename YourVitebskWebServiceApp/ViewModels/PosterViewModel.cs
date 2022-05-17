@@ -4,7 +4,7 @@ using YourVitebskWebServiceApp.Interfaces;
 
 namespace YourVitebskWebServiceApp.ViewModels
 {
-    public class PosterViewModel : IViewModel
+    public class Poster : IViewModel
     {
         public int? PosterId { get; set; }
 

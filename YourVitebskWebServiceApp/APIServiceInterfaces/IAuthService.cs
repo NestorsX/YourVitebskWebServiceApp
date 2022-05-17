@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using YourVitebskWebServiceApp.Models;
+using YourVitebskWebServiceApp.APIModels;
 
 namespace YourVitebskWebServiceApp.APIServiceInterfaces
 {

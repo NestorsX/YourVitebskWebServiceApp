@@ -1,14 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using YourVitebskWebServiceApp.APIServiceInterfaces;
-using YourVitebskWebServiceApp.Models;
-using YourVitebskWebServiceApp.ViewModels;
 
 namespace YourVitebskWebServiceApp.APIServices
 {
-    public class CafesService : IService<CafeViewModel>
+    public class CafesService : IService<APIModels.Cafe>
     {
         private readonly YourVitebskDBContext _context;
 
@@ -17,13 +16,13 @@ namespace YourVitebskWebServiceApp.APIServices
             _context = context;
         }
 
-        public async Task<IEnumerable<CafeViewModel>> GetAll()
+        public async Task<IEnumerable<APIModels.Cafe>> GetAll()
         {
-            IEnumerable<CafeViewModel> result = new List<CafeViewModel>();
-            IEnumerable<Cafe> cafes = (await _context.Cafes.ToListAsync()).OrderBy(x => x.Rating).ThenBy(x => x.CafeId);
-            foreach (Cafe cafe in cafes)
+            IEnumerable<APIModels.Cafe> result = new List<APIModels.Cafe>();
+            IEnumerable<Models.Cafe> cafes = (await _context.Cafes.ToListAsync()).OrderBy(x => x.Rating).ThenBy(x => x.CafeId);
+            foreach (Models.Cafe cafe in cafes)
             {
-                result = result.Append(new CafeViewModel()
+                result = result.Append(new APIModels.Cafe()
                 {
                     CafeId = (int)cafe.CafeId,
                     CafeType = (await _context.CafeTypes.FirstAsync(x => x.CafeTypeId == cafe.CafeTypeId)).Name,
@@ -39,10 +38,15 @@ namespace YourVitebskWebServiceApp.APIServices
             return result;
         }
 
-        public async Task<CafeViewModel> GetById(int id)
+        public async Task<APIModels.Cafe> GetById(int id)
         {
-            Cafe cafe = await _context.Cafes.FirstOrDefaultAsync(x => x.CafeId == id);
-            var result = new CafeViewModel()
+            Models.Cafe cafe = await _context.Cafes.FirstOrDefaultAsync(x => x.CafeId == id);
+            if (cafe == null)
+            {
+                throw new ArgumentException("Не найдено");
+            }
+
+            var result = new APIModels.Cafe()
             {
                 CafeId = (int)cafe.CafeId,
                 CafeType = _context.CafeTypes.First(x => x.CafeTypeId == cafe.CafeTypeId).Name,

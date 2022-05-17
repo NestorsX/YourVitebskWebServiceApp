@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace YourVitebskWebServiceApp.Models
+namespace YourVitebskWebServiceApp.APIModels
 {
     public class UserLoginDTO
     {

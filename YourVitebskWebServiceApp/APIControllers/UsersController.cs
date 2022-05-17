@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using YourVitebskWebServiceApp.Models;
 using YourVitebskWebServiceApp.APIServiceInterfaces;
 using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using YourVitebskWebServiceApp.APIModels;
 
 namespace YourVitebskWebServiceApp.APIControllers
 {
@@ -30,20 +30,20 @@ namespace YourVitebskWebServiceApp.APIControllers
 
         // Gets user by id
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<ResponseModel>> GetUser(int id)
         {
             User user = await _usersService.GetById(id);
             if (user == null)
             {
-                return NotFound("Пользователь не найден!");
+                return NotFound(ResponseModel.CreateResponseWithError("Пользователь не найден!"));
             }
 
-            return Ok(user);
+            return Ok(ResponseModel.CreateResponseWithContent(user));
         }
 
         // Updates user
         [HttpPut]
-        public async Task<IActionResult> UpdateUser([FromBody] User user)
+        public async Task<IActionResult> UpdateUser(User user)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace YourVitebskWebServiceApp.APIControllers
             }
             catch (ArgumentException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(ResponseModel.CreateResponseWithError(e.Message));
             }
         }
     }

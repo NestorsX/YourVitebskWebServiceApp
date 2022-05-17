@@ -14,7 +14,6 @@ using YourVitebskWebServiceApp.APIServices;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
 using YourVitebskWebServiceApp.Repositories;
-using YourVitebskWebServiceApp.ViewModels;
 
 namespace YourVitebskWebServiceApp
 {
@@ -31,7 +30,8 @@ namespace YourVitebskWebServiceApp
         {
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUsersService, UsersService>();
-            services.AddScoped<IService<CafeViewModel>, CafesService>();
+            services.AddScoped<IService<APIModels.Cafe >, CafesService>();
+            services.AddScoped<IService<APIModels.Poster>, PostersService>();
 
             services.AddScoped<IUserRepository, UsersRepository>();
             services.AddScoped<IRepository<Role>, RolesRepository>();
