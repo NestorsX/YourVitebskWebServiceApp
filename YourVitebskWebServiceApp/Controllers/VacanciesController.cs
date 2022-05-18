@@ -18,7 +18,7 @@ namespace YourVitebskWebServiceApp.Controllers
             _repository = repository;
         }
 
-        public IActionResult Index()
+        public ActionResult Index()
         {
             return View(_repository.Get());
         }
@@ -29,7 +29,7 @@ namespace YourVitebskWebServiceApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateAsync(Vacancy newVacancy)
+        public ActionResult Create(Vacancy newVacancy)
         {
             if (ModelState.IsValid)
             {

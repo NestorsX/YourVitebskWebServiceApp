@@ -1,11 +1,11 @@
-﻿@model YourVitebskWebServiceApp.Models.Cafe
+﻿@model YourVitebskWebServiceApp.Models.News
 
 <div class="row mb-3">
     <div class="col-auto me-auto">
-        <h2>Удаление заведения</h2>
+        <h2>Удаление новости</h2>
     </div>
     <div class="col-auto">
-        <a asp-controller="Cafes" asp-action="Index">Вернуться к списку</a>
+        <a asp-controller="News" asp-action="Index">Вернуться к списку</a>
     </div>
 </div>
 
@@ -13,28 +13,20 @@
     <table class="table table-striped align-middle">
         <tr>
             <th>ID</th>
-            <th>Тип</th>
             <th>Название</th>
             <th>Описание</th>
-            <th>Время работы</th>
-            <th>Адрес</th>
             <th>Ссылка</th>
-            <th>Рейтинг</th>
         </tr>
         <tr>
-            <td>@Model.CafeId</td>
-            <td>@ViewData["CafeType"]</td>
+            <td>@Model.NewsId</td>
             <td>@Model.Title</td>
             <td>@Model.Description</td>
-            <td>@Model.WorkingTime</td>
-            <td>@Model.Address</td>
             <td>@Model.ExternalLink</td>
-            <td>@Model.Rating</td>
         </tr>
     </table>
 </div>
  
-<form asp-action="Delete" asp-controller="Cafes" method="post">
+<form asp-action="Delete" asp-controller="News" method="post">
     <div class="mb-3">
         <input type="submit" class="btn btn-outline-danger" value="Удалить" />
     </div>

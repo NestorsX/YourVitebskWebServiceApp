@@ -6,7 +6,7 @@ namespace YourVitebskWebServiceApp.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public ActionResult Index()
         {
             return View();
         }

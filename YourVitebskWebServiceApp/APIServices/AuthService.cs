@@ -79,7 +79,7 @@ namespace YourVitebskWebServiceApp.APIServices
                         throw new ArgumentException("Пользователь с таким email уже существует!");
                     }
 
-                    if (!string.IsNullOrEmpty(userData.PhoneNumber))
+                    if (!string.IsNullOrWhiteSpace(userData.PhoneNumber))
                     {
                         if (await _context.UserData.AnyAsync(x => x.PhoneNumber == userData.PhoneNumber))
                         {
@@ -110,9 +110,9 @@ namespace YourVitebskWebServiceApp.APIServices
                         UserDataId = null,
                         UserId = user.UserId,
                         FirstName = userData.FirstName,
-                        SecondName = userData.SecondName,
+                        SecondName = userData.SecondName ?? "",
                         LastName = userData.LastName,
-                        PhoneNumber = userData.PhoneNumber
+                        PhoneNumber = userData.PhoneNumber ?? ""
                     };
 
                     _context.UserData.Add(user.UserDatum);

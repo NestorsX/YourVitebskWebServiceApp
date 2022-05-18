@@ -18,7 +18,7 @@ namespace YourVitebskWebServiceApp.Controllers
             _repository = repository;
         }
 
-        public IActionResult Index()
+        public ActionResult Index()
         {
             ViewBag.Services = _context.Services;
             ViewBag.UserData = _context.UserData;

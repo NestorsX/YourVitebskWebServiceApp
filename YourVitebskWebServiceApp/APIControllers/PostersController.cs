@@ -23,15 +23,9 @@ namespace YourVitebskWebServiceApp.APIControllers
 
         // Gets all posters
         [HttpGet("posters/all")]
-        public async Task<ActionResult<IEnumerable<Poster>>> GetAll()
+        public async Task<IEnumerable<Poster>> GetAll()
         {
-            IEnumerable<Poster> posters = await _postersService.GetAll();
-            if (posters == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(posters);
+            return await _postersService.GetAll();
         }
 
         // Gets poster by id

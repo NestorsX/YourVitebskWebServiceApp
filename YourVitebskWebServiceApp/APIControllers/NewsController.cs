@@ -5,6 +5,7 @@ using YourVitebskWebServiceApp.APIServiceInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System;
+using YourVitebskWebServiceApp.Models;
 using YourVitebskWebServiceApp.APIModels;
 
 namespace YourVitebskWebServiceApp.APIControllers
@@ -12,30 +13,30 @@ namespace YourVitebskWebServiceApp.APIControllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class CafesController : ControllerBase
+    public class NewsController : ControllerBase
     {
-        private readonly IService<Cafe> _cafesService;
+        private readonly IService<News> _newsService;
 
-        public CafesController(IService<Cafe> cafesService)
+        public NewsController(IService<News> newsService)
         {
-            _cafesService = cafesService;
+            _newsService = newsService;
         }
 
-        // Gets all cafes
-        [HttpGet("cafes/all")]
-        public async Task<IEnumerable<Cafe>> GetAll()
+        // Gets all news
+        [HttpGet("news/all")]
+        public async Task<IEnumerable<News>> GetAll()
         {
-            return await _cafesService.GetAll();
+            return await _newsService.GetAll();
         }
 
-        // Gets cafe by id
-        [HttpGet("cafes/{id}")]
+        // Gets news by id
+        [HttpGet("news/{id}")]
         public async Task<ActionResult<ResponseModel>> Get(int id)
         {
             try
             {
-                Cafe cafe = await _cafesService.GetById(id);
-                return Ok(ResponseModel.CreateResponseWithContent(cafe));
+                News news = await _newsService.GetById(id);
+                return Ok(ResponseModel.CreateResponseWithContent(news));
             }
             catch (ArgumentException e)
             {

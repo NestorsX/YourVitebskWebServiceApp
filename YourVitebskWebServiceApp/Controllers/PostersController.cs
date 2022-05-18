@@ -20,7 +20,7 @@ namespace YourVitebskWebServiceApp.Controllers
             _repository = repository;
         }
 
-        public IActionResult Index()
+        public ActionResult Index()
         {
             return View(_repository.Get());
         }
@@ -32,7 +32,7 @@ namespace YourVitebskWebServiceApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateAsync(ViewModels.Poster newPoster)
+        public ActionResult Create(PosterViewModel newPoster)
         {
             if (_context.Posters.FirstOrDefault(x => x.Title == newPoster.Title) != null)
             {
@@ -64,7 +64,7 @@ namespace YourVitebskWebServiceApp.Controllers
                     Description = newPoster.Description,
                     DateTime = dateTime,
                     Address = newPoster.Address,
-                    ExternalLink = newPoster.ExternalLink,
+                    ExternalLink = newPoster.ExternalLink ?? ""
                 };
 
                 _repository.Create(Poster);
@@ -80,7 +80,7 @@ namespace YourVitebskWebServiceApp.Controllers
             Models.Poster poster = _repository.Get(id);
             if (poster != null)
             {
-                var viewModel = new ViewModels.Poster
+                var viewModel = new PosterViewModel
                 {
                     PosterId = poster.PosterId,
                     PosterTypeId = poster.PosterTypeId,
@@ -88,7 +88,7 @@ namespace YourVitebskWebServiceApp.Controllers
                     Description = poster.Description,
                     DateTime = ((DateTime)poster.DateTime).ToString("yyyy-MM-dd HH:mm"),
                     Address = poster.Address,
-                    ExternalLink = poster.ExternalLink
+                    ExternalLink = poster.ExternalLink ?? ""
                 };
 
                 ViewBag.PosterTypes = _context.PosterTypes;
@@ -100,7 +100,7 @@ namespace YourVitebskWebServiceApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(ViewModels.Poster newPoster)
+        public ActionResult Edit(PosterViewModel newPoster)
         {
             Models.Poster Poster = _repository.Get((int)newPoster.PosterId);
             if (_context.Posters.FirstOrDefault(x => x.Title == newPoster.Title && newPoster.Title != Poster.Title) != null)

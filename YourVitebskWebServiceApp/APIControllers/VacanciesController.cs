@@ -12,30 +12,30 @@ namespace YourVitebskWebServiceApp.APIControllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class CafesController : ControllerBase
+    public class VacanciesController : ControllerBase
     {
-        private readonly IService<Cafe> _cafesService;
+        private readonly IService<Vacancy> _vacanciesService;
 
-        public CafesController(IService<Cafe> cafesService)
+        public VacanciesController(IService<Vacancy> vacanciesService)
         {
-            _cafesService = cafesService;
+            _vacanciesService = vacanciesService;
         }
 
-        // Gets all cafes
-        [HttpGet("cafes/all")]
-        public async Task<IEnumerable<Cafe>> GetAll()
+        // Gets all vacancies
+        [HttpGet("vacancies/all")]
+        public async Task<IEnumerable<Vacancy>> GetAll()
         {
-            return await _cafesService.GetAll();
+            return await _vacanciesService.GetAll();
         }
 
-        // Gets cafe by id
-        [HttpGet("cafes/{id}")]
+        // Gets vacancy by id
+        [HttpGet("vacancies/{id}")]
         public async Task<ActionResult<ResponseModel>> Get(int id)
         {
             try
             {
-                Cafe cafe = await _cafesService.GetById(id);
-                return Ok(ResponseModel.CreateResponseWithContent(cafe));
+                Vacancy vacancy = await _vacanciesService.GetById(id);
+                return Ok(ResponseModel.CreateResponseWithContent(vacancy));
             }
             catch (ArgumentException e)
             {

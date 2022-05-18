@@ -18,7 +18,7 @@ namespace YourVitebskWebServiceApp.Controllers
             _repository = repository;
         }
 
-        public IActionResult Index()
+        public ActionResult Index()
         {
             return View(_repository.Get());
         }
@@ -30,7 +30,7 @@ namespace YourVitebskWebServiceApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateAsync(Cafe newCafe)
+        public ActionResult Create(Cafe newCafe)
         {
             if (_context.Cafes.FirstOrDefault(x => x.Title == newCafe.Title) != null)
             {
@@ -52,7 +52,7 @@ namespace YourVitebskWebServiceApp.Controllers
                     Description = newCafe.Description,
                     WorkingTime = newCafe.WorkingTime,
                     Address = newCafe.Address,
-                    ExternalLink = newCafe.ExternalLink,
+                    ExternalLink = newCafe.ExternalLink ?? "",
                     Rating = null,
                 };
 
@@ -98,7 +98,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 cafe.Description = newCafe.Description;
                 cafe.WorkingTime = newCafe.WorkingTime;
                 cafe.Address = newCafe.Address;
-                cafe.ExternalLink = newCafe.ExternalLink;
+                cafe.ExternalLink = newCafe.ExternalLink ?? "";
                 _repository.Update(cafe);
                 return RedirectToAction("Index");
             }
@@ -118,6 +118,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 ViewData["CafeType"] = _context.CafeTypes.First(x => x.CafeTypeId == cafe.CafeTypeId).Name;
                 return View(cafe);
             }
+
             return NotFound();
         }
 

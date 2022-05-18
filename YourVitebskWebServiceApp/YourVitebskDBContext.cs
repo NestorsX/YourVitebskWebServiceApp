@@ -8,6 +8,10 @@ namespace YourVitebskWebServiceApp
         public DbSet<User> Users { get; set; }
         public DbSet<UserDatum> UserData { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<News> News { get; set; }
+        public DbSet<Bus> Buses { get; set; }
+        public DbSet<BusStop> BusStops { get; set; }
+        public DbSet<BusShedule> BusShedules { get; set; }
         public DbSet<Cafe> Cafes { get; set; }
         public DbSet<CafeType> CafeTypes { get; set; }
         public DbSet<Poster> Posters { get; set; }

@@ -1,7 +1,5 @@
-﻿@model YourVitebskWebServiceApp.Models.Poster
-@{
-    ViewData["Date"] = ((DateTime)Model.DateTime).ToString("yyyy-MM-dd HH:mm");
-}
+﻿@model YourVitebskWebServiceApp.ViewModels.PosterViewModel
+
 <div class="row mb-3">
     <div class="col-auto me-auto">
         <h2>Удаление афиши</h2>
@@ -24,10 +22,10 @@
         </tr>
         <tr>
             <td>@Model.PosterId</td>
-            <td>@ViewData["PosterType"]</td>
+            <td>@Model.PosterType</td>
             <td>@Model.Title</td>
             <td>@Model.Description</td>
-            <td>@ViewData["Date"]</td>
+            <td>@Model.DateTime</td>
             <td>@Model.Address</td>
             <td>@Model.ExternalLink</td>
         </tr>

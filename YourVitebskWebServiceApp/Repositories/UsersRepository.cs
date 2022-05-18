@@ -47,6 +47,7 @@ namespace YourVitebskWebServiceApp.Repositories
             {
                 UserId = (int)user.UserId,
                 Email = user.Email,
+                RoleId = user.RoleId,
                 Role = _context.Roles.First(x => x.RoleId == user.RoleId).Name,
                 FirstName = user.UserDatum.FirstName,
                 SecondName = user.UserDatum.SecondName,

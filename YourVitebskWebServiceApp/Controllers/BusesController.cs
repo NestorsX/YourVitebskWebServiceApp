@@ -7,12 +7,12 @@ using YourVitebskWebServiceApp.Models;
 namespace YourVitebskWebServiceApp.Controllers
 {
     [Authorize]
-    public class RolesController : Controller
+    public class BusesController : Controller
     {
         private readonly YourVitebskDBContext _context;
-        private readonly IRepository<Role> _repository;
+        private readonly IRepository<Bus> _repository;
 
-        public RolesController(YourVitebskDBContext context, IRepository<Role> repository)
+        public BusesController(YourVitebskDBContext context, IRepository<Bus> repository)
         {
             _context = context;
             _repository = repository;
@@ -29,26 +29,26 @@ namespace YourVitebskWebServiceApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Role newRole)
+        public ActionResult Create(Bus newBus)
         {
-            if (_context.Roles.FirstOrDefault(x => x.Name == newRole.Name) != null)
+            if (_context.Buses.FirstOrDefault(x => x.Number == newBus.Number) != null)
             {
-                ModelState.AddModelError("Name", "Такая роль уже существует");
+                ModelState.AddModelError("Number", "Такой автобус уже существует");
             }
 
             if (ModelState.IsValid)
             {
-                var role = new Role
+                var bus = new Bus
                 {
-                    RoleId = null,
-                    Name = newRole.Name
+                    BusId = null,
+                    Number = newBus.Number
                 };
 
-                _repository.Create(role);
+                _repository.Create(bus);
                 return RedirectToAction("Index");
             }
 
-            return View(newRole);
+            return View(newBus);
         }
 
         public ActionResult Edit(int id)
@@ -58,29 +58,29 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            Role role = _repository.Get(id);
-            if (role != null)
-                return View(role);
+            Bus bus = _repository.Get(id);
+            if (bus != null)
+                return View(bus);
             return NotFound();
         }
 
         [HttpPost]
-        public ActionResult Edit(Role newRole)
+        public ActionResult Edit(Bus newBus)
         {
-            Role role = _repository.Get((int)newRole.RoleId);
-            if (_context.Roles.FirstOrDefault(x => x.Name == newRole.Name && role.Name != newRole.Name) != null)
+            Bus bus = _repository.Get((int)newBus.BusId);
+            if (_context.Buses.FirstOrDefault(x => x.Number == newBus.Number && bus.Number != newBus.Number) != null)
             {
-                ModelState.AddModelError("Name", "Такая роль уже существует");
+                ModelState.AddModelError("Number", "Такой автобус уже существует");
             }
 
             if (ModelState.IsValid)
             {
-                role.Name = newRole.Name;
-                _repository.Update(role);
+                bus.Number = newBus.Number;
+                _repository.Update(bus);
                 return RedirectToAction("Index");
             }
 
-            return View(newRole);
+            return View(newBus);
         }
 
         [HttpGet]
@@ -92,10 +92,10 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            Role role = _repository.Get(id);
-            if (role != null)
+            Bus bus = _repository.Get(id);
+            if (bus != null)
             {
-                return View(role);
+                return View(bus);
             }
 
             return NotFound();

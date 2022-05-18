@@ -20,7 +20,7 @@ namespace YourVitebskWebServiceApp.Controllers
             _repository = repository;
         }
 
-        public IActionResult Index()
+        public ActionResult Index()
         {
             return View(_repository.Get());
         }
@@ -72,9 +72,9 @@ namespace YourVitebskWebServiceApp.Controllers
                         UserDataId = null,
                         UserId = null,
                         FirstName = newUser.FirstName,
-                        SecondName = newUser.SecondName,
+                        SecondName = newUser.SecondName ?? "",
                         LastName = newUser.LastName,
-                        PhoneNumber = newUser.PhoneNumber,
+                        PhoneNumber = newUser.PhoneNumber ?? "",
                     }
                 };
 
@@ -119,7 +119,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 ModelState.AddModelError("RoleId", "Выберите роль");
             }
 
-            if (newUser.PhoneNumber != null)
+            if (!string.IsNullOrWhiteSpace(newUser.PhoneNumber))
             {
                 if (_context.Users.FirstOrDefault(x => x.UserDatum.PhoneNumber == newUser.PhoneNumber && newUser.PhoneNumber != user.UserDatum.PhoneNumber) != null)
                 {
@@ -139,9 +139,9 @@ namespace YourVitebskWebServiceApp.Controllers
                 user.Email = newUser.Email;
                 user.RoleId = newUser.RoleId;
                 user.UserDatum.FirstName = newUser.FirstName;
-                user.UserDatum.SecondName = newUser.SecondName;
+                user.UserDatum.SecondName = newUser.SecondName ?? "";
                 user.UserDatum.LastName = newUser.LastName;
-                user.UserDatum.PhoneNumber = newUser.PhoneNumber;
+                user.UserDatum.PhoneNumber = newUser.PhoneNumber ?? "";
                 _repository.Update(user);
                 return RedirectToAction("Index");
             }

@@ -1,0 +1,33 @@
+﻿@model IEnumerable<YourVitebskWebServiceApp.Models.News>
+
+<div class="mb-3">
+    <h2>Новости</h2>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped align-middle">
+        <tr>
+            <th>ID</th>
+            <th>Заголовок</th>
+            <th>Описание</th>
+            <th>Ссылка</th>
+            <th><a class="btn btn-outline-dark float-end" asp-controller="News" asp-action="Create">Добавить</a></th>
+        </tr>
+    
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.NewsId</td>
+                <td>@item.Title</td>
+                <td>@item.Description</td>
+                <td>@item.ExternalLink</td>
+                <td>
+                    <div class="btn-group float-end" role="group">
+                        <a class="btn btn-outline-dark" asp-controller="News" asp-action="Edit" asp-route-id="@item.NewsId">Изменить</a>
+                        <a class="btn btn-outline-danger" asp-controller="News" asp-action="Delete" asp-route-id="@item.NewsId">Удалить</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </table>
+</div>

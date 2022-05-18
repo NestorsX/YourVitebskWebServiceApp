@@ -1,0 +1,36 @@
+﻿@model YourVitebskWebServiceApp.Models.News
+
+<div class="row mb-3">
+    <div class="col-auto me-auto">
+        <h2>Добавление новости</h2>
+        <div class="form-text"><i>*</i> - обязательные поля</div>
+    </div>
+    <div class="col-auto">
+        <a asp-controller="News" asp-action="Index">Вернуться к списку</a>
+    </div>
+</div>
+ 
+<form asp-action="Create" asp-controller="News" method="post" enctype="multipart/form-data">
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
+    <div>
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label">Заголовок<i>*</i></label>
+            <input type="text" asp-for="Title" class="form-control form-control-sm" />
+            <span class="badge bg-danger" asp-validation-for="Title"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Описание<i>*</i></label>
+            <textarea asp-for="Description" class="form-control form-control-sm" ></textarea>
+            <span class="badge bg-danger" asp-validation-for="Description"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="ExternalLink" class="form-label">Ссылка</label>
+            <input type="url" asp-for="ExternalLink" class="form-control form-control-sm" placeholder="https://www.example.com" aria-describedby="linkNotify" />
+            <div id="linkNotify" class="form-text">Ссылка на внешний ресурс</div>
+            <span class="badge bg-danger" asp-validation-for="ExternalLink"></span>
+        </div>
+        <div class="mb-3">
+            <input type="submit" value="Сохранить" class="btn btn-outline-secondary" />
+        </div>
+    </div>
+</form>

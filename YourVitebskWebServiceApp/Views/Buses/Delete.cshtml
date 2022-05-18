@@ -1,11 +1,11 @@
-﻿@model YourVitebskWebServiceApp.Models.PosterType
+﻿@model YourVitebskWebServiceApp.Models.Bus
 
 <div class="row mb-3">
     <div class="col-auto me-auto">
-        <h2>Удаление вида искусства</h2>
+        <h2>Удаление автобуса</h2>
     </div>
     <div class="col-auto">
-        <a asp-controller="PosterTypes" asp-action="Index">Вернуться к списку</a>
+        <a asp-controller="Buses" asp-action="Index">Вернуться к списку</a>
     </div>
 </div>
 
@@ -13,16 +13,16 @@
     <table class="table table-striped align-middle">
         <tr>
             <th>ID</th>
-            <th>Тип искусства</th>
+            <th>Номер</th>
         </tr>
         <tr>
-            <td>@Model.PosterTypeId</td>
-            <td>@Model.Name</td>
+            <td>@Model.BusId</td>
+            <td>@Model.Number</td>
         </tr>
     </table>
 </div>
  
-<form asp-action="Delete" asp-controller="PosterTypes" method="post">
+<form asp-action="Delete" asp-controller="Buses" method="post">
     <div class="mb-3">
         <input type="submit" class="btn btn-outline-danger" value="Удалить" />
     </div>
