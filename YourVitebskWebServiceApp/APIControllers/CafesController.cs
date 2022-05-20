@@ -22,14 +22,14 @@ namespace YourVitebskWebServiceApp.APIControllers
         }
 
         // Gets all cafes
-        [HttpGet("cafes/all")]
+        [HttpGet("all")]
         public async Task<IEnumerable<Cafe>> GetAll()
         {
             return await _cafesService.GetAll();
         }
 
         // Gets cafe by id
-        [HttpGet("cafes/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<ResponseModel>> Get(int id)
         {
             try

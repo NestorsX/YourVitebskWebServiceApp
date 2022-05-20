@@ -22,7 +22,7 @@ namespace YourVitebskWebServiceApp.APIControllers
         }
 
         // Gets all users
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<IEnumerable<User>> GetAllUsers()
         {
             return await _usersService.GetAllUsers();

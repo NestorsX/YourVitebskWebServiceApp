@@ -22,14 +22,14 @@ namespace YourVitebskWebServiceApp.APIControllers
         }
 
         // Gets all posters
-        [HttpGet("posters/all")]
+        [HttpGet("all")]
         public async Task<IEnumerable<Poster>> GetAll()
         {
             return await _postersService.GetAll();
         }
 
         // Gets poster by id
-        [HttpGet("posters/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<ResponseModel>> Get(int id)
         {
             try

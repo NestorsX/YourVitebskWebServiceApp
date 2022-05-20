@@ -23,14 +23,14 @@ namespace YourVitebskWebServiceApp.APIControllers
         }
 
         // Gets all news
-        [HttpGet("news/all")]
+        [HttpGet("all")]
         public async Task<IEnumerable<News>> GetAll()
         {
             return await _newsService.GetAll();
         }
 
         // Gets news by id
-        [HttpGet("news/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<ResponseModel>> Get(int id)
         {
             try
