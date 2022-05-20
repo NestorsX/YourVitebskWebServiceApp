@@ -14,7 +14,7 @@
     <div class="validation" asp-validation-summary="ModelOnly"></div>
     <div>
         <div class="mb-3">
-            <label asp-for="CafeTypeId" class="form-label">Тип заведения<i>*</i></label>
+            <label asp-for="CafeTypeId" class="form-label">Вид заведения<i>*</i></label>
             <select asp-for="CafeTypeId" class="form-control form-control-sm" >
                 <option value="0">Выберите тип заведения</option>
                 @foreach (CafeType cafeType in ViewBag.CafeTypes)

@@ -28,7 +28,7 @@ namespace YourVitebskWebServiceApp.APIServices
                     PosterType = (await _context.PosterTypes.FirstAsync(x => x.PosterTypeId == poster.PosterTypeId)).Name,
                     Title = poster.Title,
                     Description = poster.Description,
-                    DateTime = ((DateTime)poster.DateTime).ToString("f"),
+                    DateTime = poster.DateTime,
                     Address = poster.Address,
                     ExternalLink = poster.ExternalLink,
                 });
@@ -51,7 +51,7 @@ namespace YourVitebskWebServiceApp.APIServices
                 PosterType = _context.PosterTypes.First(x => x.PosterTypeId == poster.PosterTypeId).Name,
                 Title = poster.Title,
                 Description = poster.Description,
-                DateTime = ((DateTime)poster.DateTime).ToString("f"),
+                DateTime = poster.DateTime,
                 Address = poster.Address,
                 ExternalLink = poster.ExternalLink,
             };

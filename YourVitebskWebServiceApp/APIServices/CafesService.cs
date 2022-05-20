@@ -31,7 +31,7 @@ namespace YourVitebskWebServiceApp.APIServices
                     WorkingTime = cafe.WorkingTime,
                     Address = cafe.Address,
                     ExternalLink = cafe.ExternalLink,
-                    Rating = cafe.Rating,
+                    Rating = cafe.Rating == null ? "Без рейтинга" : cafe.Rating.ToString(),
                 });
             }
 
@@ -55,7 +55,7 @@ namespace YourVitebskWebServiceApp.APIServices
                 WorkingTime = cafe.WorkingTime,
                 Address = cafe.Address,
                 ExternalLink = cafe.ExternalLink,
-                Rating = cafe.Rating,
+                Rating = cafe.Rating == null ? "Без рейтинга" : cafe.Rating.ToString(),
             };
 
             return result;

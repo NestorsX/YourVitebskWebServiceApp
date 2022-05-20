@@ -18,9 +18,15 @@
         {
             <tr>
                 <td>@item.NewsId</td>
-                <td>@item.Title</td>
-                <td style="white-space:pre">@item.Description</td>
-                <td>@item.ExternalLink</td>
+                <td>
+                    <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.Title</span>
+                </td>
+                <td>
+                    <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.Description</span>
+                </td>
+                <td>
+                    <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.ExternalLink</span>
+                </td>
                 <td>
                     <div class="btn-group float-end" role="group">
                         <a class="btn btn-outline-dark" asp-controller="News" asp-action="Edit" asp-route-id="@item.NewsId">Изменить</a>

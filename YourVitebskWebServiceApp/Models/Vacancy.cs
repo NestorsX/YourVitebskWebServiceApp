@@ -15,6 +15,12 @@ namespace YourVitebskWebServiceApp.Models
         [Required(ErrorMessage = "Необходимо указать описание")]
         public string Description { get; set; }
 
+        [Required(ErrorMessage = "Необходимо указать требования")]
+        public string Requirements { get; set; }
+
+        [Required(ErrorMessage = "Необходимо указать условия")]
+        public string Conditions { get; set; }
+
         [Required(ErrorMessage = "Необходимо указать предполагаемую з/п")]
         public string Salary { get; set; }
 

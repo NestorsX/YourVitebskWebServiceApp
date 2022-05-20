@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using YourVitebskWebServiceApp.APIServiceInterfaces;
@@ -27,11 +28,13 @@ namespace YourVitebskWebServiceApp.APIServices
                     VacancyId = (int)vacancy.VacancyId,
                     Title = vacancy.Title,
                     Description = vacancy.Description,
+                    Requirements = vacancy.Requirements,
+                    Conditions = vacancy.Conditions,
                     Salary = vacancy.Salary,
                     CompanyName = vacancy.CompanyName,
                     Contacts = vacancy.Contacts,
                     Address = vacancy.Address,
-                    PublishDate = ((DateTime)vacancy.PublishDate).ToString("D")
+                    PublishDate = vacancy.PublishDate.ToString("D", new CultureInfo("ru-RU"))
                 });
             }
 
@@ -51,11 +54,13 @@ namespace YourVitebskWebServiceApp.APIServices
                 VacancyId = (int)vacancy.VacancyId,
                 Title = vacancy.Title,
                 Description = vacancy.Description,
+                Requirements = vacancy.Requirements,
+                Conditions = vacancy.Conditions,
                 Salary = vacancy.Salary,
                 CompanyName = vacancy.CompanyName,
                 Contacts = vacancy.Contacts,
                 Address = vacancy.Address,
-                PublishDate = ((DateTime)vacancy.PublishDate).ToString("D")
+                PublishDate = vacancy.PublishDate.ToString("D", new CultureInfo("ru-RU"))
             };
 
             return result;

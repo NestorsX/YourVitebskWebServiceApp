@@ -14,7 +14,7 @@
     <div class="validation" asp-validation-summary="ModelOnly"></div>
     <div>
         <div class="mb-3">
-            <label asp-for="PosterTypeId" class="form-label">Тип искусства<i>*</i></label>
+            <label asp-for="PosterTypeId" class="form-label">Вид события<i>*</i></label>
             <select asp-for="PosterTypeId" class="form-control form-control-sm" >
                 <option value="0">Выберите тип искусства</option>
                 @foreach (PosterType posterType in ViewBag.PosterTypes)
@@ -36,7 +36,7 @@
         </div>
         <div class="mb-3">
             <label asp-for="DateTime" class="form-label">Дата и время<i>*</i></label>
-            <input type="text" asp-for="DateTime" class="form-control form-control-sm" placeholder="год/месяц/день часы:минуты" id="DateTime"/>
+            <textarea asp-for="DateTime" class="form-control form-control-sm" ></textarea>
             <span class="badge bg-danger" asp-validation-for="DateTime"></span>
         </div>
         <div class="mb-3">
@@ -55,9 +55,3 @@
         </div>
     </div>
 </form>
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/plugins/jquery.maskedinput.js"></script>
-<script type="text/javascript">
-    $("#DateTime").mask("9999/99/99 99:99");
-</script>

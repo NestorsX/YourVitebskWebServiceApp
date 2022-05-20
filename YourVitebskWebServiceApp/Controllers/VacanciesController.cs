@@ -38,6 +38,8 @@ namespace YourVitebskWebServiceApp.Controllers
                     VacancyId = null,
                     Title = newVacancy.Title,
                     Description = newVacancy.Description,
+                    Requirements = newVacancy.Requirements,
+                    Conditions = newVacancy.Conditions,
                     Salary = newVacancy.Salary,
                     CompanyName = newVacancy.CompanyName,
                     Contacts = newVacancy.Contacts,
@@ -71,6 +73,8 @@ namespace YourVitebskWebServiceApp.Controllers
             {
                 vacancy.Title = newVacancy.Title;
                 vacancy.Description = newVacancy.Description;
+                vacancy.Requirements = newVacancy.Requirements;
+                vacancy.Conditions = newVacancy.Conditions;
                 vacancy.Salary = newVacancy.Salary;
                 vacancy.CompanyName = newVacancy.CompanyName;
                 vacancy.Contacts = newVacancy.Contacts;

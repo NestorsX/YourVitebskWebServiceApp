@@ -8,7 +8,7 @@
     <table class="table table-striped align-middle">
         <tr>
             <th>ID</th>
-            <th>Тип</th>
+            <th>Вид заведения</th>
             <th>Название</th>
             <th>Описание</th>
             <th>Время работы</th>
@@ -24,10 +24,16 @@
                 <td>@item.CafeId</td>
                 <td>@item.CafeType</td>
                 <td>@item.Title</td>
-                <td style="white-space:pre">@item.Description</td>
-                <td style="white-space:pre">@item.WorkingTime</td>
+                <td>
+                    <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.Description</span>
+                </td>
+                <td>
+                    <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.WorkingTime</span>
+                </td>
                 <td>@item.Address</td>
-                <td>@item.ExternalLink</td>
+                <td>
+                    <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.ExternalLink</span>
+                </td>
                 <td>@item.Rating</td>
                 <td>
                     <div class="btn-group float-end" role="group">

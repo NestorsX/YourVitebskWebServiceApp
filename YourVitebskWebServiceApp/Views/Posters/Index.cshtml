@@ -8,10 +8,10 @@
     <table class="table table-striped align-middle">
         <tr>
             <th>ID</th>
-            <th>Тип</th>
+            <th>Вид события</th>
             <th>Название</th>
             <th>Описание</th>
-            <th>Дата и время</th>
+            <th>Время</th>
             <th>Адрес</th>
             <th>Ссылка</th>
             <th><a class="btn btn-outline-dark float-end" asp-controller="Posters" asp-action="Create">Добавить</a></th>
@@ -23,10 +23,16 @@
                 <td>@item.PosterId</td>
                 <td>@item.PosterType</td>
                 <td>@item.Title</td>
-                <td style="white-space:pre">@item.Description</td>
-                <td>@item.DateTime</td>
+                <td>
+                    <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.Description</span>
+                </td>
+                <td>
+                    <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.DateTime</span>
+                </td>
                 <td>@item.Address</td>
-                <td>@item.ExternalLink</td>
+                <td>
+                    <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.ExternalLink</span>
+                </td>
                 <td>
                     <div class="btn-group float-end" role="group">
                         <a class="btn btn-outline-dark" asp-controller="Posters" asp-action="Edit" asp-route-id="@item.PosterId">Изменить</a>

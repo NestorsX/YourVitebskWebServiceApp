@@ -44,16 +44,6 @@ namespace YourVitebskWebServiceApp.Controllers
                 ModelState.AddModelError("PosterTypeId", "Выберите тип искусства");
             }
 
-            if (!DateTime.TryParse(newPoster.DateTime, out DateTime dateTime) || dateTime >= new DateTime(2079, 6, 6))
-            {
-                ModelState.AddModelError("DateTime", "Некорректная дата и(или) время");
-            }
-
-            if (dateTime <= DateTime.Now)
-            {
-                ModelState.AddModelError("DateTime", "Необходимо указать будущуюю дату");
-            }
-
             if (ModelState.IsValid)
             {
                 var Poster = new Models.Poster
@@ -62,7 +52,7 @@ namespace YourVitebskWebServiceApp.Controllers
                     PosterTypeId = newPoster.PosterTypeId,
                     Title = newPoster.Title,
                     Description = newPoster.Description,
-                    DateTime = dateTime,
+                    DateTime = newPoster.DateTime,
                     Address = newPoster.Address,
                     ExternalLink = newPoster.ExternalLink ?? ""
                 };
@@ -86,7 +76,7 @@ namespace YourVitebskWebServiceApp.Controllers
                     PosterTypeId = poster.PosterTypeId,
                     Title = poster.Title,
                     Description = poster.Description,
-                    DateTime = ((DateTime)poster.DateTime).ToString("yyyy-MM-dd HH:mm"),
+                    DateTime = poster.DateTime,
                     Address = poster.Address,
                     ExternalLink = poster.ExternalLink ?? ""
                 };
@@ -113,22 +103,12 @@ namespace YourVitebskWebServiceApp.Controllers
                 ModelState.AddModelError("PosterTypeId", "Выберите тип искусства");
             }
 
-            if (!DateTime.TryParse(newPoster.DateTime, out DateTime dateTime) || dateTime >= new DateTime(2079, 6, 6))
-            {
-                ModelState.AddModelError("DateTime", "Некорректная дата и(или) время");
-            }
-
-            if (dateTime <= DateTime.Now)
-            {
-                ModelState.AddModelError("DateTime", "Необходимо указать будущуюю дату");
-            }
-
             if (ModelState.IsValid)
             {
                 Poster.PosterTypeId = newPoster.PosterTypeId;
                 Poster.Title = newPoster.Title;
                 Poster.Description = newPoster.Description;
-                Poster.DateTime = dateTime;
+                Poster.DateTime = newPoster.DateTime;
                 Poster.Address = newPoster.Address;
                 Poster.ExternalLink = newPoster.ExternalLink;
                 _repository.Update(Poster);

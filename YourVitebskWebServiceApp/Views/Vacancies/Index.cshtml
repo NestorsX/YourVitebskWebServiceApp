@@ -10,6 +10,8 @@
             <th>ID</th>
             <th>Название</th>
             <th>Описание</th>
+            <th>Требования</th>
+            <th>Условия</th>
             <th>З/п</th>
             <th>Компания-наниматель</th>
             <th>Контакты</th>
@@ -23,12 +25,22 @@
             <tr>
                 <td>@item.VacancyId</td>
                 <td>@item.Title</td>
-                <td style="white-space:pre">@item.Description</td>
+                <td>
+                    <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.Description</span>
+                </td>
+                <td>
+                    <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.Requirements</span>
+                </td>
+                <td>
+                    <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.Conditions</span>
+                </td>
                 <td>@item.Salary</td>
                 <td>@item.CompanyName</td>
-                <td style="white-space:pre">@item.Contacts</td>
+                <td>
+                    <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.Contacts</span>
+                </td>
                 <td>@item.Address</td>
-                <td>@item.PublishDate.ToString("yyyy-MM-dd")</td>
+                <td>@item.PublishDate.ToString("D", new System.Globalization.CultureInfo("ru-RU"))</td>
                 <td>
                     <div class="btn-group float-end" role="group">
                         <a class="btn btn-outline-dark" asp-controller="Vacancies" asp-action="Edit" asp-route-id="@item.VacancyId">Изменить</a>

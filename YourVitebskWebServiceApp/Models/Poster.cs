@@ -8,17 +8,17 @@ namespace YourVitebskWebServiceApp.Models
         [Key]
         public int? PosterId { get; set; }
 
-        [Required(ErrorMessage = "Необходимо указать тип искусства")]
+        [Required(ErrorMessage = "Необходимо указать тип события")]
         public int PosterTypeId { get; set; }
 
-        [Required(ErrorMessage = "Необходимо указать название афиши")]
+        [Required(ErrorMessage = "Необходимо указать название")]
         public string Title { get; set; }
 
         [Required(ErrorMessage = "Необходимо указать описание")]
         public string Description { get; set; }
 
-        [Required(ErrorMessage = "Необходимо указать дату и время")]
-        public DateTime? DateTime { get; set; }
+        [Required(ErrorMessage = "Необходимо время события")]
+        public string DateTime { get; set; }
 
         [Required(ErrorMessage = "Необходимо указать адрес")]
         public string Address { get; set; }

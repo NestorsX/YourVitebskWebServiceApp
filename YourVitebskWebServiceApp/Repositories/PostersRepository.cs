@@ -29,7 +29,7 @@ namespace YourVitebskWebServiceApp.Repositories
                     PosterType = _context.PosterTypes.First(x => x.PosterTypeId == poster.PosterTypeId).Name,
                     Title = poster.Title,
                     Description = poster.Description,
-                    DateTime = ((DateTime)poster.DateTime).ToString("yyyy-MM-dd HH:mm"),
+                    DateTime = poster.DateTime,
                     Address = poster.Address,
                     ExternalLink = poster.ExternalLink,
                 });

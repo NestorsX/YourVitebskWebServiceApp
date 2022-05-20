@@ -13,10 +13,10 @@
     <table class="table table-striped align-middle">
         <tr>
             <th>ID</th>
-            <th>Тип</th>
+            <th>Вид события</th>
             <th>Название</th>
             <th>Описание</th>
-            <th>Дата и время</th>
+            <th>Время</th>
             <th>Адрес</th>
             <th>Ссылка</th>
         </tr>
@@ -24,10 +24,16 @@
             <td>@Model.PosterId</td>
             <td>@Model.PosterType</td>
             <td>@Model.Title</td>
-            <td style="white-space:pre">@Model.Description</td>
-            <td>@Model.DateTime</td>
+            <td>
+                <span class="d-inline-block text-truncate" style="max-width: 300px;">@Model.Description</span>
+            </td>
+            <td>
+                <span class="d-inline-block text-truncate" style="max-width: 300px;">@Model.DateTime</span>
+            </td>
             <td>@Model.Address</td>
-            <td>@Model.ExternalLink</td>
+            <td>
+                <span class="d-inline-block text-truncate" style="max-width: 300px;">@Model.ExternalLink</span>
+            </td>
         </tr>
     </table>
 </div>

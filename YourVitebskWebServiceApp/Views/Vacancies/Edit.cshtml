@@ -25,6 +25,16 @@
             <span class="badge bg-danger" asp-validation-for="Description"></span>
         </div>
         <div class="mb-3">
+            <label asp-for="Requirements" class="form-label">Требования<i>*</i></label>
+            <textarea asp-for="Requirements" class="form-control form-control-sm" ></textarea>
+            <span class="badge bg-danger" asp-validation-for="Requirements"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Conditions" class="form-label">Условия<i>*</i></label>
+            <textarea asp-for="Conditions" class="form-control form-control-sm" ></textarea>
+            <span class="badge bg-danger" asp-validation-for="Conditions"></span>
+        </div>
+        <div class="mb-3">
             <label asp-for="Salary" class="form-label">Предполагаемая з/п<i>*</i></label>
             <input type="text" asp-for="Salary" class="form-control form-control-sm" placeholder="от 1000 б.р." id="DateTime"/>
             <span class="badge bg-danger" asp-validation-for="Salary"></span>
