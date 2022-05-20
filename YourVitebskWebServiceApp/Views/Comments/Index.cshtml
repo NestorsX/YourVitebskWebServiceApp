@@ -28,7 +28,7 @@
                             <td>@item.CommentId</td>
                             <td>@service.Name</td>
                             <td>@userDatum.FirstName @userDatum.LastName</td>
-                            <td>@item.Message</td>
+                            <td style="white-space:pre">@item.Message</td>
                             <td>
                                 <a asp-controller="Comments" asp-action="Delete" asp-route-id="@item.CommentId">Удалить</a>
                             </td>
