@@ -2,15 +2,11 @@
 
 namespace YourVitebskWebServiceApp.APIModels
 {
-    public class Cafe
+    public class News
     {
-        public int? CafeId { get; set; }
-        public string CafeType { get; set; }
+        public int? NewsId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public string WorkingTime { get; set; }
-        public string Address { get; set; }
-        public string Rating { get; set; }
         public string ExternalLink { get; set; }
 
         public IEnumerable<string> Images { get; set; }

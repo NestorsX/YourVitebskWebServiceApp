@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using YourVitebskWebServiceApp.APIServiceInterfaces;
@@ -10,10 +12,12 @@ namespace YourVitebskWebServiceApp.APIServices
     public class CafesService : IService<APIModels.Cafe>
     {
         private readonly YourVitebskDBContext _context;
+        private readonly IWebHostEnvironment _appEnvironment;
 
-        public CafesService(YourVitebskDBContext context)
+        public CafesService(YourVitebskDBContext context, IWebHostEnvironment appEnvironment)
         {
             _context = context;
+            _appEnvironment = appEnvironment;
         }
 
         public async Task<IEnumerable<APIModels.Cafe>> GetAll()
@@ -32,6 +36,7 @@ namespace YourVitebskWebServiceApp.APIServices
                     Address = cafe.Address,
                     ExternalLink = cafe.ExternalLink,
                     Rating = cafe.Rating == null ? "Без рейтинга" : cafe.Rating.ToString(),
+                    Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/cafes/{cafe.CafeId}").Select(x => Path.GetFileName(x))
                 });
             }
 
@@ -56,6 +61,7 @@ namespace YourVitebskWebServiceApp.APIServices
                 Address = cafe.Address,
                 ExternalLink = cafe.ExternalLink,
                 Rating = cafe.Rating == null ? "Без рейтинга" : cafe.Rating.ToString(),
+                Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/cafes/{cafe.CafeId}").Select(x => Path.GetFileName(x))
             };
 
             return result;

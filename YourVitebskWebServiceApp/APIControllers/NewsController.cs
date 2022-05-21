@@ -5,7 +5,6 @@ using YourVitebskWebServiceApp.APIServiceInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System;
-using YourVitebskWebServiceApp.Models;
 using YourVitebskWebServiceApp.APIModels;
 
 namespace YourVitebskWebServiceApp.APIControllers

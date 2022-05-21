@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using YourVitebskWebServiceApp.APIServiceInterfaces;
@@ -10,10 +12,12 @@ namespace YourVitebskWebServiceApp.APIServices
     public class PostersService : IService<APIModels.Poster>
     {
         private readonly YourVitebskDBContext _context;
+        private readonly IWebHostEnvironment _appEnvironment;
 
-        public PostersService(YourVitebskDBContext context)
+        public PostersService(YourVitebskDBContext context, IWebHostEnvironment appEnvironment)
         {
             _context = context;
+            _appEnvironment = appEnvironment;
         }
 
         public async Task<IEnumerable<APIModels.Poster>> GetAll()
@@ -31,6 +35,7 @@ namespace YourVitebskWebServiceApp.APIServices
                     DateTime = poster.DateTime,
                     Address = poster.Address,
                     ExternalLink = poster.ExternalLink,
+                    Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/posters/{poster.PosterId}").Select(x => Path.GetFileName(x))
                 });
             }
 
@@ -54,6 +59,8 @@ namespace YourVitebskWebServiceApp.APIServices
                 DateTime = poster.DateTime,
                 Address = poster.Address,
                 ExternalLink = poster.ExternalLink,
+                Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/posters/{poster.PosterId}").Select(x => Path.GetFileName(x))
+
             };
 
             return result;

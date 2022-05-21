@@ -1,4 +1,5 @@
-﻿using YourVitebskWebServiceApp.Interfaces;
+﻿using System.Collections.Generic;
+using YourVitebskWebServiceApp.Interfaces;
 
 namespace YourVitebskWebServiceApp.APIModels
 {
@@ -11,5 +12,7 @@ namespace YourVitebskWebServiceApp.APIModels
         public string DateTime { get; set; }
         public string Address { get; set; }
         public string ExternalLink { get; set; }
+
+        public IEnumerable<string> Images { get; set; }
     }
 }
