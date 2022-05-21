@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Linq;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
@@ -12,9 +12,9 @@ namespace YourVitebskWebServiceApp.Controllers
     public class PostersController : Controller
     {
         private readonly YourVitebskDBContext _context;
-        private readonly IRepository<Models.Poster> _repository;
+        private readonly IImageRepository<Poster> _repository;
 
-        public PostersController(YourVitebskDBContext context, IRepository<Models.Poster> repository)
+        public PostersController(YourVitebskDBContext context, IImageRepository<Poster> repository)
         {
             _context = context;
             _repository = repository;
@@ -32,7 +32,7 @@ namespace YourVitebskWebServiceApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(PosterViewModel newPoster)
+        public ActionResult Create(PosterViewModel newPoster, IFormFileCollection uploadedFiles)
         {
             if (_context.Posters.FirstOrDefault(x => x.Title == newPoster.Title) != null)
             {
@@ -41,12 +41,12 @@ namespace YourVitebskWebServiceApp.Controllers
 
             if (newPoster.PosterTypeId == 0)
             {
-                ModelState.AddModelError("PosterTypeId", "Выберите тип искусства");
+                ModelState.AddModelError("PosterTypeId", "Выберите вид события");
             }
 
             if (ModelState.IsValid)
             {
-                var Poster = new Models.Poster
+                var poster = new Poster
                 {
                     PosterId = null,
                     PosterTypeId = newPoster.PosterTypeId,
@@ -57,7 +57,7 @@ namespace YourVitebskWebServiceApp.Controllers
                     ExternalLink = newPoster.ExternalLink ?? ""
                 };
 
-                _repository.Create(Poster);
+                _repository.Create(poster, uploadedFiles);
                 return RedirectToAction("Index");
             }
 
@@ -67,7 +67,7 @@ namespace YourVitebskWebServiceApp.Controllers
 
         public ActionResult Edit(int id)
         {
-            Models.Poster poster = _repository.Get(id);
+            Poster poster = _repository.Get(id);
             if (poster != null)
             {
                 var viewModel = new PosterViewModel
@@ -90,28 +90,28 @@ namespace YourVitebskWebServiceApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(PosterViewModel newPoster)
+        public ActionResult Edit(PosterViewModel newPoster, IFormFileCollection uploadedFiles)
         {
-            Models.Poster Poster = _repository.Get((int)newPoster.PosterId);
-            if (_context.Posters.FirstOrDefault(x => x.Title == newPoster.Title && newPoster.Title != Poster.Title) != null)
+            Poster poster = _repository.Get((int)newPoster.PosterId);
+            if (_context.Posters.FirstOrDefault(x => x.Title == newPoster.Title && newPoster.Title != poster.Title) != null)
             {
                 ModelState.AddModelError("Title", "Афиша с таким именем уже используется");
             }
 
             if (newPoster.PosterTypeId == 0)
             {
-                ModelState.AddModelError("PosterTypeId", "Выберите тип искусства");
+                ModelState.AddModelError("PosterTypeId", "Выберите вид события");
             }
 
             if (ModelState.IsValid)
             {
-                Poster.PosterTypeId = newPoster.PosterTypeId;
-                Poster.Title = newPoster.Title;
-                Poster.Description = newPoster.Description;
-                Poster.DateTime = newPoster.DateTime;
-                Poster.Address = newPoster.Address;
-                Poster.ExternalLink = newPoster.ExternalLink;
-                _repository.Update(Poster);
+                poster.PosterTypeId = newPoster.PosterTypeId;
+                poster.Title = newPoster.Title;
+                poster.Description = newPoster.Description;
+                poster.DateTime = newPoster.DateTime;
+                poster.Address = newPoster.Address;
+                poster.ExternalLink = newPoster.ExternalLink;
+                _repository.Update(poster, uploadedFiles);
                 return RedirectToAction("Index");
             }
 
@@ -124,11 +124,11 @@ namespace YourVitebskWebServiceApp.Controllers
         [ActionName("Delete")]
         public ActionResult ConfirmDelete(int id)
         {
-            Models.Poster Poster = _repository.Get(id);
-            if (Poster != null)
+            Poster poster = _repository.Get(id);
+            if (poster != null)
             {
-                ViewData["PosterType"] = _context.PosterTypes.First(x => x.PosterTypeId == Poster.PosterTypeId).Name;
-                return View(Poster);
+                ViewData["PosterType"] = _context.PosterTypes.First(x => x.PosterTypeId == poster.PosterTypeId).Name;
+                return View(poster);
             }
             return NotFound();
         }

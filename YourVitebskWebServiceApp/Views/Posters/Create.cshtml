@@ -51,6 +51,10 @@
             <span class="badge bg-danger" asp-validation-for="ExternalLink"></span>
         </div>
         <div class="mb-3">
+            <label>Изображения<i>*</i></label>
+            <input required type="file" name="uploadedFiles" accept=".png,.jpg,.jpeg" multiple="multiple" class="form-control form-control-sm" />
+        </div>
+        <div class="mb-3">
             <input type="submit" value="Сохранить" class="btn btn-outline-secondary" />
         </div>
     </div>

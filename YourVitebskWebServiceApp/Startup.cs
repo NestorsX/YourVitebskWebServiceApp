@@ -31,17 +31,17 @@ namespace YourVitebskWebServiceApp
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IService<News>, NewsService>();
-            services.AddScoped<IService<APIModels.Cafe >, CafesService>();
+            services.AddScoped<IService<APIModels.Cafe>, CafesService>();
             services.AddScoped<IService<APIModels.Poster>, PostersService>();
             services.AddScoped<IService<APIModels.Vacancy>, VacanciesService>();
 
             services.AddScoped<IUserRepository, UsersRepository>();
             services.AddScoped<IRepository<Role>, RolesRepository>();
-            services.AddScoped<IRepository<News>, NewsRepository>();
+            services.AddScoped<IImageRepository<News>, NewsRepository>();
             services.AddScoped<IRepository<Bus>, BusesRepository>();
-            services.AddScoped<IRepository<Poster>, PostersRepository>();
+            services.AddScoped<IImageRepository<Poster>, PostersRepository>();
             services.AddScoped<IRepository<PosterType>, PosterTypesRepository>();
-            services.AddScoped<IRepository<Cafe>, CafesRepository>();
+            services.AddScoped<IImageRepository<Cafe>, CafesRepository>();
             services.AddScoped<IRepository<CafeType>, CafeTypesRepository>();
             services.AddScoped<IRepository<Vacancy>, VacanciesRepository>();
             services.AddScoped<ICommentRepository, CommentsRepository>();

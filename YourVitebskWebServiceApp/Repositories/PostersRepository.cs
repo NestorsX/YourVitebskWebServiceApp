@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using YourVitebskWebServiceApp.Interfaces;
@@ -7,14 +9,16 @@ using YourVitebskWebServiceApp.ViewModels;
 
 namespace YourVitebskWebServiceApp.Repositories
 {
-    public class PostersRepository : IRepository<Poster>
+    public class PostersRepository : IImageRepository<Poster>
     {
         private readonly YourVitebskDBContext _context;
+        private readonly ImageService _imageService;
         private bool _disposed = false;
 
-        public PostersRepository(YourVitebskDBContext context)
+        public PostersRepository(YourVitebskDBContext context, IWebHostEnvironment appEnvironment)
         {
             _context = context;
+            _imageService = new ImageService(appEnvironment);
         }
 
         public IEnumerable<IViewModel> Get()
@@ -43,22 +47,25 @@ namespace YourVitebskWebServiceApp.Repositories
             return _context.Posters.FirstOrDefault(x => x.PosterId == id);
         }
 
-        public void Create(Poster poster)
+        public void Create(Poster poster, IFormFileCollection uploadedFiles)
         {
             _context.Posters.Add(poster);
             _context.SaveChanges();
+            _imageService.SaveImages("posters", (int)poster.PosterId, uploadedFiles);
         }
 
-        public void Update(Poster poster)
+        public void Update(Poster poster, IFormFileCollection uploadedFiles)
         {
             _context.Posters.Update(poster);
             _context.SaveChanges();
+            _imageService.SaveImages("posters", (int)poster.PosterId, uploadedFiles);
         }
 
         public void Delete(int id)
         {
             _context.Posters.Remove(Get(id));
             _context.SaveChanges();
+            _imageService.DeleteImages("posters", id);
         }
 
         public virtual void Dispose(bool disposing)

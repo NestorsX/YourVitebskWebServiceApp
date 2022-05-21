@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using YourVitebskWebServiceApp.Interfaces;
@@ -10,9 +11,9 @@ namespace YourVitebskWebServiceApp.Controllers
     public class CafesController : Controller
     {
         private readonly YourVitebskDBContext _context;
-        private readonly IRepository<Cafe> _repository;
+        private readonly IImageRepository<Cafe> _repository;
 
-        public CafesController(YourVitebskDBContext context, IRepository<Cafe> repository)
+        public CafesController(YourVitebskDBContext context, IImageRepository<Cafe> repository)
         {
             _context = context;
             _repository = repository;
@@ -30,7 +31,7 @@ namespace YourVitebskWebServiceApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Cafe newCafe)
+        public ActionResult Create(Cafe newCafe, IFormFileCollection uploadedFiles)
         {
             if (_context.Cafes.FirstOrDefault(x => x.Title == newCafe.Title) != null)
             {
@@ -39,7 +40,7 @@ namespace YourVitebskWebServiceApp.Controllers
 
             if (newCafe.CafeTypeId == 0)
             {
-                ModelState.AddModelError("CafeTypeId", "Выберите тип заведения");
+                ModelState.AddModelError("CafeTypeId", "Выберите вид заведения");
             }
 
             if (ModelState.IsValid)
@@ -56,7 +57,7 @@ namespace YourVitebskWebServiceApp.Controllers
                     Rating = null,
                 };
 
-                _repository.Create(cafe);
+                _repository.Create(cafe, uploadedFiles);
                 return RedirectToAction("Index");
             }
 
@@ -78,7 +79,7 @@ namespace YourVitebskWebServiceApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(Cafe newCafe)
+        public ActionResult Edit(Cafe newCafe, IFormFileCollection uploadedFiles)
         {
             Cafe cafe = _repository.Get((int)newCafe.CafeId);
             if (_context.Cafes.FirstOrDefault(x => x.Title == newCafe.Title && newCafe.Title != cafe.Title) != null)
@@ -88,7 +89,7 @@ namespace YourVitebskWebServiceApp.Controllers
 
             if (newCafe.CafeTypeId == 0)
             {
-                ModelState.AddModelError("CafeTypeId", "Выберите тип заведения");
+                ModelState.AddModelError("CafeTypeId", "Выберите вид заведения");
             }
 
             if (ModelState.IsValid)
@@ -99,7 +100,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 cafe.WorkingTime = newCafe.WorkingTime;
                 cafe.Address = newCafe.Address;
                 cafe.ExternalLink = newCafe.ExternalLink ?? "";
-                _repository.Update(cafe);
+                _repository.Update(cafe, uploadedFiles);
                 return RedirectToAction("Index");
             }
 

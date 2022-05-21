@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
@@ -8,9 +9,9 @@ namespace YourVitebskWebServiceApp.Controllers
     [Authorize]
     public class NewsController : Controller
     {
-        private readonly IRepository<News> _repository;
+        private readonly IImageRepository<News> _repository;
 
-        public NewsController(IRepository<News> repository)
+        public NewsController(IImageRepository<News> repository)
         {
             _repository = repository;
         }
@@ -26,7 +27,7 @@ namespace YourVitebskWebServiceApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(News newNews)
+        public ActionResult Create(News newNews, IFormFileCollection uploadedFiles)
         {
             if (ModelState.IsValid)
             {
@@ -38,7 +39,7 @@ namespace YourVitebskWebServiceApp.Controllers
                     ExternalLink = newNews.ExternalLink ?? ""
                 };
 
-                _repository.Create(news);
+                _repository.Create(news, uploadedFiles);
                 return RedirectToAction("Index");
             }
 
@@ -57,7 +58,7 @@ namespace YourVitebskWebServiceApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(News newNews)
+        public ActionResult Edit(News newNews, IFormFileCollection uploadedFiles)
         {
             News news = _repository.Get((int)newNews.NewsId);
             if (ModelState.IsValid)
@@ -65,7 +66,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 news.Title = newNews.Title;
                 news.Description = newNews.Description;
                 news.ExternalLink = newNews.ExternalLink ?? "";
-                _repository.Update(news);
+                _repository.Update(news, uploadedFiles);
                 return RedirectToAction("Index");
             }
 
