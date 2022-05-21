@@ -1,4 +1,4 @@
-﻿@model YourVitebskWebServiceApp.ViewModels.PosterViewModel
+﻿@model YourVitebskWebServiceApp.Models.Poster
 
 <div class="row mb-3">
     <div class="col-auto me-auto">
@@ -22,7 +22,7 @@
         </tr>
         <tr>
             <td>@Model.PosterId</td>
-            <td>@Model.PosterType</td>
+            <td>@ViewData["PosterType"]</td>
             <td>@Model.Title</td>
             <td>
                 <span class="d-inline-block text-truncate" style="max-width: 300px;">@Model.Description</span>
