@@ -64,5 +64,35 @@ namespace YourVitebskWebServiceApp.APIControllers
                 return BadRequest(ResponseModel.CreateResponseWithError(e.Message));
             }
         }
+
+        // Update user
+        [HttpPost("update")]
+        public async Task<ActionResult<ResponseModel>> Update(User user)
+        {
+            if (string.IsNullOrEmpty(user.Email))
+            {
+                return BadRequest(ResponseModel.CreateResponseWithError("Введите email"));
+            }
+
+            if (string.IsNullOrEmpty(user.FirstName))
+            {
+                return BadRequest(ResponseModel.CreateResponseWithError("Введите имя"));
+            }
+
+            if (string.IsNullOrEmpty(user.LastName))
+            {
+                return BadRequest(ResponseModel.CreateResponseWithError("Введите фамилия"));
+            }
+
+            try
+            {
+                string token = await _authService.Update(user);
+                return Ok(ResponseModel.CreateResponseWithContent(token));
+            }
+            catch (ArgumentException e)
+            {
+                return BadRequest(ResponseModel.CreateResponseWithError(e.Message));
+            }
+        }
     }
 }
