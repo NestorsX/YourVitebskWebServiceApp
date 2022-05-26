@@ -12,7 +12,6 @@ namespace YourVitebskWebServiceApp.Models
         [Required(ErrorMessage = "Необходимо указать имя")]
         public string FirstName { get; set; }
 
-        public string SecondName { get; set; }
 
         [Required(ErrorMessage = "Необходимо указать фамилию")]
         public string LastName { get; set; }

@@ -30,8 +30,8 @@ namespace YourVitebskWebServiceApp.Repositories
                     Email = user.Email,
                     RoleId = user.RoleId,
                     Role = _context.Roles.First(x => x.RoleId == user.RoleId).Name,
+                    IsVisible = user.IsVisible,
                     FirstName = user.UserDatum.FirstName,
-                    SecondName = user.UserDatum.SecondName,
                     LastName = user.UserDatum.LastName,
                     PhoneNumber = user.UserDatum.PhoneNumber
                 });
@@ -49,8 +49,8 @@ namespace YourVitebskWebServiceApp.Repositories
                 Email = user.Email,
                 RoleId = user.RoleId,
                 Role = _context.Roles.First(x => x.RoleId == user.RoleId).Name,
+                IsVisible = user.IsVisible,
                 FirstName = user.UserDatum.FirstName,
-                SecondName = user.UserDatum.SecondName,
                 LastName = user.UserDatum.LastName,
                 PhoneNumber = user.UserDatum.PhoneNumber
             };

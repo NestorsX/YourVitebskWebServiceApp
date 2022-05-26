@@ -52,9 +52,9 @@ namespace YourVitebskWebServiceApp.APIServices
                 new Claim(nameof(user.UserId), user.UserId.ToString()),
                 new Claim(nameof(user.Email), user.Email),
                 new Claim(nameof(user.UserDatum.FirstName), user.UserDatum.FirstName),
-                new Claim(nameof(user.UserDatum.SecondName), user.UserDatum.SecondName),
                 new Claim(nameof(user.UserDatum.LastName), user.UserDatum.LastName),
-                new Claim(nameof(user.UserDatum.PhoneNumber), user.UserDatum.PhoneNumber)
+                new Claim(nameof(user.UserDatum.PhoneNumber), user.UserDatum.PhoneNumber),
+                new Claim(nameof(user.IsVisible), user.IsVisible.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
@@ -79,19 +79,6 @@ namespace YourVitebskWebServiceApp.APIServices
                         throw new ArgumentException("Пользователь с таким email уже существует!");
                     }
 
-                    if (!string.IsNullOrWhiteSpace(userData.PhoneNumber))
-                    {
-                        if (await _context.UserData.AnyAsync(x => x.PhoneNumber == userData.PhoneNumber))
-                        {
-                            throw new ArgumentException("Этот номер телефона уже привязан к другому аккаунту");
-                        }
-
-                        if (!Regex.IsMatch(userData.PhoneNumber, @"^\+375\((33|29|44|25)\)(\d{3})\-(\d{2})\-(\d{2})"))
-                        {
-                            throw new ArgumentException("Введенный номер не соответсвует формату");
-                        }
-                    }
-
                     CreatePasswordHash(userData.Password, out byte[] passwordHash, out byte[] passwordSalt);
                     var user = new Models.User
                     {
@@ -100,6 +87,7 @@ namespace YourVitebskWebServiceApp.APIServices
                         PasswordHash = passwordHash,
                         PasswordSalt = passwordSalt,
                         RoleId = 1,
+                        IsVisible = true,
                         UserDatum = null
                     };
 
@@ -110,9 +98,8 @@ namespace YourVitebskWebServiceApp.APIServices
                         UserDataId = null,
                         UserId = user.UserId,
                         FirstName = userData.FirstName,
-                        SecondName = userData.SecondName ?? "",
                         LastName = userData.LastName,
-                        PhoneNumber = userData.PhoneNumber ?? ""
+                        PhoneNumber = null
                     };
 
                     _context.UserData.Add(user.UserDatum);
@@ -142,6 +129,51 @@ namespace YourVitebskWebServiceApp.APIServices
             }
 
             return CreateToken(user);
+        }
+
+        public async Task<string> Update(APIModels.User newUser)
+        {
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    Models.User user = await _context.Users.Include(x => x.UserDatum).FirstOrDefaultAsync(x => x.UserId == newUser.UserId);
+                    if (await _context.Users.AnyAsync(x => x.Email == newUser.Email && x.UserId != newUser.UserId))
+                    {
+                        throw new ArgumentException("Пользователь с таким email уже существует!");
+                    }
+
+                    if (newUser.PhoneNumber != null && await _context.UserData.AnyAsync(x => x.PhoneNumber == newUser.PhoneNumber && x.UserId != newUser.UserId))
+                    {
+                        throw new ArgumentException("Этот номер телефона уже привязан к другому аккаунту");
+                    }
+
+                    if (!string.IsNullOrEmpty(newUser.OldPassword) && !string.IsNullOrEmpty(newUser.NewPassword))
+                    {
+                        if (VerifyPassword(newUser.OldPassword, user.PasswordHash, user.PasswordSalt))
+                        {
+                            CreatePasswordHash(newUser.NewPassword, out byte[] hash, out byte[] salt);
+                            user.PasswordHash = hash;
+                            user.PasswordSalt = salt;
+                        }
+                    }
+
+                    user.Email = newUser.Email;
+                    user.UserDatum.FirstName = newUser.FirstName;
+                    user.UserDatum.LastName = newUser.LastName;
+                    user.UserDatum.PhoneNumber = newUser.PhoneNumber;
+                    _context.Entry(user).State = EntityState.Modified;
+                    _context.Entry(user.UserDatum).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                    transaction.Commit();
+                    return CreateToken(user);
+                }
+                catch (ArgumentException ex)
+                {
+                    transaction.Rollback();
+                    throw ex;
+                }
+            }
         }
     }
 }

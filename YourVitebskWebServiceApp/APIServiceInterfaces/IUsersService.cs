@@ -6,8 +6,6 @@ namespace YourVitebskWebServiceApp.APIServiceInterfaces
 {
     public interface IUsersService
     {
-        public Task<IEnumerable<User>> GetAllUsers();
-        public Task<User> GetById(int id);
-        public Task Update(User newUser);
+        public Task<IEnumerable<UsersListItem>> GetAllUsers(int id);
     }
 }

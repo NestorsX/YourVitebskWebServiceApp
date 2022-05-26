@@ -16,18 +16,25 @@
             <th>Email</th>
             <th>Роль</th>
             <th>Имя</th>
-            <th>Отчество</th>
             <th>Фамилия</th>
             <th>Телефон</th>
+            <th>Видимость</th>
         </tr>
         <tr>
             <td>@Model.UserId</td>
             <td>@Model.Email</td>
             <td>@ViewData["RoleName"]</td>
             <td>@Model.UserDatum.FirstName</td>
-            <td>@Model.UserDatum.SecondName</td>
             <td>@Model.UserDatum.LastName</td>
             <td>@Model.UserDatum.PhoneNumber</td>
+            @if (Model.IsVisible)
+                {
+                    <td>Да</td>
+                }
+                else
+                {
+                    <td>Нет</td>
+                }
         </tr>
     </table>
 </div>

@@ -16,84 +16,22 @@ namespace YourVitebskWebServiceApp.APIServices
             _context = context;
         }
 
-        public async Task<IEnumerable<APIModels.User>> GetAllUsers()
+        public async Task<IEnumerable<APIModels.UsersListItem>> GetAllUsers(int id)
         {
-            IEnumerable<APIModels.User> result = new List<APIModels.User>();
-            IEnumerable<Models.User> users = await _context.Users.Include(x => x.UserDatum).ToListAsync();
+            IEnumerable<APIModels.UsersListItem> result = new List<APIModels.UsersListItem>();
+            IEnumerable<Models.User> users = await _context.Users.Include(x => x.UserDatum).Where(x => x.IsVisible == true && x.UserId != id).ToListAsync();
             foreach (var user in users)
             {
-                result = result.Append(new APIModels.User()
+                result = result.Append(new APIModels.UsersListItem()
                 {
                     UserId = (int)user.UserId,
-                    Email = user.Email,
-                    Password = null,
                     FirstName = user.UserDatum.FirstName,
-                    SecondName = user.UserDatum.SecondName,
                     LastName = user.UserDatum.LastName,
                     PhoneNumber = user.UserDatum.PhoneNumber
                 });
             }
 
             return result;
-        }
-
-        public async Task<APIModels.User> GetById(int id)
-        {
-            Models.User user = await _context.Users.Include(x => x.UserDatum).FirstOrDefaultAsync(x => x.UserId == id);
-            var result = new APIModels.User()
-            {
-                UserId = (int)user.UserId,
-                Email = user.Email,
-                Password = null,
-                FirstName = user.UserDatum.FirstName,
-                SecondName = user.UserDatum.SecondName,
-                LastName = user.UserDatum.LastName,
-                PhoneNumber = user.UserDatum.PhoneNumber
-            };
-
-            return result;
-        }
-
-        public async Task Update(APIModels.User newUser)
-        {
-            using (var transaction = _context.Database.BeginTransaction())
-            {
-                try
-                {
-                    Models.User user = await _context.Users.Include(x => x.UserDatum).FirstOrDefaultAsync(x => x.UserId == newUser.UserId);
-                    if (await _context.Users.AnyAsync(x => x.Email == newUser.Email && x.UserId != newUser.UserId))
-                    {
-                        throw new InvalidOperationException("Пользователь с таким email уже существует!");
-                    }
-
-                    if (newUser.PhoneNumber != null && await _context.UserData.AnyAsync(x => x.PhoneNumber == newUser.PhoneNumber && x.UserId != newUser.UserId))
-                    {
-                        throw new InvalidOperationException("Этот номер телефона уже привязан к другому аккаунту");
-                    }
-
-                    if (!string.IsNullOrEmpty(newUser.Password))
-                    {
-                        AuthService.CreatePasswordHash(newUser.Password, out byte[] hash, out byte[] salt);
-                        user.PasswordHash = hash;
-                        user.PasswordSalt = salt;
-                    }
-
-                    user.Email = newUser.Email;
-                    user.UserDatum.FirstName = newUser.FirstName;
-                    user.UserDatum.SecondName = newUser.SecondName;
-                    user.UserDatum.LastName = newUser.LastName;
-                    user.UserDatum.PhoneNumber = newUser.PhoneNumber;
-                    _context.Entry(user).State = EntityState.Modified;
-                    _context.Entry(user.UserDatum).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
-                    transaction.Commit();
-                }
-                catch (InvalidOperationException ex)
-                {
-                    transaction.Rollback();
-                    throw ex;
-                }
-            }
         }
     }
 }

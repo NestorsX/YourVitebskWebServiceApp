@@ -50,12 +50,6 @@
 
         </div>
         <div class="mb-3">
-            <label asp-for="SecondName" class="form-label">Отчество</label>
-            <input type="text" asp-for="SecondName" class="form-control form-control-sm" />
-            <span class="badge bg-danger" asp-validation-for="SecondName"></span>
-
-        </div>
-        <div class="mb-3">
             <label asp-for="LastName" class="form-label">Фамилия<i>*</i></label>
             <input type="text" asp-for="LastName" class="form-control form-control-sm" />
             <span class="badge bg-danger" asp-validation-for="LastName"></span>
@@ -65,6 +59,14 @@
             <label asp-for="PhoneNumber" class="form-label">Телефон</label>
             <input type="text" asp-for="PhoneNumber" class="form-control form-control-sm" placeholder="+375(__)___-__-__" id="Phone"/>
             <span class="badge bg-danger" asp-validation-for="PhoneNumber"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="IsVisible" class="form-label">Видимость для других пользователей</label>
+            <select asp-for="IsVisible" class="form-control form-control-sm" >
+                <option value="true">Да</option>
+                <option value="false">Нет</option>
+            </select>
+            <span class="badge bg-danger" asp-validation-for="IsVisible"></span>
         </div>
         <div class="mb-3">
             <input type="submit" value="Сохранить" class="btn btn-outline-secondary" />

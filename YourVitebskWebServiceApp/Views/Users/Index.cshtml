@@ -11,9 +11,9 @@
             <th>Email</th>
             <th>Роль</th>
             <th>Имя</th>
-            <th>Отчество</th>
             <th>Фамилия</th>
             <th>Телефон</th>
+            <th>Видимость</th>
             <th><a class="btn btn-outline-dark float-end" asp-controller="Users" asp-action="Create">Добавить</a></th>
         </tr>
     
@@ -24,9 +24,16 @@
                 <td>@item.Email</td>
                 <td>@item.Role</td>
                 <td>@item.FirstName</td>
-                <td>@item.SecondName</td>
                 <td>@item.LastName</td>
                 <td>@item.PhoneNumber</td>
+                @if (item.IsVisible)
+                {
+                    <td>Да</td>
+                }
+                else
+                {
+                    <td>Нет</td>
+                }
 
                 @if (item.UserId != 1)
                 {

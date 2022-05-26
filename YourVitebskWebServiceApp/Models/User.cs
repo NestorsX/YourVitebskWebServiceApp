@@ -18,6 +18,8 @@ namespace YourVitebskWebServiceApp.Models
         [Required(ErrorMessage = "Необходимо указать роль")]
         public int RoleId { get; set; }
 
+        public bool IsVisible { get; set; }
+
         public UserDatum UserDatum { get; set; }
     }
 }

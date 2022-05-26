@@ -66,13 +66,13 @@ namespace YourVitebskWebServiceApp.Controllers
                     Email = newUser.Email,
                     PasswordHash = hash,
                     PasswordSalt = salt,
+                    IsVisible = newUser.IsVisible,
                     RoleId = newUser.RoleId,
                     UserDatum = new UserDatum
                     {
                         UserDataId = null,
                         UserId = null,
                         FirstName = newUser.FirstName,
-                        SecondName = newUser.SecondName ?? "",
                         LastName = newUser.LastName,
                         PhoneNumber = newUser.PhoneNumber ?? "",
                     }
@@ -138,8 +138,8 @@ namespace YourVitebskWebServiceApp.Controllers
 
                 user.Email = newUser.Email;
                 user.RoleId = newUser.RoleId;
+                user.IsVisible = newUser.IsVisible;
                 user.UserDatum.FirstName = newUser.FirstName;
-                user.UserDatum.SecondName = newUser.SecondName ?? "";
                 user.UserDatum.LastName = newUser.LastName;
                 user.UserDatum.PhoneNumber = newUser.PhoneNumber ?? "";
                 _repository.Update(user);
