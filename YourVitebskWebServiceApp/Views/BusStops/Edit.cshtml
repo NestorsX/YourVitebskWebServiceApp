@@ -1,0 +1,26 @@
+﻿@model YourVitebskWebServiceApp.Models.BusStop
+
+<div class="row mb-3">
+    <div class="col-auto me-auto">
+        <h2>Редактирование автобусной остановки</h2>
+        <div class="form-text"><i>*</i> - обязательные поля</div>
+    </div>
+    <div class="col-auto">
+        <a asp-controller="BusStops" asp-action="Index">Вернуться к списку</a>
+    </div>
+</div>
+
+<form asp-action="Edit" asp-controller="BusStops" method="post" enctype="multipart/form-data">
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
+    <div>
+        <input type="hidden" asp-for="BusStopId" />
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Название<i>*</i></label>
+            <input type="text" asp-for="Name" class="form-control form-control-sm" placeholder="Вокзал" />
+            <span class="badge bg-danger" asp-validation-for="Name"></span>
+        </div>
+        <div class="mb-3">
+            <input type="submit" value="Сохранить" class="btn btn-outline-secondary" />
+        </div>
+    </div>
+</form>

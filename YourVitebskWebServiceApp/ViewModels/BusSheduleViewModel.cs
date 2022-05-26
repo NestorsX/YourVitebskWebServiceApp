@@ -9,13 +9,9 @@ namespace YourVitebskWebServiceApp.ViewModels
         public int? BusSheduleId { get; set; }
 
         [Required(ErrorMessage = "Необходимо указать номер автобуса")]
-        public int BusId { get; set; }
-
         public string BusNumber { get; set; }
 
         [Required(ErrorMessage = "Необходимо указать остановку")]
-        public int BusStopId { get; set; }
-
         public string BusStopName { get; set; }
 
         [Required(ErrorMessage = "Необходимо указать номер маршрута")]
@@ -25,7 +21,7 @@ namespace YourVitebskWebServiceApp.ViewModels
         public int BusStopNumber { get; set; }
 
         [Required(ErrorMessage = "Необходимо указать рабочий или выходной день")]
-        public bool IsWorkday { get; set; }
+        public string IsWorkday { get; set; }
 
         [Required(ErrorMessage = "Необходимо указать расписание")]
         public string Time { get; set; }

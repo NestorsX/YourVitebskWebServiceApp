@@ -52,8 +52,8 @@
                                 <a class="nav-link dropdown-toggle" href="#" id="transportDropDown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Транспорт</a>
                                 <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="transportDropDown">
                                     <li><a class="dropdown-item" asp-controller="Buses" asp-action="Index">Автобусы</a></li>
-                                    <li><a class="dropdown-item" asp-controller="#" asp-action="Index">Остановки</a></li>
-                                    <li><a class="dropdown-item" asp-controller="#" asp-action="Index">Расписания</a></li>
+                                    <li><a class="dropdown-item" asp-controller="BusStops" asp-action="Index">Остановки</a></li>
+                                    <li><a class="dropdown-item" asp-controller="BusShedules" asp-action="Index">Расписания</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
@@ -72,9 +72,6 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Vacancies" asp-action="Index">Вакансии</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Comments" asp-action="Index">Комментарии</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Account" asp-action="Logout">Выход</a>

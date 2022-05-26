@@ -1,0 +1,71 @@
+﻿@model YourVitebskWebServiceApp.Models.BusShedule
+
+<div class="row mb-3">
+    <div class="col-auto me-auto">
+        <h2>Редактирование расписания</h2>
+        <div class="form-text"><i>*</i> - обязательные поля</div>
+    </div>
+    <div class="col-auto">
+        <a asp-controller="BusShedules" asp-action="Index">Вернуться к списку</a>
+    </div>
+</div>
+ 
+<form asp-action="Edit" asp-controller="BusShedules" method="post" enctype="multipart/form-data">
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
+    <div>
+        <input type="hidden" asp-for="BusSheduleId" />
+        <div class="mb-3">
+            <label asp-for="BusId" class="form-label">Автобус<i>*</i></label>
+            <select asp-for="BusId" class="form-control form-control-sm" required >
+                <option value="">Выберите автобус</option>
+                @foreach (Bus bus in ViewBag.Buses)
+                {
+                    <option value="@bus.BusId">Автобус №@bus.Number</option>
+                }
+            </select>
+            <span class="badge bg-danger" asp-validation-for="BusId"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="BusStopId" class="form-label">Остановка<i>*</i></label>
+            <select asp-for="BusStopId" class="form-control form-control-sm" required >
+                <option value="">Выберите остановку</option>
+                @foreach (BusStop busStop in ViewBag.BusStops)
+                {
+                    <option value="@busStop.BusStopId">@busStop.Name</option>
+                }
+            </select>
+            <span class="badge bg-danger" asp-validation-for="BusStopId"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="BusRoute" class="form-label">Номер маршрута<i>*</i></label>
+            <select asp-for="BusRoute" class="form-control form-control-sm" required >
+                <option value="">Выберите номер маршрута</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select>
+            <span class="badge bg-danger" asp-validation-for="BusRoute"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="BusStopNumber" class="form-label">Номер остановки в маршруте<i>*</i></label>
+            <input type="text" asp-for="BusStopNumber" class="form-control form-control-sm" required />
+            <span class="badge bg-danger" asp-validation-for="BusStopNumber"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="IsWorkday" class="form-label">День<i>*</i></label>
+            <select asp-for="IsWorkday" class="form-control form-control-sm" >
+                <option value="">Выберите день</option>
+                <option value="true">Рабочий</option>
+                <option value="false">Выходной</option>
+            </select>
+            <span class="badge bg-danger" asp-validation-for="IsWorkday"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Time" class="form-label">Расписание<i>*</i></label>
+            <textarea asp-for="Time" class="form-control form-control-sm" placeholder="05:35 06:08 06:37 ..." required ></textarea>
+            <span class="badge bg-danger" asp-validation-for="Time"></span>
+        </div>
+        <div class="mb-3">
+            <input type="submit" value="Сохранить" class="btn btn-outline-secondary" />
+        </div>
+    </div>
+</form>

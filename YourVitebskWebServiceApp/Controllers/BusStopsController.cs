@@ -53,11 +53,6 @@ namespace YourVitebskWebServiceApp.Controllers
 
         public ActionResult Edit(int id)
         {
-            if (id == 1 || id == 2)
-            {
-                return RedirectToAction("Index");
-            }
-
             BusStop busStop = _repository.Get(id);
             if (busStop != null)
                 return View(busStop);
@@ -87,11 +82,6 @@ namespace YourVitebskWebServiceApp.Controllers
         [ActionName("Delete")]
         public ActionResult ConfirmDelete(int id)
         {
-            if (id == 1 || id == 2)
-            {
-                return RedirectToAction("Index");
-            }
-
             BusStop busStop = _repository.Get(id);
             if (busStop != null)
             {
