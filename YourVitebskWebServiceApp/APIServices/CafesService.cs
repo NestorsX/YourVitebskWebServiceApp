@@ -23,7 +23,7 @@ namespace YourVitebskWebServiceApp.APIServices
         public async Task<IEnumerable<APIModels.Cafe>> GetAll()
         {
             IEnumerable<APIModels.Cafe> result = new List<APIModels.Cafe>();
-            IEnumerable<Models.Cafe> cafes = (await _context.Cafes.ToListAsync()).OrderBy(x => x.Rating).ThenBy(x => x.CafeId);
+            IEnumerable<Models.Cafe> cafes = (await _context.Cafes.ToListAsync()).OrderByDescending(x => x.CafeId);
             foreach (Models.Cafe cafe in cafes)
             {
                 result = result.Append(new APIModels.Cafe()
@@ -35,8 +35,8 @@ namespace YourVitebskWebServiceApp.APIServices
                     WorkingTime = cafe.WorkingTime,
                     Address = cafe.Address,
                     ExternalLink = cafe.ExternalLink,
-                    Rating = cafe.Rating == null ? "Без рейтинга" : cafe.Rating.ToString(),
-                    Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/cafes/{cafe.CafeId}").Select(x => Path.GetFileName(x))
+                    TitleImage = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/cafes/{cafe.CafeId}").Select(x => string.Concat($"http://yourvitebsk.somee.com/images/cafes/{cafe.CafeId}/", Path.GetFileName(x))).First(),
+                    Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/cafes/{cafe.CafeId}").Select(x => string.Concat($"http://yourvitebsk.somee.com/images/cafes/{cafe.CafeId}/", Path.GetFileName(x)))
                 });
             }
 
@@ -60,8 +60,8 @@ namespace YourVitebskWebServiceApp.APIServices
                 WorkingTime = cafe.WorkingTime,
                 Address = cafe.Address,
                 ExternalLink = cafe.ExternalLink,
-                Rating = cafe.Rating == null ? "Без рейтинга" : cafe.Rating.ToString(),
-                Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/cafes/{cafe.CafeId}").Select(x => Path.GetFileName(x))
+                TitleImage = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/cafes/{cafe.CafeId}").Select(x => string.Concat($"http://yourvitebsk.somee.com/images/cafes/{cafe.CafeId}/", Path.GetFileName(x))).First(),
+                Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/cafes/{cafe.CafeId}").Select(x => string.Concat($"http://yourvitebsk.somee.com/images/cafes/{cafe.CafeId}/", Path.GetFileName(x)))
             };
 
             return result;

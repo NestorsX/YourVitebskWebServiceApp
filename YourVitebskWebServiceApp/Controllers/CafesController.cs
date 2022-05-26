@@ -54,7 +54,6 @@ namespace YourVitebskWebServiceApp.Controllers
                     WorkingTime = newCafe.WorkingTime,
                     Address = newCafe.Address,
                     ExternalLink = newCafe.ExternalLink ?? "",
-                    Rating = null,
                 };
 
                 _repository.Create(cafe, uploadedFiles);

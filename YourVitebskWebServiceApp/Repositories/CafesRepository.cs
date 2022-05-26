@@ -24,7 +24,7 @@ namespace YourVitebskWebServiceApp.Repositories
         public IEnumerable<IViewModel> Get()
         {
             IEnumerable<CafeViewModel> result = new List<CafeViewModel>();
-            IEnumerable<Cafe> cafes = _context.Cafes.ToList().OrderBy(x => x.CafeId);
+            IEnumerable<Cafe> cafes = _context.Cafes.ToList();
             foreach (Cafe cafe in cafes)
             {
                 result = result.Append(new CafeViewModel()
@@ -36,7 +36,6 @@ namespace YourVitebskWebServiceApp.Repositories
                     WorkingTime = cafe.WorkingTime,
                     Address = cafe.Address,
                     ExternalLink = cafe.ExternalLink,
-                    Rating = cafe.Rating,
                 });
             }
 

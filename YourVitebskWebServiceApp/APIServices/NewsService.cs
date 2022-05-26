@@ -32,7 +32,8 @@ namespace YourVitebskWebServiceApp.APIServices
                     Title = news.Title,
                     Description = news.Description,
                     ExternalLink = news.ExternalLink,
-                    Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/news/{news.NewsId}").Select(x => Path.GetFileName(x))
+                    TitleImage = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/news/{news.NewsId}").Select(x => string.Concat($"http://yourvitebsk.somee.com/images/news/{news.NewsId}/", Path.GetFileName(x))).First(),
+                    Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/news/{news.NewsId}").Select(x => string.Concat($"http://yourvitebsk.somee.com/images/news/{news.NewsId}/", Path.GetFileName(x)))
                 });
             }
 
@@ -53,7 +54,8 @@ namespace YourVitebskWebServiceApp.APIServices
                 Title = news.Title,
                 Description = news.Description,
                 ExternalLink = news.ExternalLink,
-                Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/news/{news.NewsId}").Select(x => Path.GetFileName(x))
+                TitleImage = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/news/{news.NewsId}").Select(x => string.Concat($"http://yourvitebsk.somee.com/images/news/{news.NewsId}/", Path.GetFileName(x))).First(),
+                Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/news/{news.NewsId}").Select(x => string.Concat($"http://yourvitebsk.somee.com/images/news/{news.NewsId}/", Path.GetFileName(x)))
             };
 
             return result;

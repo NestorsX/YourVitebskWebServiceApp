@@ -35,7 +35,8 @@ namespace YourVitebskWebServiceApp.APIServices
                     DateTime = poster.DateTime,
                     Address = poster.Address,
                     ExternalLink = poster.ExternalLink,
-                    Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/posters/{poster.PosterId}").Select(x => Path.GetFileName(x))
+                    TitleImage = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/posters/{poster.PosterId}").Select(x => string.Concat($"http://yourvitebsk.somee.com/images/posters/{poster.PosterId}/", Path.GetFileName(x))).First(),
+                    Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/posters/{poster.PosterId}").Select(x => string.Concat($"http://yourvitebsk.somee.com/images/posters/{poster.PosterId}/", Path.GetFileName(x)))
                 });
             }
 
@@ -59,7 +60,8 @@ namespace YourVitebskWebServiceApp.APIServices
                 DateTime = poster.DateTime,
                 Address = poster.Address,
                 ExternalLink = poster.ExternalLink,
-                Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/posters/{poster.PosterId}").Select(x => Path.GetFileName(x))
+                TitleImage = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/posters/{poster.PosterId}").Select(x => string.Concat($"http://yourvitebsk.somee.com/images/posters/{poster.PosterId}/", Path.GetFileName(x))).First(),
+                Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/posters/{poster.PosterId}").Select(x => string.Concat($"http://yourvitebsk.somee.com/images/posters/{poster.PosterId}/", Path.GetFileName(x)))
 
             };
 

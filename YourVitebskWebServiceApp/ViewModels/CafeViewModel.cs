@@ -10,7 +10,6 @@ namespace YourVitebskWebServiceApp.ViewModels
         public string Description { get; set; }
         public string WorkingTime { get; set; }
         public string Address { get; set; }
-        public double? Rating { get; set; }
         public string ExternalLink { get; set; }
     }
 }
