@@ -39,16 +39,6 @@ namespace YourVitebskWebServiceApp.Controllers
                 ModelState.AddModelError("Email", "Email уже используется");
             }
 
-            if (newUser.Password == null)
-            {
-                ModelState.AddModelError("Password", "Необходимо указать пароль");
-            }
-
-            if (newUser.RoleId == 0)
-            {
-                ModelState.AddModelError("RoleId", "Выберите роль");
-            }
-
             if (!string.IsNullOrEmpty(newUser.PhoneNumber))
             {
                 if (_context.Users.FirstOrDefault(x => x.UserDatum.PhoneNumber == newUser.PhoneNumber) != null)
@@ -98,7 +88,6 @@ namespace YourVitebskWebServiceApp.Controllers
             {
                 user.Password = null;
                 ViewBag.Roles = _context.Roles;
-                ViewData["RoleId"] = user.RoleId;
                 return View(user);
             }
 
@@ -112,11 +101,6 @@ namespace YourVitebskWebServiceApp.Controllers
             if (_context.Users.FirstOrDefault(x => x.Email == newUser.Email && newUser.Email != user.Email) != null)
             {
                 ModelState.AddModelError("Email", "Email уже используется");
-            }
-
-            if (newUser.RoleId == 0)
-            {
-                ModelState.AddModelError("RoleId", "Выберите роль");
             }
 
             if (!string.IsNullOrWhiteSpace(newUser.PhoneNumber))
@@ -147,7 +131,6 @@ namespace YourVitebskWebServiceApp.Controllers
             }
 
             ViewBag.Roles = _context.Roles;
-            ViewData["RoleId"] = user.RoleId;
             return View(newUser);
         }
 
@@ -160,10 +143,9 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            User user = _repository.GetUser(id);
+            UserViewModel user = _repository.Get(id);
             if (user != null)
             {
-                ViewData["RoleName"] = _context.Roles.First(x => x.RoleId == user.RoleId).Name;
                 return View(user);
             }
             return NotFound();

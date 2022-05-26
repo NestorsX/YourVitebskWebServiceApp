@@ -15,8 +15,8 @@
     <div>
         <div class="mb-3">
             <label asp-for="CafeTypeId" class="form-label">Вид заведения<i>*</i></label>
-            <select asp-for="CafeTypeId" class="form-control form-control-sm" >
-                <option value="0">Выберите тип заведения</option>
+            <select asp-for="CafeTypeId" class="form-control form-control-sm" required >
+                <option value="">Выберите тип заведения</option>
                 @foreach (CafeType cafeType in ViewBag.CafeTypes)
                 {
                     <option value="@cafeType.CafeTypeId">@cafeType.Name</option>
@@ -26,22 +26,22 @@
         </div>
         <div class="mb-3">
             <label asp-for="Title" class="form-label">Название<i>*</i></label>
-            <input type="text" asp-for="Title" class="form-control form-control-sm" />
+            <input type="text" asp-for="Title" class="form-control form-control-sm" required />
             <span class="badge bg-danger" asp-validation-for="Title"></span>
         </div>
         <div class="mb-3">
             <label asp-for="Description" class="form-label">Описание<i>*</i></label>
-            <textarea asp-for="Description" class="form-control form-control-sm" ></textarea>
+            <textarea asp-for="Description" class="form-control form-control-sm" required ></textarea>
             <span class="badge bg-danger" asp-validation-for="Description"></span>
         </div>
         <div class="mb-3">
             <label asp-for="WorkingTime" class="form-label">Время работы<i>*</i></label>
-            <textarea asp-for="WorkingTime" class="form-control form-control-sm" placeholder="Будни: 8:00 - 17:00&#10;Выходные: 10:00 - 15:00"></textarea>
+            <textarea asp-for="WorkingTime" class="form-control form-control-sm" placeholder="Будни: 8:00 - 17:00&#10;Выходные: 10:00 - 15:00" required ></textarea>
             <span class="badge bg-danger" asp-validation-for="WorkingTime"></span>
         </div>
         <div class="mb-3">
             <label asp-for="Address" class="form-label">Адрес<i>*</i></label>
-            <input type="text" asp-for="Address" class="form-control form-control-sm" placeholder="ул. Ленина, 29"/>
+            <input type="text" asp-for="Address" class="form-control form-control-sm" placeholder="ул. Ленина, 29" required />
             <span class="badge bg-danger" asp-validation-for="Address"></span>
         </div>
         <div class="mb-3">
@@ -52,7 +52,7 @@
         </div>
         <div class="mb-3">
             <label>Изображения<i>*</i></label>
-            <input required type="file" name="uploadedFiles" accept=".png,.jpg,.jpeg" multiple="multiple" class="form-control form-control-sm" />
+            <input type="file" name="uploadedFiles" accept=".png,.jpg,.jpeg" multiple="multiple" class="form-control form-control-sm" required />
         </div>
         <div class="mb-3">
             <input type="submit" value="Сохранить" class="btn btn-outline-secondary" />

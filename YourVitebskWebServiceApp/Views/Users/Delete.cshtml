@@ -1,4 +1,4 @@
-﻿@model YourVitebskWebServiceApp.Models.User
+﻿@model YourVitebskWebServiceApp.ViewModels.UserViewModel
 
 <div class="row mb-3">
     <div class="col-auto me-auto">
@@ -23,10 +23,10 @@
         <tr>
             <td>@Model.UserId</td>
             <td>@Model.Email</td>
-            <td>@ViewData["RoleName"]</td>
-            <td>@Model.UserDatum.FirstName</td>
-            <td>@Model.UserDatum.LastName</td>
-            <td>@Model.UserDatum.PhoneNumber</td>
+            <td>@Model.Role</td>
+            <td>@Model.FirstName</td>
+            <td>@Model.LastName</td>
+            <td>@Model.PhoneNumber</td>
             @if (Model.IsVisible)
                 {
                     <td>Да</td>

@@ -16,12 +16,12 @@
         <input type="hidden" asp-for="NewsId" />
         <div class="mb-3">
             <label asp-for="Title" class="form-label">Заголовок<i>*</i></label>
-            <input type="text" asp-for="Title" class="form-control form-control-sm" />
+            <input type="text" asp-for="Title" class="form-control form-control-sm" required />
             <span class="badge bg-danger" asp-validation-for="Title"></span>
         </div>
         <div class="mb-3">
             <label asp-for="Description" class="form-label">Описание<i>*</i></label>
-            <textarea asp-for="Description" class="form-control form-control-sm" ></textarea>
+            <textarea asp-for="Description" class="form-control form-control-sm" required ></textarea>
             <span class="badge bg-danger" asp-validation-for="Description"></span>
         </div>
         <div class="mb-3">

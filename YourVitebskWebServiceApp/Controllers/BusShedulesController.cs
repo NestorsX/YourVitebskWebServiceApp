@@ -67,8 +67,6 @@ namespace YourVitebskWebServiceApp.Controllers
             {
                 ViewBag.Buses = _context.Buses;
                 ViewBag.BusStops = _context.BusStops;
-                ViewData["BusId"] = busShedule.BusId;
-                ViewData["BusStopId"] = busShedule.BusStopId;
                 return View(busShedule);
             }
 
@@ -98,8 +96,6 @@ namespace YourVitebskWebServiceApp.Controllers
 
             ViewBag.Buses = _context.Buses;
             ViewBag.BusStops = _context.BusStops;
-            ViewData["BusId"] = newBusShedule.BusId;
-            ViewData["BusStopId"] = newBusShedule.BusStopId;
             return View(newBusShedule);
         }
 

@@ -39,11 +39,6 @@ namespace YourVitebskWebServiceApp.Controllers
                 ModelState.AddModelError("Title", "Афиша с таким именем уже используется");
             }
 
-            if (newPoster.PosterTypeId == 0)
-            {
-                ModelState.AddModelError("PosterTypeId", "Выберите вид события");
-            }
-
             if (ModelState.IsValid)
             {
                 var poster = new Poster
@@ -54,7 +49,7 @@ namespace YourVitebskWebServiceApp.Controllers
                     Description = newPoster.Description,
                     DateTime = newPoster.DateTime,
                     Address = newPoster.Address,
-                    ExternalLink = newPoster.ExternalLink ?? ""
+                    ExternalLink = newPoster.ExternalLink
                 };
 
                 _repository.Create(poster, uploadedFiles);
@@ -78,7 +73,7 @@ namespace YourVitebskWebServiceApp.Controllers
                     Description = poster.Description,
                     DateTime = poster.DateTime,
                     Address = poster.Address,
-                    ExternalLink = poster.ExternalLink ?? ""
+                    ExternalLink = poster.ExternalLink
                 };
 
                 ViewBag.PosterTypes = _context.PosterTypes;
@@ -98,11 +93,6 @@ namespace YourVitebskWebServiceApp.Controllers
                 ModelState.AddModelError("Title", "Афиша с таким именем уже используется");
             }
 
-            if (newPoster.PosterTypeId == 0)
-            {
-                ModelState.AddModelError("PosterTypeId", "Выберите вид события");
-            }
-
             if (ModelState.IsValid)
             {
                 poster.PosterTypeId = newPoster.PosterTypeId;
@@ -116,7 +106,6 @@ namespace YourVitebskWebServiceApp.Controllers
             }
 
             ViewBag.PosterTypes = _context.PosterTypes;
-            ViewData["PosterTypeId"] = newPoster.PosterTypeId;
             return View(newPoster);
         }
 

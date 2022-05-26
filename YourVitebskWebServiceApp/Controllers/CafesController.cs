@@ -38,11 +38,6 @@ namespace YourVitebskWebServiceApp.Controllers
                 ModelState.AddModelError("Title", "Заведение с таким именем уже используется");
             }
 
-            if (newCafe.CafeTypeId == 0)
-            {
-                ModelState.AddModelError("CafeTypeId", "Выберите вид заведения");
-            }
-
             if (ModelState.IsValid)
             {
                 var cafe = new Cafe
@@ -53,7 +48,7 @@ namespace YourVitebskWebServiceApp.Controllers
                     Description = newCafe.Description,
                     WorkingTime = newCafe.WorkingTime,
                     Address = newCafe.Address,
-                    ExternalLink = newCafe.ExternalLink ?? "",
+                    ExternalLink = newCafe.ExternalLink,
                 };
 
                 _repository.Create(cafe, uploadedFiles);
@@ -70,7 +65,6 @@ namespace YourVitebskWebServiceApp.Controllers
             if (cafe != null)
             {
                 ViewBag.CafeTypes = _context.CafeTypes;
-                ViewData["CafeTypeId"] = cafe.CafeTypeId;
                 return View(cafe);
             }
 
@@ -86,11 +80,6 @@ namespace YourVitebskWebServiceApp.Controllers
                 ModelState.AddModelError("Title", "Заведение с таким именем уже существует");
             }
 
-            if (newCafe.CafeTypeId == 0)
-            {
-                ModelState.AddModelError("CafeTypeId", "Выберите вид заведения");
-            }
-
             if (ModelState.IsValid)
             {
                 cafe.CafeTypeId = newCafe.CafeTypeId;
@@ -98,13 +87,12 @@ namespace YourVitebskWebServiceApp.Controllers
                 cafe.Description = newCafe.Description;
                 cafe.WorkingTime = newCafe.WorkingTime;
                 cafe.Address = newCafe.Address;
-                cafe.ExternalLink = newCafe.ExternalLink ?? "";
+                cafe.ExternalLink = newCafe.ExternalLink;
                 _repository.Update(cafe, uploadedFiles);
                 return RedirectToAction("Index");
             }
 
             ViewBag.CafeTypes = _context.CafeTypes;
-            ViewData["CafeTypeId"] = newCafe.CafeTypeId;
             return View(newCafe);
         }
 

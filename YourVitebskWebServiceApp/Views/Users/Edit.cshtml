@@ -16,7 +16,7 @@
         <input type="hidden" asp-for="UserId" />
         <div class="mb-3">
             <label asp-for="Email" class="form-label">Email<i>*</i></label>
-            <input type="email" asp-for="Email" class="form-control form-control-sm" placeholder="example@mail.com" />
+            <input type="email" asp-for="Email" class="form-control form-control-sm" placeholder="example@mail.com" required />
             <span class="badge bg-danger" asp-validation-for="Email"></span>
         </div>
         <div class="mb-3">
@@ -27,31 +27,24 @@
         </div>
         <div class="mb-3">
             <label asp-for="RoleId" class="form-label">Роль<i>*</i></label>
-            <select asp-for="RoleId" class="form-control form-control-sm" >
-                <option value="0">Выберите роль</option>
+            <select asp-for="RoleId" class="form-control form-control-sm" required >
+                <option value="">Выберите роль</option>
                 @foreach (Role role in ViewBag.Roles)
                 {
-                    @if ((int)ViewData["RoleId"] == role.RoleId)
-                    {
-                        <option value="@role.RoleId" selected>@role.Name</option>
-                    }
-                    else
-                    {
-                        <option value="@role.RoleId">@role.Name</option>
-                    }
+                    <option value="@role.RoleId">@role.Name</option>
                 }
             </select>
             <span class="badge bg-danger" asp-validation-for="RoleId"></span>
         </div>
         <div class="mb-3">
             <label asp-for="FirstName" class="form-label">Имя<i>*</i></label>
-            <input type="text" asp-for="FirstName" class="form-control form-control-sm" />
+            <input type="text" asp-for="FirstName" class="form-control form-control-sm" required />
             <span class="badge bg-danger" asp-validation-for="FirstName"></span>
 
         </div>
         <div class="mb-3">
             <label asp-for="LastName" class="form-label">Фамилия<i>*</i></label>
-            <input type="text" asp-for="LastName" class="form-control form-control-sm" />
+            <input type="text" asp-for="LastName" class="form-control form-control-sm" required />
             <span class="badge bg-danger" asp-validation-for="LastName"></span>
 
         </div>
@@ -61,8 +54,8 @@
             <span class="badge bg-danger" asp-validation-for="PhoneNumber"></span>
         </div>
         <div class="mb-3">
-            <label asp-for="IsVisible" class="form-label">Видимость для других пользователей</label>
-            <select asp-for="IsVisible" class="form-control form-control-sm" >
+            <label asp-for="IsVisible" class="form-label">Видимость для других пользователей<i>*</i></label>
+            <select asp-for="IsVisible" class="form-control form-control-sm" required >
                 <option value="true">Да</option>
                 <option value="false">Нет</option>
             </select>

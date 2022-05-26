@@ -36,7 +36,7 @@ namespace YourVitebskWebServiceApp.Controllers
                     NewsId = null,
                     Title = newNews.Title,
                     Description = newNews.Description,
-                    ExternalLink = newNews.ExternalLink ?? ""
+                    ExternalLink = newNews.ExternalLink
                 };
 
                 _repository.Create(news, uploadedFiles);
@@ -65,7 +65,7 @@ namespace YourVitebskWebServiceApp.Controllers
             {
                 news.Title = newNews.Title;
                 news.Description = newNews.Description;
-                news.ExternalLink = newNews.ExternalLink ?? "";
+                news.ExternalLink = newNews.ExternalLink;
                 _repository.Update(news, uploadedFiles);
                 return RedirectToAction("Index");
             }
