@@ -14,7 +14,6 @@
             <th>Время работы</th>
             <th>Адрес</th>
             <th>Ссылка</th>
-            <th>Рейтинг</th>
             <th><a class="btn btn-outline-dark float-end" asp-controller="Cafes" asp-action="Create">Добавить</a></th>
         </tr>
     
@@ -34,7 +33,6 @@
                 <td>
                     <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.ExternalLink</span>
                 </td>
-                <td>@item.Rating</td>
                 <td>
                     <div class="btn-group float-end" role="group">
                         <a class="btn btn-outline-dark" asp-controller="Cafes" asp-action="Edit" asp-route-id="@item.CafeId">Изменить</a>
