@@ -51,18 +51,14 @@
             <span class="badge bg-danger" asp-validation-for="BusStopNumber"></span>
         </div>
         <div class="mb-3">
-            <label asp-for="IsWorkday" class="form-label">День<i>*</i></label>
-            <select asp-for="IsWorkday" class="form-control form-control-sm" >
-                <option value="">Выберите день</option>
-                <option value="true">Рабочий</option>
-                <option value="false">Выходной</option>
-            </select>
-            <span class="badge bg-danger" asp-validation-for="IsWorkday"></span>
+            <label asp-for="WorkDayShedule" class="form-label">Расписание рабочего дня<i>*</i></label>
+            <textarea asp-for="WorkDayShedule" class="form-control form-control-sm" placeholder="05:35 06:08 06:37 ..." required ></textarea>
+            <span class="badge bg-danger" asp-validation-for="WorkDayShedule"></span>
         </div>
         <div class="mb-3">
-            <label asp-for="Time" class="form-label">Расписание<i>*</i></label>
-            <textarea asp-for="Time" class="form-control form-control-sm" placeholder="05:35 06:08 06:37 ..." required ></textarea>
-            <span class="badge bg-danger" asp-validation-for="Time"></span>
+            <label asp-for="DayOffShedule" class="form-label">Расписание выходного дня<i>*</i></label>
+            <textarea asp-for="DayOffShedule" class="form-control form-control-sm" placeholder="05:35 06:08 06:37 ..." required ></textarea>
+            <span class="badge bg-danger" asp-validation-for="DayOffShedule"></span>
         </div>
         <div class="mb-3">
             <input type="submit" value="Сохранить" class="btn btn-outline-secondary" />

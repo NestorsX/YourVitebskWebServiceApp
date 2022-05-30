@@ -30,6 +30,7 @@ namespace YourVitebskWebServiceApp
         {
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IBusService, BusesService>();
             services.AddScoped<IService<APIModels.News>, NewsService>();
             services.AddScoped<IService<APIModels.Cafe>, CafesService>();
             services.AddScoped<IService<APIModels.Poster>, PostersService>();

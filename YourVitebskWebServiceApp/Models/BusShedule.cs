@@ -12,7 +12,7 @@ namespace YourVitebskWebServiceApp.Models
 
         [Range(1,100, ErrorMessage = "Нумерация остановок начинается с 1")]
         public int BusStopNumber { get; set; }
-        public bool IsWorkday { get; set; }
-        public string Time { get; set; }
+        public string WorkDayShedule { get; set; }
+        public string DayOffShedule { get; set; }
     }
 }

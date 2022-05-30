@@ -31,8 +31,8 @@ namespace YourVitebskWebServiceApp.Repositories
                     BusStopName = _context.BusStops.First(x => x.BusStopId == busShedule.BusStopId).Name,
                     BusRoute = busShedule.BusRoute,
                     BusStopNumber = busShedule.BusStopNumber,
-                    IsWorkday = busShedule.IsWorkday ? "Рабочий" : "Выходной",
-                    Time = busShedule.Time
+                    WorkDayShedule = busShedule.WorkDayShedule,
+                    DayOffShedule = busShedule.DayOffShedule
                 });
             }
 

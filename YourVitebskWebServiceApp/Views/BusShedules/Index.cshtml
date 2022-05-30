@@ -9,11 +9,11 @@
         <tr>
             <th>ID</th>
             <th>Автобус</th>
-            <th>Остановка</th>
             <th>Номер маршрута</th>
             <th>Номер остановки</th>
-            <th>День</th>
-            <th>Расписание</th>
+            <th>Остановка</th>
+            <th>Расписание рабочего дня</th>
+            <th>Расписание выходного дня</th>
             <th><a class="btn btn-outline-dark float-end" asp-controller="BusShedules" asp-action="Create">Добавить</a></th>
         </tr>
     
@@ -22,12 +22,14 @@
             <tr>
                 <td>@item.BusSheduleId</td>
                 <td>Автобус №@item.BusNumber</td>
-                <td>@item.BusStopName</td>
                 <td>@item.BusRoute</td>
                 <td>@item.BusStopNumber</td>
-                <td>@item.IsWorkday</td>
+                <td>@item.BusStopName</td>
                 <td>
-                    <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.Time</span>
+                    <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.WorkDayShedule</span>
+                </td>
+                <td>
+                    <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.DayOffShedule</span>
                 </td>
                 <td>
                     <div class="btn-group float-end" role="group">

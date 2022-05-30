@@ -14,21 +14,23 @@
         <tr>
             <th>ID</th>
             <th>Автобус</th>
-            <th>Остановка</th>
             <th>Номер маршрута</th>
             <th>Номер остановки</th>
-            <th>День</th>
-            <th>Расписание</th>
+            <th>Остановка</th>
+            <th>Расписание рабочего дня</th>
+            <th>Расписание выходного дня</th>
         </tr>
         <tr>
             <td>@Model.BusSheduleId</td>
             <td>Автобус №@ViewData["BusNumber"]</td>
-            <td>@ViewData["BusStopName"]</td>
             <td>@Model.BusRoute</td>
             <td>@Model.BusStopNumber</td>
-            <td>@Model.IsWorkday</td>
+            <td>@ViewData["BusStopName"]</td>
             <td>
-                <span class="d-inline-block text-truncate" style="max-width: 300px;">@Model.Time</span>
+                <span class="d-inline-block text-truncate" style="max-width: 300px;">@Model.WorkDayShedule</span>
+            </td>
+            <td>
+                <span class="d-inline-block text-truncate" style="max-width: 300px;">@Model.DayOffShedule</span>
             </td>
         </tr>
     </table>

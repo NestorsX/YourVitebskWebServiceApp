@@ -33,7 +33,9 @@ namespace YourVitebskWebServiceApp.Controllers
         [HttpPost]
         public ActionResult Create(BusShedule newBusShedule)
         {
-            if (_context.BusShedules.FirstOrDefault(x => x.BusId == newBusShedule.BusId && x.BusStopNumber == newBusShedule.BusStopNumber) != null)
+            if (_context.BusShedules.FirstOrDefault(x => x.BusId == newBusShedule.BusId 
+                                                      && x.BusRoute == newBusShedule.BusRoute 
+                                                      && x.BusStopNumber == newBusShedule.BusStopNumber) != null)
             {
                 ModelState.AddModelError("BusStopNumber", "Этот номер остановки в маршруте уже существует");
             }
@@ -47,8 +49,8 @@ namespace YourVitebskWebServiceApp.Controllers
                     BusStopId = newBusShedule.BusStopId,
                     BusRoute = newBusShedule.BusRoute,
                     BusStopNumber = newBusShedule.BusStopNumber,
-                    IsWorkday = newBusShedule.IsWorkday,
-                    Time = newBusShedule.Time,
+                    WorkDayShedule = newBusShedule.WorkDayShedule,
+                    DayOffShedule = newBusShedule.DayOffShedule
                 };
 
                 _repository.Create(busShedule);
@@ -77,7 +79,9 @@ namespace YourVitebskWebServiceApp.Controllers
         public ActionResult Edit(BusShedule newBusShedule)
         {
             BusShedule busShedule = _repository.Get((int)newBusShedule.BusSheduleId);
-            if (_context.BusShedules.FirstOrDefault(x => x.BusId == newBusShedule.BusId && x.BusStopNumber == newBusShedule.BusStopNumber && x.BusSheduleId != busShedule.BusSheduleId) != null)
+            if (_context.BusShedules.FirstOrDefault(x => x.BusId == newBusShedule.BusId 
+                                                      && x.BusRoute == newBusShedule.BusRoute 
+                                                      && x.BusStopNumber == newBusShedule.BusStopNumber) != null)
             {
                 ModelState.AddModelError("BusStopNumber", "Этот номер остановки в маршруте уже существует");
             }
@@ -88,8 +92,8 @@ namespace YourVitebskWebServiceApp.Controllers
                 busShedule.BusStopId = newBusShedule.BusStopId;
                 busShedule.BusRoute = newBusShedule.BusRoute;
                 busShedule.BusStopNumber = newBusShedule.BusStopNumber;
-                busShedule.IsWorkday = newBusShedule.IsWorkday;
-                busShedule.Time = newBusShedule.Time;
+                busShedule.WorkDayShedule = newBusShedule.WorkDayShedule;
+                busShedule.DayOffShedule = newBusShedule.DayOffShedule;
                 _repository.Update(busShedule);
                 return RedirectToAction("Index");
             }
