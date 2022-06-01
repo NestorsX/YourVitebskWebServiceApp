@@ -30,7 +30,6 @@ namespace YourVitebskWebServiceApp
         {
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUsersService, UsersService>();
-            services.AddScoped<IBusService, BusesService>();
             services.AddScoped<IService<APIModels.News>, NewsService>();
             services.AddScoped<IService<APIModels.Cafe>, CafesService>();
             services.AddScoped<IService<APIModels.Poster>, PostersService>();
@@ -39,9 +38,6 @@ namespace YourVitebskWebServiceApp
             services.AddScoped<IUserRepository, UsersRepository>();
             services.AddScoped<IRepository<Role>, RolesRepository>();
             services.AddScoped<IImageRepository<News>, NewsRepository>();
-            services.AddScoped<IRepository<Bus>, BusesRepository>();
-            services.AddScoped<IRepository<BusStop>, BusStopsRepository>();
-            services.AddScoped<IRepository<BusShedule>, BusShedulesRepository>();
             services.AddScoped<IImageRepository<Poster>, PostersRepository>();
             services.AddScoped<IRepository<PosterType>, PosterTypesRepository>();
             services.AddScoped<IImageRepository<Cafe>, CafesRepository>();
