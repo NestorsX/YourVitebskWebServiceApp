@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using YourVitebskWebServiceApp.APIServices;
 using YourVitebskWebServiceApp.Interfaces;
@@ -12,9 +14,9 @@ namespace YourVitebskWebServiceApp.Controllers
     public class UsersController : Controller
     {
         private readonly YourVitebskDBContext _context;
-        private readonly IUserRepository _repository;
+        private readonly IImageRepository<User> _repository;
 
-        public UsersController(YourVitebskDBContext context, IUserRepository repository)
+        public UsersController(YourVitebskDBContext context, IImageRepository<User> repository)
         {
             _context = context;
             _repository = repository;
@@ -32,7 +34,7 @@ namespace YourVitebskWebServiceApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(UserViewModel newUser)
+        public ActionResult Create(UserViewModel newUser, IFormFileCollection uploadedFiles)
         {
             if (_context.Users.FirstOrDefault(x => x.Email == newUser.Email) != null)
             {
@@ -68,7 +70,7 @@ namespace YourVitebskWebServiceApp.Controllers
                     }
                 };
 
-                _repository.Create(user);
+                _repository.Create(user, uploadedFiles);
                 return RedirectToAction("Index");
             }
 
@@ -83,7 +85,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            UserViewModel user = _repository.Get(id);
+            UserViewModel user = (UserViewModel)_repository.Get(id);
             if (user != null)
             {
                 user.Password = null;
@@ -95,9 +97,9 @@ namespace YourVitebskWebServiceApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(UserViewModel newUser)
+        public ActionResult Edit(UserViewModel newUser, IFormFileCollection uploadedFiles)
         {
-            User user = _repository.GetUser(newUser.UserId);
+            User user = _context.Users.Include(x => x.UserDatum).FirstOrDefault(x => x.UserId == newUser.UserId);
             if (_context.Users.FirstOrDefault(x => x.Email == newUser.Email && newUser.Email != user.Email) != null)
             {
                 ModelState.AddModelError("Email", "Email уже используется");
@@ -126,7 +128,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 user.UserDatum.FirstName = newUser.FirstName;
                 user.UserDatum.LastName = newUser.LastName;
                 user.UserDatum.PhoneNumber = newUser.PhoneNumber ?? "";
-                _repository.Update(user);
+                _repository.Update(user, uploadedFiles);
                 return RedirectToAction("Index");
             }
 
@@ -143,11 +145,12 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            UserViewModel user = _repository.Get(id);
+            UserViewModel user = (UserViewModel)_repository.Get(id);
             if (user != null)
             {
                 return View(user);
             }
+
             return NotFound();
         }
 

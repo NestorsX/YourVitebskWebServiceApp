@@ -25,7 +25,7 @@ namespace YourVitebskWebServiceApp.Repositories
             return _context.News.ToList().OrderByDescending(x => x.NewsId);
         }
 
-        public News Get(int id)
+        public IViewModel Get(int id)
         {
             return _context.News.FirstOrDefault(x => x.NewsId == id);
         }
@@ -46,7 +46,7 @@ namespace YourVitebskWebServiceApp.Repositories
 
         public void Delete(int id)
         {
-            _context.News.Remove(Get(id));
+            _context.News.Remove((News)Get(id));
             _context.SaveChanges();
             _imageService.DeleteImages("news", id);
         }

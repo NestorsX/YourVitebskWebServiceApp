@@ -35,7 +35,7 @@ namespace YourVitebskWebServiceApp
             services.AddScoped<IService<APIModels.Poster>, PostersService>();
             services.AddScoped<IService<APIModels.Vacancy>, VacanciesService>();
 
-            services.AddScoped<IUserRepository, UsersRepository>();
+            services.AddScoped<IImageRepository<User>, UsersRepository>();
             services.AddScoped<IRepository<Role>, RolesRepository>();
             services.AddScoped<IImageRepository<News>, NewsRepository>();
             services.AddScoped<IImageRepository<Poster>, PostersRepository>();

@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using YourVitebskWebServiceApp.Interfaces;
 
 namespace YourVitebskWebServiceApp.Models
 {
-    public class Cafe
+    public class Cafe : IViewModel
     {
         [Key]
         public int? CafeId { get; set; }

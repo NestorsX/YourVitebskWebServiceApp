@@ -62,7 +62,7 @@ namespace YourVitebskWebServiceApp.Controllers
 
         public ActionResult Edit(int id)
         {
-            Poster poster = _repository.Get(id);
+            Poster poster = (Poster)_repository.Get(id);
             if (poster != null)
             {
                 var viewModel = new PosterViewModel
@@ -87,7 +87,7 @@ namespace YourVitebskWebServiceApp.Controllers
         [HttpPost]
         public ActionResult Edit(PosterViewModel newPoster, IFormFileCollection uploadedFiles)
         {
-            Poster poster = _repository.Get((int)newPoster.PosterId);
+            Poster poster = (Poster)_repository.Get((int)newPoster.PosterId);
             if (_context.Posters.FirstOrDefault(x => x.Title == newPoster.Title && newPoster.Title != poster.Title) != null)
             {
                 ModelState.AddModelError("Title", "Афиша с таким именем уже используется");
@@ -113,7 +113,7 @@ namespace YourVitebskWebServiceApp.Controllers
         [ActionName("Delete")]
         public ActionResult ConfirmDelete(int id)
         {
-            Poster poster = _repository.Get(id);
+            Poster poster = (Poster)_repository.Get(id);
             if (poster != null)
             {
                 ViewData["PosterType"] = _context.PosterTypes.First(x => x.PosterTypeId == poster.PosterTypeId).Name;

@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using YourVitebskWebServiceApp.APIServiceInterfaces;
@@ -10,10 +11,12 @@ namespace YourVitebskWebServiceApp.APIServices
     public class UsersService : IUsersService
     {
         private readonly YourVitebskDBContext _context;
+        private readonly IWebHostEnvironment _appEnvironment;
 
-        public UsersService(YourVitebskDBContext context)
+        public UsersService(YourVitebskDBContext context, IWebHostEnvironment appEnvironment)
         {
             _context = context;
+            _appEnvironment = appEnvironment;
         }
 
         public async Task<IEnumerable<APIModels.UsersListItem>> GetAllUsers(int id)
@@ -22,12 +25,19 @@ namespace YourVitebskWebServiceApp.APIServices
             IEnumerable<Models.User> users = await _context.Users.Include(x => x.UserDatum).Where(x => x.IsVisible == true && x.UserId != id).ToListAsync();
             foreach (var user in users)
             {
+                string path = null;
+                if (Directory.Exists($"{_appEnvironment.WebRootPath}/images/users/{user.UserId}"))
+                {
+                    path = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/users/{user.UserId}").Select(x => Path.GetFileName(x)).First();
+                }
+
                 result = result.Append(new APIModels.UsersListItem()
                 {
                     UserId = (int)user.UserId,
                     FirstName = user.UserDatum.FirstName,
                     LastName = user.UserDatum.LastName,
-                    PhoneNumber = user.UserDatum.PhoneNumber
+                    PhoneNumber = user.UserDatum.PhoneNumber,
+                    Image = path == null ? null : await File.ReadAllBytesAsync($"{_appEnvironment.WebRootPath}/images/users/{user.UserId}/{path}")
                 });
             }
 

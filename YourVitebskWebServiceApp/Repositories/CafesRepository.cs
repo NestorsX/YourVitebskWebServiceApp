@@ -42,7 +42,7 @@ namespace YourVitebskWebServiceApp.Repositories
             return result;
         }
 
-        public Cafe Get(int id)
+        public IViewModel Get(int id)
         {
             return _context.Cafes.FirstOrDefault(x => x.CafeId == id);
         }
@@ -63,7 +63,7 @@ namespace YourVitebskWebServiceApp.Repositories
 
         public void Delete(int id)
         {
-            _context.Cafes.Remove(Get(id));
+            _context.Cafes.Remove((Cafe)Get(id));
             _context.SaveChanges();
             _imageService.DeleteImages("cafes", id);
         }

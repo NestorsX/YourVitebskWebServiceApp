@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using YourVitebskWebServiceApp.APIServiceInterfaces;
 using YourVitebskWebServiceApp.Models;
@@ -13,6 +12,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using YourVitebskWebServiceApp.APIModels;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using YourVitebskWebServiceApp.Repositories;
+using Microsoft.AspNetCore.Http;
 
 namespace YourVitebskWebServiceApp.APIServices
 {
@@ -20,11 +23,15 @@ namespace YourVitebskWebServiceApp.APIServices
     {
         private readonly YourVitebskDBContext _context;
         private readonly IConfiguration _configuration;
+        private readonly ImageService _imageService;
+        private readonly IWebHostEnvironment _appEnvironment;
 
-        public AuthService(YourVitebskDBContext context, IConfiguration configuration)
+        public AuthService(YourVitebskDBContext context, IConfiguration configuration, IWebHostEnvironment appEnvironment)
         {
             _context = context;
             _configuration = configuration;
+            _appEnvironment = appEnvironment;
+            _imageService = new ImageService(appEnvironment);
         }
 
         public static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
@@ -45,8 +52,17 @@ namespace YourVitebskWebServiceApp.APIServices
             }
         }
 
-        public string CreateToken(Models.User user)
+        public async Task<string> CreateToken(Models.User user)
         {
+            string path = null;
+            string image = "";
+            if (Directory.Exists($"{_appEnvironment.WebRootPath}/images/users/{user.UserId}"))
+            {
+                path = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/users/{user.UserId}").Select(x => Path.GetFileName(x)).First();
+                byte[] imageBytes = await File.ReadAllBytesAsync($"{_appEnvironment.WebRootPath}/images/users/{user.UserId}/{path}");
+                image = Convert.ToBase64String(imageBytes);
+            }
+
             var claims = new List<Claim>()
             {
                 new Claim(nameof(user.UserId), user.UserId.ToString()),
@@ -54,7 +70,8 @@ namespace YourVitebskWebServiceApp.APIServices
                 new Claim(nameof(user.UserDatum.FirstName), user.UserDatum.FirstName),
                 new Claim(nameof(user.UserDatum.LastName), user.UserDatum.LastName),
                 new Claim(nameof(user.UserDatum.PhoneNumber), user.UserDatum.PhoneNumber),
-                new Claim(nameof(user.IsVisible), user.IsVisible.ToString())
+                new Claim(nameof(user.IsVisible), user.IsVisible.ToString()),
+                new Claim("Image", image)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
@@ -105,7 +122,7 @@ namespace YourVitebskWebServiceApp.APIServices
                     _context.UserData.Add(user.UserDatum);
                     await _context.SaveChangesAsync();
                     transaction.Commit();
-                    return CreateToken(user);
+                    return await CreateToken(user);
                 }
                 catch (ArgumentException e)
                 {
@@ -128,7 +145,7 @@ namespace YourVitebskWebServiceApp.APIServices
                 throw new ArgumentException("Неверные логин и(или) пароль");
             }
 
-            return CreateToken(user);
+            return await CreateToken(user);
         }
 
         public async Task<string> Update(APIModels.User newUser)
@@ -158,6 +175,14 @@ namespace YourVitebskWebServiceApp.APIServices
                         }
                     }
 
+                    if (newUser.Image != null)
+                    {
+                        _imageService.SaveImages("users", (int)user.UserId, new FormFileCollection
+                        {
+                            new FormFile(new MemoryStream(newUser.Image), 0, newUser.Image.Length, "image", "avatar.jpg"),
+                        });
+                    }
+
                     user.Email = newUser.Email;
                     user.UserDatum.FirstName = newUser.FirstName;
                     user.UserDatum.LastName = newUser.LastName;
@@ -166,7 +191,7 @@ namespace YourVitebskWebServiceApp.APIServices
                     _context.Entry(user.UserDatum).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
                     transaction.Commit();
-                    return CreateToken(user);
+                    return await CreateToken(user);
                 }
                 catch (ArgumentException ex)
                 {

@@ -8,11 +8,11 @@ namespace YourVitebskWebServiceApp.Interfaces
     {
         IEnumerable<IViewModel> Get();
 
-        T Get(int id);
+        IViewModel Get(int id);
 
-        void Create(T user, IFormFileCollection uploadedFiles);
+        void Create(T obj, IFormFileCollection uploadedFiles);
 
-        void Update(T user, IFormFileCollection uploadedFiles);
+        void Update(T obj, IFormFileCollection uploadedFiles);
 
         void Delete(int id);
     }

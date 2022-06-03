@@ -61,7 +61,7 @@ namespace YourVitebskWebServiceApp.Controllers
 
         public ActionResult Edit(int id)
         {
-            Cafe cafe = _repository.Get(id);
+            Cafe cafe = (Cafe)_repository.Get(id);
             if (cafe != null)
             {
                 ViewBag.CafeTypes = _context.CafeTypes;
@@ -74,7 +74,7 @@ namespace YourVitebskWebServiceApp.Controllers
         [HttpPost]
         public ActionResult Edit(Cafe newCafe, IFormFileCollection uploadedFiles)
         {
-            Cafe cafe = _repository.Get((int)newCafe.CafeId);
+            Cafe cafe = (Cafe)_repository.Get((int)newCafe.CafeId);
             if (_context.Cafes.FirstOrDefault(x => x.Title == newCafe.Title && newCafe.Title != cafe.Title) != null)
             {
                 ModelState.AddModelError("Title", "Заведение с таким именем уже существует");
@@ -100,7 +100,7 @@ namespace YourVitebskWebServiceApp.Controllers
         [ActionName("Delete")]
         public ActionResult ConfirmDelete(int id)
         {
-            Cafe cafe = _repository.Get(id);
+            Cafe cafe = (Cafe)_repository.Get(id);
             if (cafe != null)
             {
                 ViewData["CafeType"] = _context.CafeTypes.First(x => x.CafeTypeId == cafe.CafeTypeId).Name;

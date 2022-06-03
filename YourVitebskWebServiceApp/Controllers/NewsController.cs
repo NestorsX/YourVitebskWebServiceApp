@@ -48,7 +48,7 @@ namespace YourVitebskWebServiceApp.Controllers
 
         public ActionResult Edit(int id)
         {
-            News news = _repository.Get(id);
+            News news = (News)_repository.Get(id);
             if (news != null)
             {
                 return View(news);
@@ -60,7 +60,7 @@ namespace YourVitebskWebServiceApp.Controllers
         [HttpPost]
         public ActionResult Edit(News newNews, IFormFileCollection uploadedFiles)
         {
-            News news = _repository.Get((int)newNews.NewsId);
+            News news = (News)_repository.Get((int)newNews.NewsId);
             if (ModelState.IsValid)
             {
                 news.Title = newNews.Title;
@@ -77,7 +77,7 @@ namespace YourVitebskWebServiceApp.Controllers
         [ActionName("Delete")]
         public ActionResult ConfirmDelete(int id)
         {
-            News news = _repository.Get(id);
+            News news = (News)_repository.Get(id);
             if (news != null)
             {
                 return View(news);

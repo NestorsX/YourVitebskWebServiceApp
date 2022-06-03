@@ -42,7 +42,7 @@ namespace YourVitebskWebServiceApp.Repositories
             return result;
         }
 
-        public Poster Get(int id)
+        public IViewModel Get(int id)
         {
             return _context.Posters.FirstOrDefault(x => x.PosterId == id);
         }
@@ -63,7 +63,7 @@ namespace YourVitebskWebServiceApp.Repositories
 
         public void Delete(int id)
         {
-            _context.Posters.Remove(Get(id));
+            _context.Posters.Remove((Poster)Get(id));
             _context.SaveChanges();
             _imageService.DeleteImages("posters", id);
         }

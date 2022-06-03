@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,17 +10,19 @@ using YourVitebskWebServiceApp.ViewModels;
 
 namespace YourVitebskWebServiceApp.Repositories
 {
-    public class UsersRepository : IUserRepository
+    public class UsersRepository : IImageRepository<User>
     {
         private readonly YourVitebskDBContext _context;
+        private readonly ImageService _imageService;
         private bool _disposed = false;
 
-        public UsersRepository(YourVitebskDBContext context)
+        public UsersRepository(YourVitebskDBContext context, IWebHostEnvironment appEnvironment)
         {
             _context = context;
+            _imageService = new ImageService(appEnvironment);
         }
 
-        public IEnumerable<UserViewModel> Get()
+        public IEnumerable<IViewModel> Get()
         {
             IEnumerable<UserViewModel> result = new List<UserViewModel>();
             IEnumerable<User> users = _context.Users.Include(x => x.UserDatum).ToList().OrderBy(x => x.UserId);
@@ -40,9 +44,9 @@ namespace YourVitebskWebServiceApp.Repositories
             return result;
         }
 
-        public UserViewModel Get(int id)
+        public IViewModel Get(int id)
         {
-            User user = GetUser(id);
+            User user = _context.Users.Include(x => x.UserDatum).FirstOrDefault(x => x.UserId == id);
             var result = new UserViewModel()
             {
                 UserId = (int)user.UserId,
@@ -58,12 +62,7 @@ namespace YourVitebskWebServiceApp.Repositories
             return result;
         }
 
-        public User GetUser(int id)
-        {
-            return _context.Users.Include(x => x.UserDatum).FirstOrDefault(x => x.UserId == id);
-        }
-
-        public void Create(User user)
+        public void Create(User user, IFormFileCollection uploadedFiles)
         {
             UserDatum userData = user.UserDatum;
             user.UserDatum = null;
@@ -72,17 +71,19 @@ namespace YourVitebskWebServiceApp.Repositories
             userData.UserId = user.UserId;
             _context.UserData.Add(userData);
             _context.SaveChanges();
+            _imageService.SaveImages("users", (int)user.UserId, uploadedFiles);
         }
 
-        public void Update(User user)
+        public void Update(User user, IFormFileCollection uploadedFiles)
         {
             _context.Users.Update(user);
             _context.SaveChanges();
+            _imageService.SaveImages("users", (int)user.UserId, uploadedFiles);
         }
 
         public void Delete(int id)
         {
-            User user = GetUser(id);
+            User user = _context.Users.Include(x => x.UserDatum).FirstOrDefault(x => x.UserId == id);
             if (user.UserDatum != null)
             {
                 _context.UserData.Remove(user.UserDatum);
