@@ -25,10 +25,10 @@ namespace YourVitebskWebServiceApp.APIServices
             IEnumerable<Models.User> users = await _context.Users.Include(x => x.UserDatum).Where(x => x.IsVisible == true && x.UserId != id).ToListAsync();
             foreach (var user in users)
             {
-                string path = null;
+                string image = "";
                 if (Directory.Exists($"{_appEnvironment.WebRootPath}/images/users/{user.UserId}"))
                 {
-                    path = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/users/{user.UserId}").Select(x => Path.GetFileName(x)).First();
+                    image = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/users/{user.UserId}").Select(x => Path.GetFileName(x)).First();
                 }
 
                 result = result.Append(new APIModels.UsersListItem()
@@ -37,7 +37,7 @@ namespace YourVitebskWebServiceApp.APIServices
                     FirstName = user.UserDatum.FirstName,
                     LastName = user.UserDatum.LastName,
                     PhoneNumber = user.UserDatum.PhoneNumber,
-                    Image = path == null ? null : await File.ReadAllBytesAsync($"{_appEnvironment.WebRootPath}/images/users/{user.UserId}/{path}")
+                    Image = image
                 });
             }
 

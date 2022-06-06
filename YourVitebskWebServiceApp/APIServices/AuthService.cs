@@ -52,15 +52,12 @@ namespace YourVitebskWebServiceApp.APIServices
             }
         }
 
-        public async Task<string> CreateToken(Models.User user)
+        public string CreateToken(Models.User user)
         {
-            string path = null;
             string image = "";
             if (Directory.Exists($"{_appEnvironment.WebRootPath}/images/users/{user.UserId}"))
             {
-                path = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/users/{user.UserId}").Select(x => Path.GetFileName(x)).First();
-                byte[] imageBytes = await File.ReadAllBytesAsync($"{_appEnvironment.WebRootPath}/images/users/{user.UserId}/{path}");
-                image = Convert.ToBase64String(imageBytes);
+                image = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/users/{user.UserId}").Select(x => Path.GetFileName(x)).First();
             }
 
             var claims = new List<Claim>()
@@ -122,7 +119,7 @@ namespace YourVitebskWebServiceApp.APIServices
                     _context.UserData.Add(user.UserDatum);
                     await _context.SaveChangesAsync();
                     transaction.Commit();
-                    return await CreateToken(user);
+                    return CreateToken(user);
                 }
                 catch (ArgumentException e)
                 {
@@ -145,7 +142,7 @@ namespace YourVitebskWebServiceApp.APIServices
                 throw new ArgumentException("Неверные логин и(или) пароль");
             }
 
-            return await CreateToken(user);
+            return CreateToken(user);
         }
 
         public async Task<string> Update(APIModels.User newUser)
@@ -191,7 +188,7 @@ namespace YourVitebskWebServiceApp.APIServices
                     _context.Entry(user.UserDatum).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
                     transaction.Commit();
-                    return await CreateToken(user);
+                    return CreateToken(user);
                 }
                 catch (ArgumentException ex)
                 {
