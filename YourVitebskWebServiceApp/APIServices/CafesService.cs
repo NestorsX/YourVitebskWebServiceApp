@@ -35,8 +35,8 @@ namespace YourVitebskWebServiceApp.APIServices
                     WorkingTime = cafe.WorkingTime,
                     Address = cafe.Address,
                     ExternalLink = cafe.ExternalLink,
-                    TitleImage = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/cafes/{cafe.CafeId}").Select(x => string.Concat($"http://yourvitebsk.somee.com/images/cafes/{cafe.CafeId}/", Path.GetFileName(x))).First(),
-                    Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/cafes/{cafe.CafeId}").Select(x => string.Concat($"http://yourvitebsk.somee.com/images/cafes/{cafe.CafeId}/", Path.GetFileName(x)))
+                    TitleImage = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/cafes/{cafe.CafeId}").Select(x => Path.GetFileName(x)).First(),
+                    Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/cafes/{cafe.CafeId}").Select(x => Path.GetFileName(x))
                 });
             }
 
@@ -60,8 +60,8 @@ namespace YourVitebskWebServiceApp.APIServices
                 WorkingTime = cafe.WorkingTime,
                 Address = cafe.Address,
                 ExternalLink = cafe.ExternalLink,
-                TitleImage = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/cafes/{cafe.CafeId}").Select(x => string.Concat($"http://yourvitebsk.somee.com/images/cafes/{cafe.CafeId}/", Path.GetFileName(x))).First(),
-                Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/cafes/{cafe.CafeId}").Select(x => string.Concat($"http://yourvitebsk.somee.com/images/cafes/{cafe.CafeId}/", Path.GetFileName(x)))
+                TitleImage = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/cafes/{cafe.CafeId}").Select(x => Path.GetFileName(x)).First(),
+                Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/cafes/{cafe.CafeId}").Select(x => Path.GetFileName(x))
             };
 
             return result;

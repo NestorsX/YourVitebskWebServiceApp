@@ -176,7 +176,7 @@ namespace YourVitebskWebServiceApp.APIServices
                     {
                         _imageService.SaveImages("users", (int)user.UserId, new FormFileCollection
                         {
-                            new FormFile(new MemoryStream(newUser.Image), 0, newUser.Image.Length, "image", "avatar.jpg"),
+                            new FormFile(new MemoryStream(newUser.Image), 0, newUser.Image.Length, "image", DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg"),
                         });
                     }
 
@@ -184,6 +184,7 @@ namespace YourVitebskWebServiceApp.APIServices
                     user.UserDatum.FirstName = newUser.FirstName;
                     user.UserDatum.LastName = newUser.LastName;
                     user.UserDatum.PhoneNumber = newUser.PhoneNumber;
+                    user.IsVisible = newUser.IsVisible;
                     _context.Entry(user).State = EntityState.Modified;
                     _context.Entry(user.UserDatum).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
