@@ -22,7 +22,7 @@ namespace YourVitebskWebServiceApp.APIServices
         public async Task<IEnumerable<APIModels.UsersListItem>> GetAllUsers(int id)
         {
             IEnumerable<APIModels.UsersListItem> result = new List<APIModels.UsersListItem>();
-            IEnumerable<Models.User> users = await _context.Users.Include(x => x.UserDatum).Where(x => x.IsVisible == true && x.UserId != id).ToListAsync();
+            IEnumerable<Models.User> users = await _context.Users.Where(x => x.IsVisible == true && x.UserId != id).ToListAsync();
             foreach (var user in users)
             {
                 string image = "";
@@ -34,9 +34,9 @@ namespace YourVitebskWebServiceApp.APIServices
                 result = result.Append(new APIModels.UsersListItem()
                 {
                     UserId = (int)user.UserId,
-                    FirstName = user.UserDatum.FirstName,
-                    LastName = user.UserDatum.LastName,
-                    PhoneNumber = user.UserDatum.PhoneNumber,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    PhoneNumber = user.PhoneNumber,
                     Image = image
                 });
             }

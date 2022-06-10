@@ -16,11 +16,16 @@ namespace YourVitebskWebServiceApp.Models
 
         public byte[] PasswordSalt { get; set; }
 
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        [Phone(ErrorMessage = "Неверный формат телефона")]
+        public string PhoneNumber { get; set; }
+
         [Required(ErrorMessage = "Необходимо указать роль")]
         public int RoleId { get; set; }
 
         public bool IsVisible { get; set; }
-
-        public UserDatum UserDatum { get; set; }
     }
 }

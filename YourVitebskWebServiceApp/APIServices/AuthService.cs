@@ -6,7 +6,6 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using YourVitebskWebServiceApp.APIServiceInterfaces;
-using YourVitebskWebServiceApp.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
@@ -64,9 +63,9 @@ namespace YourVitebskWebServiceApp.APIServices
             {
                 new Claim(nameof(user.UserId), user.UserId.ToString()),
                 new Claim(nameof(user.Email), user.Email),
-                new Claim(nameof(user.UserDatum.FirstName), user.UserDatum.FirstName),
-                new Claim(nameof(user.UserDatum.LastName), user.UserDatum.LastName),
-                new Claim(nameof(user.UserDatum.PhoneNumber), user.UserDatum.PhoneNumber),
+                new Claim(nameof(user.FirstName), user.FirstName),
+                new Claim(nameof(user.LastName), user.LastName),
+                new Claim(nameof(user.PhoneNumber), user.PhoneNumber),
                 new Claim(nameof(user.IsVisible), user.IsVisible.ToString()),
                 new Claim("Image", image)
             };
@@ -100,23 +99,14 @@ namespace YourVitebskWebServiceApp.APIServices
                         Email = userData.Email,
                         PasswordHash = passwordHash,
                         PasswordSalt = passwordSalt,
+                        FirstName = userData.FirstName,
+                        LastName = userData.LastName,
+                        PhoneNumber = null,
                         RoleId = 1,
                         IsVisible = true,
-                        UserDatum = null
                     };
 
                     _context.Users.Add(user);
-                    await _context.SaveChangesAsync();
-                    user.UserDatum = new UserDatum
-                    {
-                        UserDataId = null,
-                        UserId = user.UserId,
-                        FirstName = userData.FirstName,
-                        LastName = userData.LastName,
-                        PhoneNumber = null
-                    };
-
-                    _context.UserData.Add(user.UserDatum);
                     await _context.SaveChangesAsync();
                     transaction.Commit();
                     return CreateToken(user);
@@ -131,7 +121,7 @@ namespace YourVitebskWebServiceApp.APIServices
 
         public async Task<string> Login(UserLoginDTO userData)
         {
-            Models.User user = await _context.Users.Include(x => x.UserDatum).FirstOrDefaultAsync(x => x.Email == userData.Email);
+            Models.User user = await _context.Users.FirstOrDefaultAsync(x => x.Email == userData.Email);
             if (user == null)
             {
                 throw new ArgumentException("Неверные логин и(или) пароль");
@@ -151,13 +141,13 @@ namespace YourVitebskWebServiceApp.APIServices
             {
                 try
                 {
-                    Models.User user = await _context.Users.Include(x => x.UserDatum).FirstOrDefaultAsync(x => x.UserId == newUser.UserId);
+                    Models.User user = await _context.Users.FirstOrDefaultAsync(x => x.UserId == newUser.UserId);
                     if (await _context.Users.AnyAsync(x => x.Email == newUser.Email && x.UserId != newUser.UserId))
                     {
                         throw new ArgumentException("Пользователь с таким email уже существует!");
                     }
 
-                    if (newUser.PhoneNumber != null && await _context.UserData.AnyAsync(x => x.PhoneNumber == newUser.PhoneNumber && x.UserId != newUser.UserId))
+                    if (newUser.PhoneNumber != null && await _context.Users.AnyAsync(x => x.PhoneNumber == newUser.PhoneNumber && x.UserId != newUser.UserId))
                     {
                         throw new ArgumentException("Этот номер телефона уже привязан к другому аккаунту");
                     }
@@ -181,12 +171,11 @@ namespace YourVitebskWebServiceApp.APIServices
                     }
 
                     user.Email = newUser.Email;
-                    user.UserDatum.FirstName = newUser.FirstName;
-                    user.UserDatum.LastName = newUser.LastName;
-                    user.UserDatum.PhoneNumber = newUser.PhoneNumber;
+                    user.FirstName = newUser.FirstName;
+                    user.LastName = newUser.LastName;
+                    user.PhoneNumber = newUser.PhoneNumber;
                     user.IsVisible = newUser.IsVisible;
                     _context.Entry(user).State = EntityState.Modified;
-                    _context.Entry(user.UserDatum).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
                     transaction.Commit();
                     return CreateToken(user);

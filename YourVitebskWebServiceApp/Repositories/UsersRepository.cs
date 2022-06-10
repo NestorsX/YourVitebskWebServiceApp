@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +24,7 @@ namespace YourVitebskWebServiceApp.Repositories
         public IEnumerable<IViewModel> Get()
         {
             IEnumerable<UserViewModel> result = new List<UserViewModel>();
-            IEnumerable<User> users = _context.Users.Include(x => x.UserDatum).ToList().OrderBy(x => x.UserId);
+            IEnumerable<User> users = _context.Users.ToList().OrderBy(x => x.UserId);
             foreach (User user in users)
             {
                 result = result.Append(new UserViewModel()
@@ -35,9 +34,9 @@ namespace YourVitebskWebServiceApp.Repositories
                     RoleId = user.RoleId,
                     Role = _context.Roles.First(x => x.RoleId == user.RoleId).Name,
                     IsVisible = user.IsVisible,
-                    FirstName = user.UserDatum.FirstName,
-                    LastName = user.UserDatum.LastName,
-                    PhoneNumber = user.UserDatum.PhoneNumber
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    PhoneNumber = user.PhoneNumber
                 });
             }
 
@@ -46,7 +45,7 @@ namespace YourVitebskWebServiceApp.Repositories
 
         public IViewModel Get(int id)
         {
-            User user = _context.Users.Include(x => x.UserDatum).FirstOrDefault(x => x.UserId == id);
+            User user = _context.Users.FirstOrDefault(x => x.UserId == id);
             var result = new UserViewModel()
             {
                 UserId = (int)user.UserId,
@@ -54,9 +53,9 @@ namespace YourVitebskWebServiceApp.Repositories
                 RoleId = user.RoleId,
                 Role = _context.Roles.First(x => x.RoleId == user.RoleId).Name,
                 IsVisible = user.IsVisible,
-                FirstName = user.UserDatum.FirstName,
-                LastName = user.UserDatum.LastName,
-                PhoneNumber = user.UserDatum.PhoneNumber
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber
             };
 
             return result;
@@ -64,12 +63,7 @@ namespace YourVitebskWebServiceApp.Repositories
 
         public void Create(User user, IFormFileCollection uploadedFiles)
         {
-            UserDatum userData = user.UserDatum;
-            user.UserDatum = null;
             _context.Users.Add(user);
-            _context.SaveChanges();
-            userData.UserId = user.UserId;
-            _context.UserData.Add(userData);
             _context.SaveChanges();
             _imageService.SaveImages("users", (int)user.UserId, uploadedFiles);
         }
@@ -83,12 +77,7 @@ namespace YourVitebskWebServiceApp.Repositories
 
         public void Delete(int id)
         {
-            User user = _context.Users.Include(x => x.UserDatum).FirstOrDefault(x => x.UserId == id);
-            if (user.UserDatum != null)
-            {
-                _context.UserData.Remove(user.UserDatum);
-            }
-
+            User user = _context.Users.FirstOrDefault(x => x.UserId == id);
             _context.Users.Remove(user);
             _context.SaveChanges();
         }

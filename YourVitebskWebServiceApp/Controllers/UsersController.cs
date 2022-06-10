@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using YourVitebskWebServiceApp.APIServices;
 using YourVitebskWebServiceApp.Interfaces;
@@ -43,7 +42,7 @@ namespace YourVitebskWebServiceApp.Controllers
 
             if (!string.IsNullOrEmpty(newUser.PhoneNumber))
             {
-                if (_context.Users.FirstOrDefault(x => x.UserDatum.PhoneNumber == newUser.PhoneNumber) != null)
+                if (_context.Users.FirstOrDefault(x => x.PhoneNumber == newUser.PhoneNumber) != null)
                 {
                     ModelState.AddModelError("PhoneNumber", "Такой номер телефона уже используется");
                 }
@@ -60,14 +59,10 @@ namespace YourVitebskWebServiceApp.Controllers
                     PasswordSalt = salt,
                     IsVisible = newUser.IsVisible,
                     RoleId = newUser.RoleId,
-                    UserDatum = new UserDatum
-                    {
-                        UserDataId = null,
-                        UserId = null,
-                        FirstName = newUser.FirstName,
-                        LastName = newUser.LastName,
-                        PhoneNumber = newUser.PhoneNumber ?? "",
-                    }
+                    FirstName = newUser.FirstName,
+                    LastName = newUser.LastName,
+                    PhoneNumber = newUser.PhoneNumber ?? "",
+
                 };
 
                 _repository.Create(user, uploadedFiles);
@@ -99,7 +94,7 @@ namespace YourVitebskWebServiceApp.Controllers
         [HttpPost]
         public ActionResult Edit(UserViewModel newUser, IFormFileCollection uploadedFiles)
         {
-            User user = _context.Users.Include(x => x.UserDatum).FirstOrDefault(x => x.UserId == newUser.UserId);
+            User user = _context.Users.FirstOrDefault(x => x.UserId == newUser.UserId);
             if (_context.Users.FirstOrDefault(x => x.Email == newUser.Email && newUser.Email != user.Email) != null)
             {
                 ModelState.AddModelError("Email", "Email уже используется");
@@ -107,7 +102,7 @@ namespace YourVitebskWebServiceApp.Controllers
 
             if (!string.IsNullOrWhiteSpace(newUser.PhoneNumber))
             {
-                if (_context.Users.FirstOrDefault(x => x.UserDatum.PhoneNumber == newUser.PhoneNumber && newUser.PhoneNumber != user.UserDatum.PhoneNumber) != null)
+                if (_context.Users.FirstOrDefault(x => x.PhoneNumber == newUser.PhoneNumber && newUser.PhoneNumber != user.PhoneNumber) != null)
                 {
                     ModelState.AddModelError("UserDatum.PhoneNumber", "Такой номер телефона уже используется");
                 }
@@ -125,9 +120,9 @@ namespace YourVitebskWebServiceApp.Controllers
                 user.Email = newUser.Email;
                 user.RoleId = newUser.RoleId;
                 user.IsVisible = newUser.IsVisible;
-                user.UserDatum.FirstName = newUser.FirstName;
-                user.UserDatum.LastName = newUser.LastName;
-                user.UserDatum.PhoneNumber = newUser.PhoneNumber ?? "";
+                user.FirstName = newUser.FirstName;
+                user.LastName = newUser.LastName;
+                user.PhoneNumber = newUser.PhoneNumber ?? "";
                 _repository.Update(user, uploadedFiles);
                 return RedirectToAction("Index");
             }
