@@ -5,6 +5,7 @@ using YourVitebskWebServiceApp.APIServiceInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using YourVitebskWebServiceApp.APIModels;
+using System.Linq;
 
 namespace YourVitebskWebServiceApp.APIControllers
 {
@@ -22,9 +23,9 @@ namespace YourVitebskWebServiceApp.APIControllers
 
         // Gets all users except the caller
         [HttpGet("all/{id}")]
-        public async Task<IEnumerable<UsersListItem>> GetAllUsers(int id)
+        public async Task<IEnumerable<UsersListItem>> GetAllUsers(int id, int offset, int count)
         {
-            return await _usersService.GetAllUsers(id);
+            return (await _usersService.GetAllUsers(id)).Skip(offset).Take(count);
         }
     }
 }

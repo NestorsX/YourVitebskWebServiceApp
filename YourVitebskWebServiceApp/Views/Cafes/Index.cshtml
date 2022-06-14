@@ -1,4 +1,4 @@
-﻿@model IEnumerable<YourVitebskWebServiceApp.ViewModels.CafeViewModel>
+﻿@model IEnumerable<YourVitebskWebServiceApp.Models.Cafe>
 
 <div class="mb-3">
     <h2>Заведения</h2>
@@ -21,7 +21,13 @@
         {
             <tr>
                 <td>@item.CafeId</td>
-                <td>@item.CafeType</td>
+                @foreach (var obj in ViewBag.CafeTypes)
+                {
+                    @if (obj.CafeTypeId == @item.CafeTypeId)
+                    {
+                        <td>@obj.Name</td>
+                    }
+                }
                 <td>@item.Title</td>
                 <td>
                     <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.Description</span>

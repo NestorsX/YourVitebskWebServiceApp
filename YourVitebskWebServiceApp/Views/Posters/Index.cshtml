@@ -1,4 +1,4 @@
-﻿@model IEnumerable<YourVitebskWebServiceApp.ViewModels.PosterViewModel>
+﻿@model IEnumerable<YourVitebskWebServiceApp.Models.Poster>
 
 <div class="mb-3">
     <h2>Афиша</h2>
@@ -21,7 +21,13 @@
         {
             <tr>
                 <td>@item.PosterId</td>
-                <td>@item.PosterType</td>
+                @foreach (var obj in ViewBag.PosterTypes)
+                {
+                    @if (obj.PosterTypeId == @item.PosterTypeId)
+                    {
+                        <td>@obj.Name</td>
+                    }
+                }
                 <td>@item.Title</td>
                 <td>
                     <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.Description</span>

@@ -22,22 +22,11 @@ namespace YourVitebskWebServiceApp.APIServices
 
         public async Task<IEnumerable<APIModels.Poster>> GetAll()
         {
-            IEnumerable<APIModels.Poster> result = new List<APIModels.Poster>();
+            var result = new List<APIModels.Poster>();
             IEnumerable<Models.Poster> posters = (await _context.Posters.ToListAsync()).OrderBy(x => x.DateTime);
             foreach (Models.Poster poster in posters)
             {
-                result = result.Append(new APIModels.Poster()
-                {
-                    PosterId = (int)poster.PosterId,
-                    PosterType = (await _context.PosterTypes.FirstAsync(x => x.PosterTypeId == poster.PosterTypeId)).Name,
-                    Title = poster.Title,
-                    Description = poster.Description,
-                    DateTime = poster.DateTime,
-                    Address = poster.Address,
-                    ExternalLink = poster.ExternalLink,
-                    TitleImage = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/posters/{poster.PosterId}").Select(x => Path.GetFileName(x)).First(),
-                    Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/posters/{poster.PosterId}").Select(x => Path.GetFileName(x))
-                });
+                result.Add(await GetById((int)poster.PosterId));
             }
 
             return result;
@@ -60,6 +49,8 @@ namespace YourVitebskWebServiceApp.APIServices
                 DateTime = poster.DateTime,
                 Address = poster.Address,
                 ExternalLink = poster.ExternalLink,
+                RecommendCount = _context.Comments.Where(x => x.ServiceId == 2 && x.IsRecommend == true).Count(),
+                UnrecommendCount = _context.Comments.Where(x => x.ServiceId == 2 && x.IsRecommend == false).Count(),
                 TitleImage = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/posters/{poster.PosterId}").Select(x => Path.GetFileName(x)).First(),
                 Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/posters/{poster.PosterId}").Select(x => Path.GetFileName(x))
 

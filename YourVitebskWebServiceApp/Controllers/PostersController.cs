@@ -22,6 +22,7 @@ namespace YourVitebskWebServiceApp.Controllers
 
         public ActionResult Index()
         {
+            ViewBag.PosterTypes = _context.PosterTypes;
             return View(_repository.Get());
         }
 
@@ -32,7 +33,7 @@ namespace YourVitebskWebServiceApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(PosterViewModel newPoster, IFormFileCollection uploadedFiles)
+        public ActionResult Create(Poster newPoster, IFormFileCollection uploadedFiles)
         {
             if (_context.Posters.FirstOrDefault(x => x.Title == newPoster.Title) != null)
             {
@@ -65,27 +66,15 @@ namespace YourVitebskWebServiceApp.Controllers
             Poster poster = (Poster)_repository.Get(id);
             if (poster != null)
             {
-                var viewModel = new PosterViewModel
-                {
-                    PosterId = poster.PosterId,
-                    PosterTypeId = poster.PosterTypeId,
-                    Title = poster.Title,
-                    Description = poster.Description,
-                    DateTime = poster.DateTime,
-                    Address = poster.Address,
-                    ExternalLink = poster.ExternalLink
-                };
-
                 ViewBag.PosterTypes = _context.PosterTypes;
-                ViewData["PosterTypeId"] = poster.PosterTypeId;
-                return View(viewModel);
+                return View(poster);
             }
 
             return NotFound();
         }
 
         [HttpPost]
-        public ActionResult Edit(PosterViewModel newPoster, IFormFileCollection uploadedFiles)
+        public ActionResult Edit(Poster newPoster, IFormFileCollection uploadedFiles)
         {
             Poster poster = (Poster)_repository.Get((int)newPoster.PosterId);
             if (_context.Posters.FirstOrDefault(x => x.Title == newPoster.Title && newPoster.Title != poster.Title) != null)
@@ -116,7 +105,7 @@ namespace YourVitebskWebServiceApp.Controllers
             Poster poster = (Poster)_repository.Get(id);
             if (poster != null)
             {
-                ViewData["PosterType"] = _context.PosterTypes.First(x => x.PosterTypeId == poster.PosterTypeId).Name;
+                ViewBag.PosterType = _context.PosterTypes.First(x => x.PosterTypeId == poster.PosterTypeId).Name;
                 return View(poster);
             }
             return NotFound();

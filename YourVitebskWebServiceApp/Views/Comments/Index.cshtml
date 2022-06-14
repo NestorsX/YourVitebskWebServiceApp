@@ -1,0 +1,38 @@
+﻿@model IEnumerable<YourVitebskWebServiceApp.ViewModels.CommentViewModel>
+
+<div class="mb-3">
+    <h2>Комментарии</h2>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped align-middle">
+        <tr>
+            <th>ID</th>
+            <th>Пользователь</th>
+            <th>Сервис</th>
+            <th>Объект</th>
+            <th>Комментарий</th>
+            <th>Дата</th>
+            <th></th>
+        </tr>
+    
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.CommentId</td>
+                <td>@item.UserEmail</td>
+                <td>@item.Service</td>
+                <td>@item.ItemName</td>
+                <td>
+                    <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.Message</span>
+                </td>
+                <td>@item.PublishDate</td>
+                <td>
+                    <div class="btn-group float-end" role="group">
+                        <a class="btn btn-outline-danger" asp-controller="Comments" asp-action="Delete" asp-route-id="@item.CommentId">Удалить</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </table>
+</div>

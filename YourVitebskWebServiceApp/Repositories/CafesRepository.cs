@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
-using YourVitebskWebServiceApp.ViewModels;
 
 namespace YourVitebskWebServiceApp.Repositories
 {
@@ -23,23 +22,7 @@ namespace YourVitebskWebServiceApp.Repositories
 
         public IEnumerable<IViewModel> Get()
         {
-            IEnumerable<CafeViewModel> result = new List<CafeViewModel>();
-            IEnumerable<Cafe> cafes = _context.Cafes.ToList();
-            foreach (Cafe cafe in cafes)
-            {
-                result = result.Append(new CafeViewModel()
-                {
-                    CafeId = (int)cafe.CafeId,
-                    CafeType = _context.CafeTypes.First(x => x.CafeTypeId == cafe.CafeTypeId).Name,
-                    Title = cafe.Title,
-                    Description = cafe.Description,
-                    WorkingTime = cafe.WorkingTime,
-                    Address = cafe.Address,
-                    ExternalLink = cafe.ExternalLink,
-                });
-            }
-
-            return result;
+            return _context.Cafes.ToList();
         }
 
         public IViewModel Get(int id)
@@ -63,7 +46,8 @@ namespace YourVitebskWebServiceApp.Repositories
 
         public void Delete(int id)
         {
-            _context.Cafes.Remove((Cafe)Get(id));
+            Cafe cafe = _context.Cafes.FirstOrDefault(x => x.CafeId == id);
+            _context.Cafes.Remove(cafe);
             _context.SaveChanges();
             _imageService.DeleteImages("cafes", id);
         }

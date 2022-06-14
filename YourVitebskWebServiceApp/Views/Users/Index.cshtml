@@ -1,18 +1,48 @@
 ﻿@model IEnumerable<YourVitebskWebServiceApp.ViewModels.UserViewModel>
+@{
+    Pager pager = new Pager();
+    int pageNumber = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNumber = pager.CurrentPage;
+    }
+}
 
 <div class="mb-3">
     <h2>Пользователи</h2>
 </div>
 
+<form method="get">
+    <div class="row mb-3 align-items-center">
+        <div class="col">
+            <input name="search" placeholder="Поиск" class="form-control" value="@ViewBag.Search" />
+        </div>
+        <div class="col">
+            <select name="role" class="form-control">
+                <option value="">Роль</option>
+                @foreach (YourVitebskWebServiceApp.Models.Role role in ViewBag.Roles)
+                {
+                    <option value="@role.RoleId">@role.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col">
+            <input type="submit" value="Применить" class="btn btn-outline-dark" />
+        </div>
+        
+    </div>
+</form>
+
 <div class="table-responsive">
     <table class="table table-striped align-middle">
         <tr>
-            <th>ID</th>
-            <th>Email</th>
-            <th>Роль</th>
-            <th>Имя</th>
-            <th>Фамилия</th>
-            <th>Телефон</th>
+            <th><a asp-action="Index" asp-route-sort="@ViewBag.IdSort">ID</a></th>
+            <th><a asp-action="Index" asp-route-sort="@ViewBag.EmailSort">Email</a></th>
+            <th><a asp-action="Index" asp-route-sort="@ViewBag.RoleSort">Роль</a></th>
+            <th><a asp-action="Index" asp-route-sort="@ViewBag.FirstNameSort">Имя</a></th>
+            <th><a asp-action="Index" asp-route-sort="@ViewBag.LastNameSort">Фамилия</a></th>
+            <th><a asp-action="Index" asp-route-sort="@ViewBag.PhoneNumberSort">Телефон</a></th>
             <th>Видимость</th>
             <th><a class="btn btn-outline-dark float-end" asp-controller="Users" asp-action="Create">Добавить</a></th>
         </tr>
@@ -52,3 +82,5 @@
         }
     </table>
 </div>
+
+<partial name="_Pager" model="@pager" />

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System;
 using YourVitebskWebServiceApp.APIModels;
+using System.Linq;
 
 namespace YourVitebskWebServiceApp.APIControllers
 {
@@ -23,9 +24,9 @@ namespace YourVitebskWebServiceApp.APIControllers
 
         // Gets all vacancies
         [HttpGet("all")]
-        public async Task<IEnumerable<Vacancy>> GetAll()
+        public async Task<IEnumerable<Vacancy>> GetAll(int offset, int count)
         {
-            return await _vacanciesService.GetAll();
+            return (await _vacanciesService.GetAll()).Skip(offset).Take(count);
         }
 
         // Gets vacancy by id

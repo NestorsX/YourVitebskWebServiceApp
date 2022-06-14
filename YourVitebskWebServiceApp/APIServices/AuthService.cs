@@ -83,39 +83,34 @@ namespace YourVitebskWebServiceApp.APIServices
 
         public async Task<string> Register(UserRegisterDTO userData)
         {
-            using (var transaction = _context.Database.BeginTransaction())
+            try
             {
-                try
+                if (await _context.Users.AnyAsync(x => x.Email == userData.Email))
                 {
-                    if (await _context.Users.AnyAsync(x => x.Email == userData.Email))
-                    {
-                        throw new ArgumentException("Пользователь с таким email уже существует!");
-                    }
-
-                    CreatePasswordHash(userData.Password, out byte[] passwordHash, out byte[] passwordSalt);
-                    var user = new Models.User
-                    {
-                        UserId = null,
-                        Email = userData.Email,
-                        PasswordHash = passwordHash,
-                        PasswordSalt = passwordSalt,
-                        FirstName = userData.FirstName,
-                        LastName = userData.LastName,
-                        PhoneNumber = null,
-                        RoleId = 1,
-                        IsVisible = true,
-                    };
-
-                    _context.Users.Add(user);
-                    await _context.SaveChangesAsync();
-                    transaction.Commit();
-                    return CreateToken(user);
+                    throw new ArgumentException("Пользователь с таким email уже существует!");
                 }
-                catch (ArgumentException e)
+
+                CreatePasswordHash(userData.Password, out byte[] passwordHash, out byte[] passwordSalt);
+                var user = new Models.User
                 {
-                    transaction.Rollback();
-                    throw e;
-                }
+                    UserId = null,
+                    Email = userData.Email,
+                    PasswordHash = passwordHash,
+                    PasswordSalt = passwordSalt,
+                    FirstName = userData.FirstName,
+                    LastName = userData.LastName,
+                    PhoneNumber = null,
+                    RoleId = 1,
+                    IsVisible = true,
+                };
+
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+                return CreateToken(user);
+            }
+            catch (ArgumentException e)
+            {
+                throw e;
             }
         }
 
@@ -137,54 +132,49 @@ namespace YourVitebskWebServiceApp.APIServices
 
         public async Task<string> Update(APIModels.User newUser)
         {
-            using (var transaction = _context.Database.BeginTransaction())
+            try
             {
-                try
+                Models.User user = await _context.Users.FirstOrDefaultAsync(x => x.UserId == newUser.UserId);
+                if (await _context.Users.AnyAsync(x => x.Email == newUser.Email && x.UserId != newUser.UserId))
                 {
-                    Models.User user = await _context.Users.FirstOrDefaultAsync(x => x.UserId == newUser.UserId);
-                    if (await _context.Users.AnyAsync(x => x.Email == newUser.Email && x.UserId != newUser.UserId))
-                    {
-                        throw new ArgumentException("Пользователь с таким email уже существует!");
-                    }
+                    throw new ArgumentException("Пользователь с таким email уже существует!");
+                }
 
-                    if (newUser.PhoneNumber != null && await _context.Users.AnyAsync(x => x.PhoneNumber == newUser.PhoneNumber && x.UserId != newUser.UserId))
-                    {
-                        throw new ArgumentException("Этот номер телефона уже привязан к другому аккаунту");
-                    }
+                if (newUser.PhoneNumber != null && await _context.Users.AnyAsync(x => x.PhoneNumber == newUser.PhoneNumber && x.UserId != newUser.UserId))
+                {
+                    throw new ArgumentException("Этот номер телефона уже привязан к другому аккаунту");
+                }
 
-                    if (!string.IsNullOrEmpty(newUser.OldPassword) && !string.IsNullOrEmpty(newUser.NewPassword))
+                if (!string.IsNullOrEmpty(newUser.OldPassword) && !string.IsNullOrEmpty(newUser.NewPassword))
+                {
+                    if (VerifyPassword(newUser.OldPassword, user.PasswordHash, user.PasswordSalt))
                     {
-                        if (VerifyPassword(newUser.OldPassword, user.PasswordHash, user.PasswordSalt))
-                        {
-                            CreatePasswordHash(newUser.NewPassword, out byte[] hash, out byte[] salt);
-                            user.PasswordHash = hash;
-                            user.PasswordSalt = salt;
-                        }
+                        CreatePasswordHash(newUser.NewPassword, out byte[] hash, out byte[] salt);
+                        user.PasswordHash = hash;
+                        user.PasswordSalt = salt;
                     }
+                }
 
-                    if (newUser.Image != null)
-                    {
-                        _imageService.SaveImages("users", (int)user.UserId, new FormFileCollection
+                if (newUser.Image != null)
+                {
+                    _imageService.SaveImages("users", (int)user.UserId, new FormFileCollection
                         {
                             new FormFile(new MemoryStream(newUser.Image), 0, newUser.Image.Length, "image", DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg"),
                         });
-                    }
+                }
 
-                    user.Email = newUser.Email;
-                    user.FirstName = newUser.FirstName;
-                    user.LastName = newUser.LastName;
-                    user.PhoneNumber = newUser.PhoneNumber;
-                    user.IsVisible = newUser.IsVisible;
-                    _context.Entry(user).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
-                    transaction.Commit();
-                    return CreateToken(user);
-                }
-                catch (ArgumentException ex)
-                {
-                    transaction.Rollback();
-                    throw ex;
-                }
+                user.Email = newUser.Email;
+                user.FirstName = newUser.FirstName;
+                user.LastName = newUser.LastName;
+                user.PhoneNumber = newUser.PhoneNumber;
+                user.IsVisible = newUser.IsVisible;
+                _context.Entry(user).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return CreateToken(user);
+            }
+            catch (ArgumentException ex)
+            {
+                throw ex;
             }
         }
     }

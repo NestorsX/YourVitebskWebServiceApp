@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
@@ -18,9 +19,21 @@ namespace YourVitebskWebServiceApp.Controllers
             _repository = repository;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int page = 1)
         {
-            return View(_repository.Get());
+            var roles = (IEnumerable<Role>)_repository.Get();
+            const int pageSize = 5;
+            if (page < 1)
+            {
+                page = 1;
+            }
+
+            int count = roles.Count();
+            var pager = new Pager(count, page, pageSize);
+            int skip = (page - 1) * pageSize;
+            roles = roles.Skip(skip).Take(pager.PageSize);
+            ViewBag.Pager = pager;
+            return View(roles.ToList());
         }
 
         public ActionResult Create()

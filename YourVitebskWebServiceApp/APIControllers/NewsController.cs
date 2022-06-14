@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System;
 using YourVitebskWebServiceApp.APIModels;
+using System.Linq;
 
 namespace YourVitebskWebServiceApp.APIControllers
 {
@@ -23,9 +24,9 @@ namespace YourVitebskWebServiceApp.APIControllers
 
         // Gets all news
         [HttpGet("all")]
-        public async Task<IEnumerable<News>> GetAll()
+        public async Task<IEnumerable<News>> GetAll(int offset, int count)
         {
-            return await _newsService.GetAll();
+            return (await _newsService.GetAll()).Skip(offset).Take(count);
         }
 
         // Gets news by id

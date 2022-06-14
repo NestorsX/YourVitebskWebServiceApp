@@ -1,0 +1,38 @@
+﻿@model YourVitebskWebServiceApp.ViewModels.CommentViewModel
+
+<div class="row mb-3">
+    <div class="col-auto me-auto">
+        <h2>Удаление комментария</h2>
+    </div>
+    <div class="col-auto">
+        <a asp-controller="Comments" asp-action="Index">Вернуться к списку</a>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped align-middle">
+        <tr>
+            <th>ID</th>
+            <th>Пользователь</th>
+            <th>Сервис</th>
+            <th>Объект</th>
+            <th>Комментарий</th>
+            <th>Дата</th>
+        </tr>
+        <tr>
+            <td>@Model.CommentId</td>
+            <td>@Model.UserEmail</td>
+            <td>@Model.Service</td>
+            <td>@Model.ItemName</td>
+            <td>
+                <span class="d-inline-block text-truncate" style="max-width: 300px;">@Model.Message</span>
+            </td>
+            <td>@Model.PublishDate</td>
+    </table>
+</div>
+ 
+<form asp-action="Delete" asp-controller="Comments" method="post">
+    <div class="mb-3">
+        <input type="submit" class="btn btn-outline-danger" value="Удалить" />
+    </div>
+</form>

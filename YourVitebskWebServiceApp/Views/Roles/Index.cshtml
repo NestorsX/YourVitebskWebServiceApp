@@ -1,4 +1,13 @@
 ﻿@model IEnumerable<YourVitebskWebServiceApp.Models.Role>
+@{
+    Pager pager = new Pager();
+    int pageNumber = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNumber = pager.CurrentPage;
+    }
+}
 
 <div class="mb-3">
     <h2>Роли</h2>
@@ -35,3 +44,5 @@
         }
     </table>
 </div>
+
+<partial name="_Pager" model="@pager" />

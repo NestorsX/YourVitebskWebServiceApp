@@ -14,6 +14,7 @@ using YourVitebskWebServiceApp.APIServices;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
 using YourVitebskWebServiceApp.Repositories;
+using YourVitebskWebServiceApp.ViewModels;
 
 namespace YourVitebskWebServiceApp
 {
@@ -34,8 +35,9 @@ namespace YourVitebskWebServiceApp
             services.AddScoped<IService<APIModels.Cafe>, CafesService>();
             services.AddScoped<IService<APIModels.Poster>, PostersService>();
             services.AddScoped<IService<APIModels.Vacancy>, VacanciesService>();
+            services.AddScoped<ICommentService, CommentsService>();
 
-            services.AddScoped<IImageRepository<User>, UsersRepository>();
+            services.AddScoped<IImageRepository<UserViewModel>, UsersRepository>();
             services.AddScoped<IRepository<Role>, RolesRepository>();
             services.AddScoped<IImageRepository<News>, NewsRepository>();
             services.AddScoped<IImageRepository<Poster>, PostersRepository>();
@@ -43,6 +45,7 @@ namespace YourVitebskWebServiceApp
             services.AddScoped<IImageRepository<Cafe>, CafesRepository>();
             services.AddScoped<IRepository<CafeType>, CafeTypesRepository>();
             services.AddScoped<IRepository<Vacancy>, VacanciesRepository>();
+            services.AddScoped<ICommentRepository, CommentsRepository>();
             services.AddDbContext<YourVitebskDBContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>

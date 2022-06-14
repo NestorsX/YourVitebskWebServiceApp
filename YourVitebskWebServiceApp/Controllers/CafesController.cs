@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
+using YourVitebskWebServiceApp.ViewModels;
 
 namespace YourVitebskWebServiceApp.Controllers
 {
@@ -21,6 +22,7 @@ namespace YourVitebskWebServiceApp.Controllers
 
         public ActionResult Index()
         {
+            ViewBag.CafeTypes = _context.CafeTypes;
             return View(_repository.Get());
         }
 
@@ -103,7 +105,7 @@ namespace YourVitebskWebServiceApp.Controllers
             Cafe cafe = (Cafe)_repository.Get(id);
             if (cafe != null)
             {
-                ViewData["CafeType"] = _context.CafeTypes.First(x => x.CafeTypeId == cafe.CafeTypeId).Name;
+                ViewBag.CafeType = _context.CafeTypes.First(x => x.CafeTypeId == cafe.CafeTypeId).Name;
                 return View(cafe);
             }
 

@@ -12,6 +12,8 @@ namespace YourVitebskWebServiceApp.APIModels
         public string DateTime { get; set; }
         public string Address { get; set; }
         public string ExternalLink { get; set; }
+        public int RecommendCount { get; set; }
+        public int UnrecommendCount { get; set; }
         public string TitleImage { get; set; }
         public IEnumerable<string> Images { get; set; }
     }

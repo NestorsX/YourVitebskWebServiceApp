@@ -22,22 +22,11 @@ namespace YourVitebskWebServiceApp.APIServices
 
         public async Task<IEnumerable<APIModels.Cafe>> GetAll()
         {
-            IEnumerable<APIModels.Cafe> result = new List<APIModels.Cafe>();
+            var result = new List<APIModels.Cafe>();
             IEnumerable<Models.Cafe> cafes = (await _context.Cafes.ToListAsync()).OrderByDescending(x => x.CafeId);
             foreach (Models.Cafe cafe in cafes)
             {
-                result = result.Append(new APIModels.Cafe()
-                {
-                    CafeId = (int)cafe.CafeId,
-                    CafeType = (await _context.CafeTypes.FirstAsync(x => x.CafeTypeId == cafe.CafeTypeId)).Name,
-                    Title = cafe.Title,
-                    Description = cafe.Description,
-                    WorkingTime = cafe.WorkingTime,
-                    Address = cafe.Address,
-                    ExternalLink = cafe.ExternalLink,
-                    TitleImage = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/cafes/{cafe.CafeId}").Select(x => Path.GetFileName(x)).First(),
-                    Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/cafes/{cafe.CafeId}").Select(x => Path.GetFileName(x))
-                });
+                result.Add(await GetById((int)cafe.CafeId));
             }
 
             return result;
@@ -60,6 +49,8 @@ namespace YourVitebskWebServiceApp.APIServices
                 WorkingTime = cafe.WorkingTime,
                 Address = cafe.Address,
                 ExternalLink = cafe.ExternalLink,
+                RecommendCount = _context.Comments.Where(x => x.ServiceId == 1 && x.IsRecommend == true).Count(),
+                UnrecommendCount = _context.Comments.Where(x => x.ServiceId == 1 && x.IsRecommend == false).Count(),
                 TitleImage = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/cafes/{cafe.CafeId}").Select(x => Path.GetFileName(x)).First(),
                 Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/cafes/{cafe.CafeId}").Select(x => Path.GetFileName(x))
             };

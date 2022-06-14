@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System;
 using YourVitebskWebServiceApp.APIModels;
+using System.Linq;
 
 namespace YourVitebskWebServiceApp.APIControllers
 {
@@ -23,9 +24,9 @@ namespace YourVitebskWebServiceApp.APIControllers
 
         // Gets all posters
         [HttpGet("all")]
-        public async Task<IEnumerable<Poster>> GetAll()
+        public async Task<IEnumerable<Poster>> GetAll(int offset, int count)
         {
-            return await _postersService.GetAll();
+            return (await _postersService.GetAll()).Skip(offset).Take(count);
         }
 
         // Gets poster by id

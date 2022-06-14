@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
 using YourVitebskWebServiceApp.APIServices;
+using YourVitebskWebServiceApp.Helpers;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
 using YourVitebskWebServiceApp.ViewModels;
@@ -13,17 +15,70 @@ namespace YourVitebskWebServiceApp.Controllers
     public class UsersController : Controller
     {
         private readonly YourVitebskDBContext _context;
-        private readonly IImageRepository<User> _repository;
+        private readonly IImageRepository<UserViewModel> _repository;
 
-        public UsersController(YourVitebskDBContext context, IImageRepository<User> repository)
+        public UsersController(YourVitebskDBContext context, IImageRepository<UserViewModel> repository)
         {
             _context = context;
             _repository = repository;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? role, string search, UserSortStates sort = UserSortStates.UserIdAsc, int page = 1)
         {
-            return View(_repository.Get());
+            ViewBag.Roles = _context.Roles;
+            ViewBag.Search = search;
+            var users = (IEnumerable<UserViewModel>)_repository.Get();
+
+            if (role != null)
+            {
+                users = users.Where(x => x.RoleId == role);
+            }
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                users = users.Where(x => x.Email.Contains(search) ||
+                                         x.FirstName.Contains(search) ||
+                                         x.LastName.Contains(search) ||
+                                         x.PhoneNumber.Contains(search)
+                );
+            }
+
+            ViewBag.IdSort = sort == UserSortStates.UserIdAsc ? UserSortStates.UserIdDesc : UserSortStates.UserIdAsc;
+            ViewBag.RoleSort = sort == UserSortStates.RoleAsc ? UserSortStates.RoleDesc : UserSortStates.RoleAsc;
+            ViewBag.EmailSort = sort == UserSortStates.EmailAsc ? UserSortStates.EmailDesc : UserSortStates.EmailAsc;
+            ViewBag.FirstNameSort = sort == UserSortStates.FirstNameAsc ? UserSortStates.FirstNameDesc : UserSortStates.FirstNameAsc;
+            ViewBag.LastNameSort = sort == UserSortStates.LastNameAsc ? UserSortStates.LastNameDesc : UserSortStates.LastNameAsc;
+            ViewBag.PhoneNumberSort = sort == UserSortStates.PhoneNumberAsc ? UserSortStates.PhoneNumberDesc : UserSortStates.PhoneNumberAsc;
+            
+            users = sort switch
+            {
+                UserSortStates.UserIdDesc => users.OrderByDescending(x => x.UserId),
+                UserSortStates.RoleAsc => users.OrderBy(x => x.Role),
+                UserSortStates.RoleDesc => users.OrderByDescending(x => x.Role),
+                UserSortStates.EmailAsc => users.OrderBy(x => x.Email),
+                UserSortStates.EmailDesc => users.OrderByDescending(x => x.Email),
+                UserSortStates.FirstNameAsc => users.OrderBy(x => x.FirstName),
+                UserSortStates.FirstNameDesc => users.OrderByDescending(x => x.FirstName),
+                UserSortStates.LastNameAsc => users.OrderBy(x => x.LastName),
+                UserSortStates.LastNameDesc => users.OrderByDescending(x => x.LastName),
+                UserSortStates.PhoneNumberAsc => users.OrderBy(x => x.PhoneNumber),
+                UserSortStates.PhoneNumberDesc => users.OrderByDescending(x => x.PhoneNumber),
+                _ => users.OrderBy(x => x.UserId),
+            };
+
+            const int pageSize = 5;
+            if (page < 1)
+            {
+                page = 1;
+            }
+
+            int count = users.Count();
+            var pager = new Pager(count, page, pageSize);
+            int skip = (page - 1) * pageSize;
+            users = users.Skip(skip).Take(pager.PageSize);
+            ViewBag.Pager = pager;
+
+            return View(users.ToList());
         }
 
         public ActionResult Create()
@@ -50,22 +105,7 @@ namespace YourVitebskWebServiceApp.Controllers
 
             if (ModelState.IsValid)
             {
-                AuthService.CreatePasswordHash(newUser.Password, out byte[] hash, out byte[] salt);
-                var user = new User
-                {
-                    UserId = null,
-                    Email = newUser.Email,
-                    PasswordHash = hash,
-                    PasswordSalt = salt,
-                    IsVisible = newUser.IsVisible,
-                    RoleId = newUser.RoleId,
-                    FirstName = newUser.FirstName,
-                    LastName = newUser.LastName,
-                    PhoneNumber = newUser.PhoneNumber ?? "",
-
-                };
-
-                _repository.Create(user, uploadedFiles);
+                _repository.Create(newUser, uploadedFiles);
                 return RedirectToAction("Index");
             }
 
@@ -94,15 +134,15 @@ namespace YourVitebskWebServiceApp.Controllers
         [HttpPost]
         public ActionResult Edit(UserViewModel newUser, IFormFileCollection uploadedFiles)
         {
-            User user = _context.Users.FirstOrDefault(x => x.UserId == newUser.UserId);
-            if (_context.Users.FirstOrDefault(x => x.Email == newUser.Email && newUser.Email != user.Email) != null)
+            UserViewModel currentUser = (UserViewModel)_repository.Get(newUser.UserId);
+            if (_context.Users.FirstOrDefault(x => x.Email == newUser.Email && newUser.Email != currentUser.Email) != null)
             {
                 ModelState.AddModelError("Email", "Email уже используется");
             }
 
             if (!string.IsNullOrWhiteSpace(newUser.PhoneNumber))
             {
-                if (_context.Users.FirstOrDefault(x => x.PhoneNumber == newUser.PhoneNumber && newUser.PhoneNumber != user.PhoneNumber) != null)
+                if (_context.Users.FirstOrDefault(x => x.PhoneNumber == newUser.PhoneNumber && newUser.PhoneNumber != currentUser.PhoneNumber) != null)
                 {
                     ModelState.AddModelError("UserDatum.PhoneNumber", "Такой номер телефона уже используется");
                 }
@@ -110,20 +150,7 @@ namespace YourVitebskWebServiceApp.Controllers
 
             if (ModelState.IsValid)
             {
-                if (!string.IsNullOrEmpty(newUser.Password))
-                {
-                    AuthService.CreatePasswordHash(newUser.Password, out byte[] hash, out byte[] salt);
-                    user.PasswordHash = hash;
-                    user.PasswordSalt = salt;
-                }
-
-                user.Email = newUser.Email;
-                user.RoleId = newUser.RoleId;
-                user.IsVisible = newUser.IsVisible;
-                user.FirstName = newUser.FirstName;
-                user.LastName = newUser.LastName;
-                user.PhoneNumber = newUser.PhoneNumber ?? "";
-                _repository.Update(user, uploadedFiles);
+                _repository.Update(newUser, uploadedFiles);
                 return RedirectToAction("Index");
             }
 
