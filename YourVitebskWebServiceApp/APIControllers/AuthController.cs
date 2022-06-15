@@ -19,7 +19,7 @@ namespace YourVitebskWebServiceApp.APIControllers
 
         // Register user
         [HttpPost("register")]
-        public async Task<ActionResult<string>> Register(UserRegisterDTO user)
+        public async Task<ActionResult<ResponseModel>> Register(UserRegisterDTO user)
         {
             if (string.IsNullOrEmpty(user.Email) 
                 || string.IsNullOrEmpty(user.Password) 

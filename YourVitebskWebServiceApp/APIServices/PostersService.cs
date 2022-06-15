@@ -49,8 +49,8 @@ namespace YourVitebskWebServiceApp.APIServices
                 DateTime = poster.DateTime,
                 Address = poster.Address,
                 ExternalLink = poster.ExternalLink,
-                RecommendCount = _context.Comments.Where(x => x.ServiceId == 2 && x.IsRecommend == true).Count(),
-                UnrecommendCount = _context.Comments.Where(x => x.ServiceId == 2 && x.IsRecommend == false).Count(),
+                RecommendCount = _context.Comments.Where(x => x.ServiceId == 2 && x.ItemId == poster.PosterId && x.IsRecommend == true).Count(),
+                UnrecommendCount = _context.Comments.Where(x => x.ServiceId == 2 && x.ItemId == poster.PosterId && x.IsRecommend == false).Count(),
                 TitleImage = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/posters/{poster.PosterId}").Select(x => Path.GetFileName(x)).First(),
                 Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/posters/{poster.PosterId}").Select(x => Path.GetFileName(x))
 

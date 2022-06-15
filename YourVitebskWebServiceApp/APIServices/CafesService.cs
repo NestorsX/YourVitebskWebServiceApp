@@ -49,8 +49,8 @@ namespace YourVitebskWebServiceApp.APIServices
                 WorkingTime = cafe.WorkingTime,
                 Address = cafe.Address,
                 ExternalLink = cafe.ExternalLink,
-                RecommendCount = _context.Comments.Where(x => x.ServiceId == 1 && x.IsRecommend == true).Count(),
-                UnrecommendCount = _context.Comments.Where(x => x.ServiceId == 1 && x.IsRecommend == false).Count(),
+                RecommendCount = _context.Comments.Where(x => x.ServiceId == 1 && x.ItemId == cafe.CafeId && x.IsRecommend == true).Count(),
+                UnrecommendCount = _context.Comments.Where(x => x.ServiceId == 1 && x.ItemId == cafe.CafeId && x.IsRecommend == false).Count(),
                 TitleImage = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/cafes/{cafe.CafeId}").Select(x => Path.GetFileName(x)).First(),
                 Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/cafes/{cafe.CafeId}").Select(x => Path.GetFileName(x))
             };

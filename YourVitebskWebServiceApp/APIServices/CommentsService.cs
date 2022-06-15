@@ -29,7 +29,7 @@ namespace YourVitebskWebServiceApp.APIServices
                     CommentId = (int)comment.CommentId,
                     UserId = comment.UserId,
                     UserFirstName = (await _context.Users.FirstAsync(x => x.UserId == comment.UserId)).FirstName,
-                    IsRecommend = comment.IsRecommend,
+                    IsRecommend = comment.IsRecommend ? "Рекомендует" : "Не рекомендует",
                     Message = comment.Message,
                     PublishDate = comment.PublishDate.ToString("D", new CultureInfo("ru-RU")) + comment.PublishDate.ToString(" HH:mm")
                 });
