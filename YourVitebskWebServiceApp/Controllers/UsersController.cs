@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
-using YourVitebskWebServiceApp.APIServices;
 using YourVitebskWebServiceApp.Helpers;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
@@ -25,6 +24,11 @@ namespace YourVitebskWebServiceApp.Controllers
 
         public ActionResult Index(int? role, string search, UserSortStates sort = UserSortStates.UserIdAsc, int page = 1)
         {
+            if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.UsersGet)))
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
             ViewBag.Roles = _context.Roles;
             ViewBag.Search = search;
             var users = (IEnumerable<UserViewModel>)_repository.Get();

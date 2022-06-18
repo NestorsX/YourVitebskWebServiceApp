@@ -4,7 +4,7 @@ using YourVitebskWebServiceApp.ViewModels;
 
 namespace YourVitebskWebServiceApp.Interfaces
 {
-    public interface ICommentRepository : IDisposable
+    public interface ICommentRepository : IPermissionChecker, IDisposable
     {
         IEnumerable<CommentViewModel> Get();
         CommentViewModel Get(int id);

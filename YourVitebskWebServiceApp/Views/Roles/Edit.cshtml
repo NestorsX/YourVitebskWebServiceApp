@@ -1,4 +1,4 @@
-﻿@model YourVitebskWebServiceApp.Models.Role
+﻿@model YourVitebskWebServiceApp.ViewModels.RoleDTOViewModel
 
 <div class="row mb-3">
     <div class="col-auto me-auto">
@@ -18,6 +18,158 @@
             <label asp-for="Name" class="form-label">Роль<i>*</i></label>
             <input type="text" asp-for="Name" class="form-control form-control-sm" required />
             <span class="badge bg-danger" asp-validation-for="Name"></span>
+        </div>
+        <h4>Права роли</h4>
+        <div class="mb-3">
+            <h5>Пользователи:</h5>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="UsersGet" id="UsersGet" class="form-check-input" />
+                <label asp-for="UsersGet" class="form-label">Просмотр</label>
+                <input name="UsersGet" type="hidden" value="false" />
+            </div>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="UsersCreate" id="UsersCreate" class="form-check-input" />
+                <label asp-for="UsersCreate" class="form-label">Добавление</label>
+                <input name="UsersCreate" type="hidden" value="false" />
+            </div>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="UsersUpdate" id="UsersUpdate" value="true" class="form-check-input" />
+                <label asp-for="UsersUpdate" class="form-label">Изменение</label>
+                <input name="UsersUpdate" type="hidden" value="false" />
+            </div>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="UsersDelete" id="UsersDelete" value="true" class="form-check-input" />
+                <label asp-for="UsersDelete" class="form-label">Удаление</label>
+                <input name="UsersDelete" type="hidden" value="false" />
+            </div>
+        </div>
+        <div class="mb-3">
+            <h5>Роли:</h5>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="RolesGet" id="RolesGet" value="true" class="form-check-input" />
+                <label asp-for="RolesGet" class="form-label">Просмотр</label>
+                <input name="RolesGet" type="hidden" value="false" />
+            </div>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="RolesCreate" id="RolesCreate" value="true" class="form-check-input" />
+                <label asp-for="RolesCreate" class="form-label">Добавление</label>
+                <input name="RolesCreate" type="hidden" value="false" />
+            </div>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="RolesUpdate" id="RolesUpdate" value="true" class="form-check-input" />
+                <label asp-for="RolesUpdate" class="form-label">Изменение</label>
+                <input name="RolesUpdate" type="hidden" value="false" />
+            </div>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="RolesDelete" id="RolesDelete" value="true" class="form-check-input" />
+                <label asp-for="RolesDelete" class="form-label">Удаление</label>
+                <input name="RolesDelete" type="hidden" value="false" />
+            </div>
+        </div>
+        <div class="mb-3">
+            <h5>Новости:</h5>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="NewsGet" id="NewsGet" value="true" class="form-check-input" />
+                <label asp-for="NewsGet" class="form-label">Просмотр</label>
+                <input name="NewsGet" type="hidden" value="false" />
+            </div>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="NewsCreate" id="NewsCreate" value="true" class="form-check-input" />
+                <label asp-for="NewsCreate" class="form-label">Добавление</label>
+                <input name="NewsCreate" type="hidden" value="false" />
+            </div>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="NewsUpdate" id="NewsUpdate" value="true" class="form-check-input" />
+                <label asp-for="NewsUpdate" class="form-label">Изменение</label>
+                <input name="NewsUpdate" type="hidden" value="false" />
+            </div>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="NewsDelete" id="NewsDelete" value="true" class="form-check-input" />
+                <label asp-for="NewsDelete" class="form-label">Удаление</label>
+                <input name="NewsDelete" type="hidden" value="false" />
+            </div>
+        </div>
+        <div class="mb-3">
+            <h5>Заведения:</h5>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="CafesGet" id="CafesGet" value="true" class="form-check-input" />
+                <label asp-for="CafesGet" class="form-label">Просмотр</label>
+                <input name="CafesGet" type="hidden" value="false" />
+            </div>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="CafesCreate" id="CafesCreate" value="true" class="form-check-input" />
+                <label asp-for="CafesCreate" class="form-label">Добавление</label>
+                <input name="CafesCreate" type="hidden" value="false" />
+            </div>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="CafesUpdate" id="CafesUpdate" value="true" class="form-check-input" />
+                <label asp-for="CafesUpdate" class="form-label">Изменение</label>
+                <input name="CafesUpdate" type="hidden" value="false" />
+            </div>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="CafesDelete" id="CafesDelete" value="true" class="form-check-input" />
+                <label asp-for="CafesDelete" class="form-label">Удаление</label>
+                <input name="CafesDelete" type="hidden" value="false" />
+            </div>
+        </div>
+        <div class="mb-3">
+            <h5>Афиша:</h5>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="PostersGet" id="PostersGet" value="true" class="form-check-input" />
+                <label asp-for="PostersGet" class="form-label">Просмотр</label>
+                <input name="PostersGet" type="hidden" value="false" />
+            </div>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="PostersCreate" id="PostersCreate" value="true" class="form-check-input" />
+                <label asp-for="PostersCreate" class="form-label">Добавление</label>
+                <input name="PostersCreate" type="hidden" value="false" />
+            </div>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="PostersUpdate" id="PostersUpdate" value="true" class="form-check-input" />
+                <label asp-for="PostersUpdate" class="form-label">Изменение</label>
+                <input name="PostersUpdate" type="hidden" value="false" />
+            </div>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="PostersDelete" id="PostersDelete" value="true" class="form-check-input" />
+                <label asp-for="PostersDelete" class="form-label">Удаление</label>
+                <input name="PostersDelete" type="hidden" value="false" />
+            </div>
+        </div>
+        <div class="mb-3">
+            <h5>Вакансии:</h5>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="VacanciesGet" id="VacanciesGet" value="true" class="form-check-input" />
+                <label asp-for="VacanciesGet" class="form-label">Просмотр</label>
+                <input name="VacanciesGet" type="hidden" value="false" />
+            </div>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="VacanciesCreate" id="VacanciesCreate" value="true" class="form-check-input" />
+                <label asp-for="VacanciesCreate" class="form-label">Добавление</label>
+                <input name="VacanciesCreate" type="hidden" value="false" />
+            </div>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="VacanciesUpdate" id="VacanciesUpdate" value="true" class="form-check-input" />
+                <label asp-for="VacanciesUpdate" class="form-label">Изменение</label>
+                <input name="VacanciesUpdate" type="hidden" value="false" />
+            </div>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="VacanciesDelete" id="VacanciesDelete" value="true" class="form-check-input" />
+                <label asp-for="VacanciesDelete" class="form-label">Удаление</label>
+                <input name="VacanciesDelete" type="hidden" value="false" />
+            </div>
+        </div>
+        <div class="mb-3">
+            <h5>Комментарии:</h5>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="CommentsGet" id="CommentsGet" value="true" class="form-check-input" />
+                <label asp-for="CommentsGet" class="form-label">Просмотр</label>
+                <input name="CommentsGet" type="hidden" value="false" />
+            </div>
+            <div class="form-check-inline form-switch">
+                <input type="checkbox" asp-for="CommentsDelete" id="CommentsDelete" value="true" class="form-check-input" />
+                <label asp-for="CommentsDelete" class="form-label">Удаление</label>
+                <input name="CommentsDelete" type="hidden" value="false" />
+            </div>
         </div>
         <div class="mb-3">
             <input type="submit" value="Сохранить" class="btn btn-outline-secondary" />

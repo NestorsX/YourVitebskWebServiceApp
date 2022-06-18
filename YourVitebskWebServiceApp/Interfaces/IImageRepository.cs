@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace YourVitebskWebServiceApp.Interfaces
 {
-    public interface IImageRepository<T> : IDisposable
+    public interface IImageRepository<T> : IPermissionChecker, IDisposable
     {
         IEnumerable<IViewModel> Get();
 

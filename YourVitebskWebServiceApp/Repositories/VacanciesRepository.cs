@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using YourVitebskWebServiceApp.Helpers;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
 
@@ -9,11 +10,18 @@ namespace YourVitebskWebServiceApp.Repositories
     public class VacanciesRepository : IRepository<Vacancy>
     {
         private readonly YourVitebskDBContext _context;
+        private readonly RolePermissionManager _roleManager;
         private bool _disposed = false;
 
         public VacanciesRepository(YourVitebskDBContext context)
         {
             _context = context;
+            _roleManager = new RolePermissionManager(_context);
+        }
+
+        public bool CheckRolePermission(string userEmail, string permission)
+        {
+            return _roleManager.HasPermission(userEmail, permission);
         }
 
         public IEnumerable<IViewModel> Get()

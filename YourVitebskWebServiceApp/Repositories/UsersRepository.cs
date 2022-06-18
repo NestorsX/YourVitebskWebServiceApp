@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using YourVitebskWebServiceApp.APIServices;
+using YourVitebskWebServiceApp.Helpers;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
 using YourVitebskWebServiceApp.ViewModels;
@@ -14,12 +15,19 @@ namespace YourVitebskWebServiceApp.Repositories
     {
         private readonly YourVitebskDBContext _context;
         private readonly ImageService _imageService;
+        private readonly RolePermissionManager _roleManager;
         private bool _disposed = false;
 
         public UsersRepository(YourVitebskDBContext context, IWebHostEnvironment appEnvironment)
         {
             _context = context;
             _imageService = new ImageService(appEnvironment);
+            _roleManager = new RolePermissionManager(_context);
+        }
+
+        public bool CheckRolePermission(string userEmail, string permission)
+        {
+            return _roleManager.HasPermission(userEmail, permission);
         }
 
         public IEnumerable<IViewModel> Get()

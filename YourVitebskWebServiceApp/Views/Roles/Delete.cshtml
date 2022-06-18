@@ -1,4 +1,4 @@
-﻿@model YourVitebskWebServiceApp.Models.Role
+﻿@model YourVitebskWebServiceApp.ViewModels.RoleViewModel
 
 <div class="row mb-3">
     <div class="col-auto me-auto">
@@ -14,10 +14,17 @@
         <tr>
             <th>ID</th>
             <th>Роль</th>
+            <th>Права</th>
         </tr>
         <tr>
             <td>@Model.RoleId</td>
             <td>@Model.Name</td>
+            <td>
+                @foreach (var permission in Model.Permissions)
+                {
+                    <span>@permission </span>
+                }
+            </td>
         </tr>
     </table>
 </div>

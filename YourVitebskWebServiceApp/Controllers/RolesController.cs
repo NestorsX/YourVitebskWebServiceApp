@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Linq;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
+using YourVitebskWebServiceApp.ViewModels;
 
 namespace YourVitebskWebServiceApp.Controllers
 {
@@ -11,9 +11,9 @@ namespace YourVitebskWebServiceApp.Controllers
     public class RolesController : Controller
     {
         private readonly YourVitebskDBContext _context;
-        private readonly IRepository<Role> _repository;
+        private readonly IRoleRepository _repository;
 
-        public RolesController(YourVitebskDBContext context, IRepository<Role> repository)
+        public RolesController(YourVitebskDBContext context, IRoleRepository repository)
         {
             _context = context;
             _repository = repository;
@@ -21,7 +21,7 @@ namespace YourVitebskWebServiceApp.Controllers
 
         public ActionResult Index(int page = 1)
         {
-            var roles = (IEnumerable<Role>)_repository.Get();
+            var roles = _repository.Get();
             const int pageSize = 5;
             if (page < 1)
             {
@@ -42,7 +42,7 @@ namespace YourVitebskWebServiceApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Role newRole)
+        public ActionResult Create(RoleDTOViewModel newRole)
         {
             if (_context.Roles.FirstOrDefault(x => x.Name == newRole.Name) != null)
             {
@@ -51,13 +51,7 @@ namespace YourVitebskWebServiceApp.Controllers
 
             if (ModelState.IsValid)
             {
-                var role = new Role
-                {
-                    RoleId = null,
-                    Name = newRole.Name
-                };
-
-                _repository.Create(role);
+                _repository.Create(newRole);
                 return RedirectToAction("Index");
             }
 
@@ -71,16 +65,19 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            Role role = _repository.Get(id);
+            RoleDTOViewModel role = _repository.GetForEdit(id);
             if (role != null)
+            {
                 return View(role);
-            return NotFound();
+            }
+
+            return RedirectToAction("NotFound", "Home");
         }
 
         [HttpPost]
-        public ActionResult Edit(Role newRole)
+        public ActionResult Edit(RoleDTOViewModel newRole)
         {
-            Role role = _repository.Get((int)newRole.RoleId);
+            Role role = _context.Roles.First(x => x.RoleId == newRole.RoleId);
             if (_context.Roles.FirstOrDefault(x => x.Name == newRole.Name && role.Name != newRole.Name) != null)
             {
                 ModelState.AddModelError("Name", "Такая роль уже существует");
@@ -88,8 +85,7 @@ namespace YourVitebskWebServiceApp.Controllers
 
             if (ModelState.IsValid)
             {
-                role.Name = newRole.Name;
-                _repository.Update(role);
+                _repository.Update(newRole);
                 return RedirectToAction("Index");
             }
 
@@ -105,13 +101,13 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            Role role = _repository.Get(id);
+            RoleViewModel role = _repository.GetForView(id);
             if (role != null)
             {
                 return View(role);
             }
 
-            return NotFound();
+            return RedirectToAction("NotFound", "Home");
         }
 
         [HttpPost]

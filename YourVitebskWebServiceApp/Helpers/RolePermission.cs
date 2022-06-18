@@ -1,0 +1,32 @@
+﻿namespace YourVitebskWebServiceApp.Helpers
+{
+    public enum RolePermission
+    {
+        UsersGet,
+        UsersCreate,
+        UsersUpdate,
+        UsersDelete,
+        RolesGet,
+        RolesCreate,
+        RolesUpdate,
+        RolesDelete,
+        NewsGet,
+        NewsCreate,
+        NewsUpdate,
+        NewsDelete,
+        CafesGet,
+        CafesCreate,
+        CafesUpdate,
+        CafesDelete,
+        PostersGet,
+        PostersCreate,
+        PostersUpdate,
+        PostersDelete,
+        VacanciesGet,
+        VacanciesCreate,
+        VacanciesUpdate,
+        VacanciesDelete,
+        CommentsGet,
+        CommentsDelete
+    }
+}

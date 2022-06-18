@@ -7,6 +7,8 @@ namespace YourVitebskWebServiceApp
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<RolePermission> RolePermissions { get; set; }
+        public DbSet<RolePermissionLink> RolePermissionLinks { get; set; }
         public DbSet<News> News { get; set; }
         public DbSet<Cafe> Cafes { get; set; }
         public DbSet<CafeType> CafeTypes { get; set; }

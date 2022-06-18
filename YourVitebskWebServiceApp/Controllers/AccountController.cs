@@ -33,8 +33,8 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _context.Users.FirstOrDefaultAsync(x => x.Email == model.Email && x.RoleId == 2);
-                if (user != null && AuthService.VerifyPassword(model.Password, user.PasswordHash, user.PasswordSalt))
+                User user = await _context.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
+                if (user != null && await _context.RolePermissionLinks.AnyAsync(x => x.RoleId == user.RoleId) && AuthService.VerifyPassword(model.Password, user.PasswordHash, user.PasswordSalt))
                 {
                     await Authenticate(model.Email);
                     return RedirectToAction("Index", "Home");

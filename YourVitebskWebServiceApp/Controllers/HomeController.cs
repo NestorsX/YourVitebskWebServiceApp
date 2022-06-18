@@ -10,5 +10,15 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             return View();
         }
+
+        public ActionResult AccessDenied()
+        {
+            return View();
+        }
+
+        public ActionResult NotFound()
+        {
+            return View();
+        }
     }
 }
