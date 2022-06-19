@@ -1,13 +1,4 @@
-﻿@model IEnumerable<YourVitebskWebServiceApp.ViewModels.UserViewModel>
-@{
-    Pager pager = new Pager();
-    int pageNumber = 0;
-    if (ViewBag.Pager != null)
-    {
-        pager = ViewBag.Pager;
-        pageNumber = pager.CurrentPage;
-    }
-}
+﻿@model YourVitebskWebServiceApp.ViewModels.IndexViewModels.UserIndexViewModel
 
 <div class="mb-3">
     <h2>Пользователи</h2>
@@ -16,38 +7,58 @@
 <form method="get">
     <div class="row mb-3 align-items-center">
         <div class="col">
-            <input name="search" placeholder="Поиск" class="form-control" value="@ViewBag.Search" />
+            <input name="search" value="@Model.Filterer.SearchLine" placeholder="Поиск" class="form-control" />
         </div>
         <div class="col">
-            <select name="role" class="form-control">
-                <option value="">Роль</option>
-                @foreach (YourVitebskWebServiceApp.Models.Role role in ViewBag.Roles)
-                {
-                    <option value="@role.RoleId">@role.Name</option>
-                }
-            </select>
+            <select name="role" asp-items="@Model.Filterer.Roles" class="form-control"></select>
         </div>
         <div class="col">
             <input type="submit" value="Применить" class="btn btn-outline-dark" />
         </div>
-        
     </div>
 </form>
 
 <div class="table-responsive">
     <table class="table table-striped align-middle">
         <tr>
-            <th><a asp-action="Index" asp-route-sort="@ViewBag.IdSort">ID</a></th>
-            <th><a asp-action="Index" asp-route-sort="@ViewBag.EmailSort">Email</a></th>
-            <th><a asp-action="Index" asp-route-sort="@ViewBag.RoleSort">Роль</a></th>
-            <th><a asp-action="Index" asp-route-sort="@ViewBag.FirstNameSort">Имя</a></th>
-            <th><a asp-action="Index" asp-route-sort="@ViewBag.LastNameSort">Фамилия</a></th>
-            <th><a asp-action="Index" asp-route-sort="@ViewBag.PhoneNumberSort">Телефон</a></th>
-            <th>Видимость</th>
+            <th><a asp-action="Index" 
+                 asp-route-sort="@Model.Sorter.IdSort"
+                 asp-route-search="@Model.Filterer.SearchLine"
+                 asp-route-role="@Model.Filterer.SelectedRole">ID</a>
+            </th>
+            <th><a asp-action="Index" 
+                 asp-route-sort="@Model.Sorter.EmailSort"
+                 asp-route-search="@Model.Filterer.SearchLine"
+                 asp-route-role="@Model.Filterer.SelectedRole">Email</a>
+            </th>
+            <th><a asp-action="Index" 
+                 asp-route-sort="@Model.Sorter.RoleSort"
+                 asp-route-search="@Model.Filterer.SearchLine"
+                 asp-route-role="@Model.Filterer.SelectedRole">Роль</a>
+            </th>
+            <th><a asp-action="Index" 
+                 asp-route-sort="@Model.Sorter.FirstNameSort"
+                 asp-route-search="@Model.Filterer.SearchLine"
+                 asp-route-role="@Model.Filterer.SelectedRole">Имя</a>
+            </th>
+            <th><a asp-action="Index" 
+                 asp-route-sort="@Model.Sorter.LastNameSort"
+                 asp-route-search="@Model.Filterer.SearchLine"
+                 asp-route-role="@Model.Filterer.SelectedRole">Фамилия</a>
+            </th>
+            <th><a asp-action="Index" 
+                 asp-route-sort="@Model.Sorter.PhoneNumberSort"
+                 asp-route-search="@Model.Filterer.SearchLine"
+                 asp-route-role="@Model.Filterer.SelectedRole">Телефон</a>
+            </th>
+            <th><a asp-action="Index" 
+                 asp-route-sort="@Model.Sorter.VisibleSort"
+                 asp-route-search="@Model.Filterer.SearchLine"
+                 asp-route-role="@Model.Filterer.SelectedRole">Видимость</a></th>
             <th><a class="btn btn-outline-dark float-end" asp-controller="Users" asp-action="Create">Добавить</a></th>
         </tr>
     
-        @foreach (var item in Model)
+        @foreach (var item in Model.Data)
         {
             <tr>
                 <td>@item.UserId</td>
@@ -83,4 +94,104 @@
     </table>
 </div>
 
-<partial name="_Pager" model="@pager" />
+<div class="container">
+    <ul class="pagination justify-content-center">
+        @if (Model.Pager.CurrentPage - 1 > Model.Pager.StartPage)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" 
+                 asp-route-page="@(Model.Pager.CurrentPage - 1)"
+                 asp-route-sort="@Model.Sorter.Current"
+                 asp-route-search="@Model.Filterer.SearchLine"
+                 asp-route-role="@Model.Filterer.SelectedRole">&lt;</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" 
+                 asp-route-page="@(Model.Pager.StartPage)"
+                 asp-route-sort="@Model.Sorter.Current"
+                 asp-route-search="@Model.Filterer.SearchLine"
+                 asp-route-role="@Model.Filterer.SelectedRole">@(Model.Pager.StartPage)</a>
+            </li>
+            <li class="page-item">
+                ...
+            </li>
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" 
+                 asp-route-page="@(Model.Pager.CurrentPage - 1)"
+                 asp-route-sort="@Model.Sorter.Current"
+                 asp-route-search="@Model.Filterer.SearchLine"
+                 asp-route-role="@Model.Filterer.SelectedRole">@(Model.Pager.CurrentPage - 1)</a>
+            </li>
+        }
+        else if (Model.Pager.CurrentPage - 1 == Model.Pager.StartPage)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" 
+                 asp-route-page="@(Model.Pager.CurrentPage - 1)"
+                 asp-route-sort="@Model.Sorter.Current"
+                 asp-route-search="@Model.Filterer.SearchLine"
+                 asp-route-role="@Model.Filterer.SelectedRole">&lt;</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" 
+                 asp-route-page="@(Model.Pager.CurrentPage - 1)"
+                 asp-route-sort="@Model.Sorter.Current"
+                 asp-route-search="@Model.Filterer.SearchLine"
+                 asp-route-role="@Model.Filterer.SelectedRole">@(Model.Pager.CurrentPage - 1)</a>
+            </li>
+        }
+
+        <li class="page-item active">
+            <a class="page-link" asp-action="Index" 
+             asp-route-page="@Model.Pager.CurrentPage"
+             asp-route-sort="@Model.Sorter.Current"
+             asp-route-search="@Model.Filterer.SearchLine"
+             asp-route-role="@Model.Filterer.SelectedRole">@Model.Pager.CurrentPage</a>
+        </li>
+
+        @if (Model.Pager.CurrentPage + 1 == Model.Pager.EndPage)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" 
+                 asp-route-page="@(Model.Pager.CurrentPage + 1)"
+                 asp-route-sort="@Model.Sorter.Current"
+                 asp-route-search="@Model.Filterer.SearchLine"
+                 asp-route-role="@Model.Filterer.SelectedRole">@(Model.Pager.CurrentPage + 1)</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" 
+                 asp-route-page="@(Model.Pager.CurrentPage + 1)"
+                 asp-route-sort="@Model.Sorter.Current"
+                 asp-route-search="@Model.Filterer.SearchLine"
+                 asp-route-role="@Model.Filterer.SelectedRole">&gt;</a>
+            </li>
+        }
+        else if (Model.Pager.CurrentPage + 1 < Model.Pager.EndPage)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" 
+                 asp-route-page="@(Model.Pager.CurrentPage + 1)"
+                 asp-route-sort="@Model.Sorter.Current"
+                 asp-route-search="@Model.Filterer.SearchLine"
+                 asp-route-role="@Model.Filterer.SelectedRole">@(Model.Pager.CurrentPage + 1)</a>
+            </li>
+            <li class="page-item">
+                ...
+            </li>
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" 
+                 asp-route-page="@(Model.Pager.EndPage)"
+                 asp-route-sort="@Model.Sorter.Current"
+                 asp-route-search="@Model.Filterer.SearchLine"
+                 asp-route-role="@Model.Filterer.SelectedRole">@(Model.Pager.EndPage)</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" 
+                 asp-route-page="@(Model.Pager.CurrentPage + 1)"
+                 asp-route-sort="@Model.Sorter.Current"
+                 asp-route-search="@Model.Filterer.SearchLine"
+                 asp-route-role="@Model.Filterer.SelectedRole">&gt;</a>
+            </li>
+        }
+    </ul>
+</div>

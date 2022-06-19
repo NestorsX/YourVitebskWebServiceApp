@@ -1,9 +1,8 @@
-﻿using YourVitebskWebServiceApp.Helpers;
-using YourVitebskWebServiceApp.Interfaces;
+﻿using YourVitebskWebServiceApp.Helpers.SortStates;
 
-namespace YourVitebskWebServiceApp.Models
+namespace YourVitebskWebServiceApp.Helpers.Sorters
 {
-    public class UserSorter : ISorter
+    public class UserSorter
     {
         public UserSortStates IdSort { get; set; }
         public UserSortStates RoleSort { get; set; }
@@ -11,6 +10,7 @@ namespace YourVitebskWebServiceApp.Models
         public UserSortStates FirstNameSort { get; set; }
         public UserSortStates LastNameSort { get; set; }
         public UserSortStates PhoneNumberSort { get; set; }
+        public UserSortStates VisibleSort { get; set; }
         public UserSortStates Current { get; set; }
 
         public UserSorter(UserSortStates sort)
@@ -21,6 +21,7 @@ namespace YourVitebskWebServiceApp.Models
             FirstNameSort = sort == UserSortStates.FirstNameAsc ? UserSortStates.FirstNameDesc : UserSortStates.FirstNameAsc;
             LastNameSort = sort == UserSortStates.LastNameAsc ? UserSortStates.LastNameDesc : UserSortStates.LastNameAsc;
             PhoneNumberSort = sort == UserSortStates.PhoneNumberAsc ? UserSortStates.PhoneNumberDesc : UserSortStates.PhoneNumberAsc;
+            VisibleSort = sort == UserSortStates.VisibleAsc ? UserSortStates.VisibleDesc : UserSortStates.VisibleAsc;
             Current = sort;
         }
     }

@@ -6,6 +6,7 @@ using System.Linq;
 using YourVitebskWebServiceApp.Helpers;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
+using YourVitebskWebServiceApp.ViewModels;
 
 namespace YourVitebskWebServiceApp.Repositories
 {
@@ -30,7 +31,24 @@ namespace YourVitebskWebServiceApp.Repositories
 
         public IEnumerable<IViewModel> Get()
         {
-            return _context.Cafes.ToList();
+            var result = new List<CafeViewModel>();
+            IEnumerable<Cafe> cafes = _context.Cafes.ToList();
+            foreach (var cafe in cafes)
+            {
+                result.Add(new CafeViewModel()
+                {
+                    CafeId = (int)cafe.CafeId,
+                    CafeTypeId = cafe.CafeTypeId,
+                    CafeType = _context.CafeTypes.First(x => x.CafeTypeId == cafe.CafeTypeId).Name,
+                    Title = cafe.Title,
+                    Description = cafe.Description,
+                    WorkingTime = cafe.WorkingTime,
+                    Address = cafe.Address,
+                    ExternalLink = cafe.ExternalLink
+                });
+            }
+
+            return result.ToList();
         }
 
         public IViewModel Get(int id)

@@ -1,12 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using YourVitebskWebServiceApp.Helpers;
+using YourVitebskWebServiceApp.Helpers.Filterers;
+using YourVitebskWebServiceApp.Helpers.Sorters;
+using YourVitebskWebServiceApp.Helpers.SortStates;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
 using YourVitebskWebServiceApp.ViewModels;
+using YourVitebskWebServiceApp.ViewModels.IndexViewModels;
 
 namespace YourVitebskWebServiceApp.Controllers
 {
@@ -15,44 +19,45 @@ namespace YourVitebskWebServiceApp.Controllers
     {
         private readonly YourVitebskDBContext _context;
         private readonly IImageRepository<UserViewModel> _repository;
+        private readonly AccountController _account;
 
         public UsersController(YourVitebskDBContext context, IImageRepository<UserViewModel> repository)
         {
             _context = context;
             _repository = repository;
+            _account = new AccountController(context);
         }
 
         public ActionResult Index(int? role, string search, UserSortStates sort = UserSortStates.UserIdAsc, int page = 1)
         {
-            if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.UsersGet)))
+            try
             {
-                return RedirectToAction("AccessDenied", "Home");
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.UsersGet)))
+                {
+                    return RedirectToAction("AccessDenied", "Home");
+                }
+            }
+            catch (ArgumentException)
+            {
+                return RedirectToAction("Logout", "Account");
             }
 
-            ViewBag.Roles = _context.Roles;
-            ViewBag.Search = search;
             var users = (IEnumerable<UserViewModel>)_repository.Get();
 
-            if (role != null)
+            if (role != null && role != 0)
             {
                 users = users.Where(x => x.RoleId == role);
             }
 
             if (!string.IsNullOrWhiteSpace(search))
             {
-                users = users.Where(x => x.Email.Contains(search) ||
-                                         x.FirstName.Contains(search) ||
-                                         x.LastName.Contains(search) ||
+                users = users.Where(x => x.UserId.ToString().Contains(search) ||
+                                         x.Email.ToLower().Contains(search.ToLower()) ||
+                                         x.FirstName.ToLower().Contains(search.ToLower()) ||
+                                         x.LastName.ToLower().Contains(search.ToLower()) ||
                                          x.PhoneNumber.Contains(search)
                 );
             }
-
-            ViewBag.IdSort = sort == UserSortStates.UserIdAsc ? UserSortStates.UserIdDesc : UserSortStates.UserIdAsc;
-            ViewBag.RoleSort = sort == UserSortStates.RoleAsc ? UserSortStates.RoleDesc : UserSortStates.RoleAsc;
-            ViewBag.EmailSort = sort == UserSortStates.EmailAsc ? UserSortStates.EmailDesc : UserSortStates.EmailAsc;
-            ViewBag.FirstNameSort = sort == UserSortStates.FirstNameAsc ? UserSortStates.FirstNameDesc : UserSortStates.FirstNameAsc;
-            ViewBag.LastNameSort = sort == UserSortStates.LastNameAsc ? UserSortStates.LastNameDesc : UserSortStates.LastNameAsc;
-            ViewBag.PhoneNumberSort = sort == UserSortStates.PhoneNumberAsc ? UserSortStates.PhoneNumberDesc : UserSortStates.PhoneNumberAsc;
             
             users = sort switch
             {
@@ -67,6 +72,8 @@ namespace YourVitebskWebServiceApp.Controllers
                 UserSortStates.LastNameDesc => users.OrderByDescending(x => x.LastName),
                 UserSortStates.PhoneNumberAsc => users.OrderBy(x => x.PhoneNumber),
                 UserSortStates.PhoneNumberDesc => users.OrderByDescending(x => x.PhoneNumber),
+                UserSortStates.VisibleAsc => users.OrderBy(x => x.IsVisible),
+                UserSortStates.VisibleDesc => users.OrderByDescending(x => x.IsVisible),
                 _ => users.OrderBy(x => x.UserId),
             };
 
@@ -80,13 +87,32 @@ namespace YourVitebskWebServiceApp.Controllers
             var pager = new Pager(count, page, pageSize);
             int skip = (page - 1) * pageSize;
             users = users.Skip(skip).Take(pager.PageSize);
-            ViewBag.Pager = pager;
 
-            return View(users.ToList());
+            var viewModel = new UserIndexViewModel()
+            {
+                Pager = pager,
+                Sorter = new UserSorter(sort),
+                Filterer = new UserFilterer(_context.Roles.ToList(), role, search),
+                Data = users.ToList()
+            };
+
+            return View(viewModel);
         }
 
         public ActionResult Create()
         {
+            try
+            {
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.UsersGet)))
+                {
+                    return RedirectToAction("AccessDenied", "Home");
+                }
+            }
+            catch (ArgumentException)
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+
             ViewBag.Roles = _context.Roles;
             return View();
         }
@@ -119,6 +145,18 @@ namespace YourVitebskWebServiceApp.Controllers
 
         public ActionResult Edit(int id)
         {
+            try
+            {
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.UsersGet)))
+                {
+                    return RedirectToAction("AccessDenied", "Home");
+                }
+            }
+            catch (ArgumentException)
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+
             if (id == 1)
             {
                 return RedirectToAction("Index");
@@ -166,6 +204,18 @@ namespace YourVitebskWebServiceApp.Controllers
         [ActionName("Delete")]
         public ActionResult ConfirmDelete(int id)
         {
+            try
+            {
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.UsersGet)))
+                {
+                    return RedirectToAction("AccessDenied", "Home");
+                }
+            }
+            catch (ArgumentException)
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+
             if (id == 1)
             {
                 return RedirectToAction("Index");

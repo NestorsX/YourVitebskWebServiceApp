@@ -6,8 +6,8 @@ using Moq;
 using System.Collections.Generic;
 using Xunit;
 using YourVitebskWebServiceApp.ViewModels;
-using YourVitebskWebServiceApp.Helpers;
 using System.Linq;
+using YourVitebskWebServiceApp.Helpers.SortStates;
 
 namespace YourVitebskWebServiceApp.Tests.ControllerTests
 {

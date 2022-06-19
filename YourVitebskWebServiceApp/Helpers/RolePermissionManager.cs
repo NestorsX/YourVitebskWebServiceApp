@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using YourVitebskWebServiceApp.Models;
 
 namespace YourVitebskWebServiceApp.Helpers
@@ -13,7 +14,12 @@ namespace YourVitebskWebServiceApp.Helpers
 
         public bool HasPermission(string userEmail, string requiredPermission)
         {
-            User user = _context.Users.First(x => x.Email == userEmail);
+            User user = _context.Users.FirstOrDefault(x => x.Email == userEmail);
+            if (user == null)
+            {
+                throw new ArgumentException("Неверные данные");
+            }
+
             Models.RolePermission rolePermission = _context.RolePermissions.First(x => x.Name == requiredPermission);
             if (_context.RolePermissionLinks.Any(x => x.RoleId == user.RoleId && x.RolePermissionId == rolePermission.RolePermissionId))
             {

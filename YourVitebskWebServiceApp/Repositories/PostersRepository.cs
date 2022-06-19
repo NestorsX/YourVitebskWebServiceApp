@@ -6,6 +6,7 @@ using System.Linq;
 using YourVitebskWebServiceApp.Helpers;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
+using YourVitebskWebServiceApp.ViewModels;
 
 namespace YourVitebskWebServiceApp.Repositories
 {
@@ -30,7 +31,24 @@ namespace YourVitebskWebServiceApp.Repositories
 
         public IEnumerable<IViewModel> Get()
         {
-            return _context.Posters.ToList().OrderBy(x => x.PosterId);
+            var result = new List<PosterViewModel>();
+            IEnumerable<Poster> posters = _context.Posters.ToList();
+            foreach (var poster in posters)
+            {
+                result.Add(new PosterViewModel()
+                {
+                    PosterId = (int)poster.PosterId,
+                    PosterTypeId = poster.PosterTypeId,
+                    PosterType = _context.PosterTypes.First(x => x.PosterTypeId == poster.PosterTypeId).Name,
+                    Title = poster.Title,
+                    Description = poster.Description,
+                    DateTime = poster.DateTime,
+                    Address = poster.Address,
+                    ExternalLink = poster.ExternalLink
+                });
+            }
+
+            return result.ToList();
         }
 
         public IViewModel Get(int id)

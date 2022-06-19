@@ -1,4 +1,4 @@
-﻿namespace YourVitebskWebServiceApp.Helpers
+﻿namespace YourVitebskWebServiceApp.Helpers.SortStates
 {
     public enum UserSortStates
     {
@@ -14,5 +14,7 @@
         LastNameDesc,
         PhoneNumberAsc,
         PhoneNumberDesc,
+        VisibleAsc,
+        VisibleDesc
     }
 }

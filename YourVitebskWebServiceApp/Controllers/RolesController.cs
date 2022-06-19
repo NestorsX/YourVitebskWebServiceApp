@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using YourVitebskWebServiceApp.Helpers.Filterers;
+using YourVitebskWebServiceApp.Helpers.Sorters;
+using YourVitebskWebServiceApp.Helpers.SortStates;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
 using YourVitebskWebServiceApp.ViewModels;
+using YourVitebskWebServiceApp.ViewModels.IndexViewModels;
 
 namespace YourVitebskWebServiceApp.Controllers
 {
@@ -19,9 +23,24 @@ namespace YourVitebskWebServiceApp.Controllers
             _repository = repository;
         }
 
-        public ActionResult Index(int page = 1)
+        public ActionResult Index(string search, RoleSortStates sort = RoleSortStates.RoleIdAsc, int page = 1)
         {
             var roles = _repository.Get();
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                roles = roles.Where(x => x.RoleId.ToString().Contains(search) ||
+                                         x.Name.ToLower().Contains(search.ToLower()) || 
+                                         x.Permissions.Any(x => x.ToLower().Contains(search.ToLower())));
+            }
+
+            roles = sort switch
+            {
+                RoleSortStates.RoleIdDesc => roles.OrderByDescending(x => x.RoleId),
+                RoleSortStates.NameAsc => roles.OrderBy(x => x.Name),
+                RoleSortStates.NameDesc => roles.OrderByDescending(x => x.Name),
+                _ => roles.OrderBy(x => x.RoleId),
+            };
+
             const int pageSize = 5;
             if (page < 1)
             {
@@ -32,8 +51,16 @@ namespace YourVitebskWebServiceApp.Controllers
             var pager = new Pager(count, page, pageSize);
             int skip = (page - 1) * pageSize;
             roles = roles.Skip(skip).Take(pager.PageSize);
-            ViewBag.Pager = pager;
-            return View(roles.ToList());
+
+            var viewModel = new RoleIndexViewModel()
+            {
+                Pager = pager,
+                Sorter = new RoleSorter(sort),
+                Filterer = new RoleFilterer(search),
+                Data = roles.ToList()
+            };
+
+            return View(viewModel);
         }
 
         public ActionResult Create()

@@ -1,8 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
+using YourVitebskWebServiceApp.Helpers.Filterers;
+using YourVitebskWebServiceApp.Helpers.Sorters;
+using YourVitebskWebServiceApp.Helpers.SortStates;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
+using YourVitebskWebServiceApp.ViewModels.IndexViewModels;
 
 namespace YourVitebskWebServiceApp.Controllers
 {
@@ -18,9 +23,42 @@ namespace YourVitebskWebServiceApp.Controllers
             _repository = repository;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(string search, PosterTypeSortStates sort = PosterTypeSortStates.PosterTypeIdAsc, int page = 1)
         {
-            return View(_repository.Get());
+            var posterTypes = (IEnumerable<PosterType>)_repository.Get();
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                posterTypes = posterTypes.Where(x => x.PosterTypeId.ToString().Contains(search) || x.Name.ToLower().Contains(search.ToLower()));
+            }
+
+            posterTypes = sort switch
+            {
+                PosterTypeSortStates.PosterTypeIdDesc => posterTypes.OrderByDescending(x => x.PosterTypeId),
+                PosterTypeSortStates.NameAsc => posterTypes.OrderBy(x => x.Name),
+                PosterTypeSortStates.NameDesc => posterTypes.OrderByDescending(x => x.Name),
+                _ => posterTypes.OrderBy(x => x.PosterTypeId),
+            };
+
+            const int pageSize = 5;
+            if (page < 1)
+            {
+                page = 1;
+            }
+
+            int count = posterTypes.Count();
+            var pager = new Pager(count, page, pageSize);
+            int skip = (page - 1) * pageSize;
+            posterTypes = posterTypes.Skip(skip).Take(pager.PageSize);
+
+            var viewModel = new PosterTypeIndexViewModel()
+            {
+                Pager = pager,
+                Sorter = new PosterTypeSorter(sort),
+                Filterer = new PosterTypeFilterer(search),
+                Data = posterTypes.ToList()
+            };
+
+            return View(viewModel);
         }
 
         public ActionResult Create()
