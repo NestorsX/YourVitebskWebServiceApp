@@ -26,7 +26,7 @@ namespace YourVitebskWebServiceApp.Repositories
 
         public IEnumerable<IViewModel> Get()
         {
-            return _context.CafeTypes.ToList().OrderBy(x => x.CafeTypeId);
+            return _context.CafeTypes.ToList();
         }
 
         public CafeType Get(int id)

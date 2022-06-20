@@ -51,7 +51,7 @@ namespace YourVitebskWebServiceApp.APIServices
             }
         }
 
-        public string CreateToken(Models.User user)
+        private string CreateToken(Models.User user)
         {
             string image = "";
             if (Directory.Exists($"{_appEnvironment.WebRootPath}/images/users/{user.UserId}"))
@@ -74,11 +74,24 @@ namespace YourVitebskWebServiceApp.APIServices
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.Now.AddYears(1),
                 signingCredentials: credentials
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        private string GenerateTemporaryPassword()
+        {
+            var newPassword = new StringBuilder();
+            string symbolsAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-abcdefghijklmnopqrstuvwxyz";
+            var rnd = new Random();
+            for (int i = 0; i < 10; i++)
+            {
+                newPassword.Append(symbolsAlphabet[rnd.Next(0, symbolsAlphabet.Length - 1)]);
+            }
+
+            return newPassword.ToString();
         }
 
         public async Task<string> Register(UserRegisterDTO userData)
@@ -99,7 +112,7 @@ namespace YourVitebskWebServiceApp.APIServices
                     PasswordSalt = passwordSalt,
                     FirstName = userData.FirstName,
                     LastName = userData.LastName,
-                    PhoneNumber = null,
+                    PhoneNumber = "",
                     RoleId = 1,
                     IsVisible = true,
                 };
@@ -130,6 +143,30 @@ namespace YourVitebskWebServiceApp.APIServices
             return CreateToken(user);
         }
 
+        public async Task RestorePassword(string email, string firstName)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email && x.FirstName == firstName);
+            if (user == null)
+            {
+                throw new ArgumentException("Проверьте введенные данные");
+            }
+
+            var password = GenerateTemporaryPassword();
+            try
+            {
+                await SMTPService.SendPasswordByEmail(user.Email, user.FirstName, password);
+                CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+                user.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
+                _context.Entry(user).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException("Проверьте введенные данные");
+            }
+        }
+
         public async Task<string> Update(APIModels.User newUser)
         {
             try
@@ -140,7 +177,7 @@ namespace YourVitebskWebServiceApp.APIServices
                     throw new ArgumentException("Пользователь с таким email уже существует!");
                 }
 
-                if (newUser.PhoneNumber != null && await _context.Users.AnyAsync(x => x.PhoneNumber == newUser.PhoneNumber && x.UserId != newUser.UserId))
+                if (!string.IsNullOrWhiteSpace(newUser.PhoneNumber) && await _context.Users.AnyAsync(x => x.PhoneNumber == newUser.PhoneNumber && x.UserId != newUser.UserId))
                 {
                     throw new ArgumentException("Этот номер телефона уже привязан к другому аккаунту");
                 }

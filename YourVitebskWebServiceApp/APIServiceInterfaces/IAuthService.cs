@@ -7,6 +7,7 @@ namespace YourVitebskWebServiceApp.APIServiceInterfaces
     {
         public Task<string> Register(UserRegisterDTO userData);
         public Task<string> Login(UserLoginDTO userData);
+        public Task RestorePassword(string email, string firstName);
         public Task<string> Update(User userData);
     }
 }

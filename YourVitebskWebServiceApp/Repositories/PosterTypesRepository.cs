@@ -26,7 +26,7 @@ namespace YourVitebskWebServiceApp.Repositories
 
         public IEnumerable<IViewModel> Get()
         {
-            return _context.PosterTypes.ToList().OrderBy(x => x.PosterTypeId);
+            return _context.PosterTypes.ToList();
         }
 
         public PosterType Get(int id)

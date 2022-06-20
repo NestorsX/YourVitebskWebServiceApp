@@ -103,7 +103,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.UsersGet)))
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.UsersCreate)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -147,7 +147,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.UsersGet)))
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.UsersUpdate)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -206,7 +206,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.UsersGet)))
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.UsersDelete)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }

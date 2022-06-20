@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using YourVitebskWebServiceApp.Helpers.Filterers;
@@ -25,6 +26,18 @@ namespace YourVitebskWebServiceApp.Controllers
 
         public ActionResult Index(string search, PosterTypeSortStates sort = PosterTypeSortStates.PosterTypeIdAsc, int page = 1)
         {
+            try
+            {
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.PostersGet)))
+                {
+                    return RedirectToAction("AccessDenied", "Home");
+                }
+            }
+            catch (ArgumentException)
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+
             var posterTypes = (IEnumerable<PosterType>)_repository.Get();
             if (!string.IsNullOrWhiteSpace(search))
             {
@@ -63,6 +76,18 @@ namespace YourVitebskWebServiceApp.Controllers
 
         public ActionResult Create()
         {
+            try
+            {
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.PostersCreate)))
+                {
+                    return RedirectToAction("AccessDenied", "Home");
+                }
+            }
+            catch (ArgumentException)
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+
             return View();
         }
 
@@ -91,6 +116,18 @@ namespace YourVitebskWebServiceApp.Controllers
 
         public ActionResult Edit(int id)
         {
+            try
+            {
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.PostersUpdate)))
+                {
+                    return RedirectToAction("AccessDenied", "Home");
+                }
+            }
+            catch (ArgumentException)
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+
             PosterType posterType = _repository.Get(id);
             if (posterType != null)
                 return View(posterType);
@@ -120,6 +157,18 @@ namespace YourVitebskWebServiceApp.Controllers
         [ActionName("Delete")]
         public ActionResult ConfirmDelete(int id)
         {
+            try
+            {
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.PostersDelete)))
+                {
+                    return RedirectToAction("AccessDenied", "Home");
+                }
+            }
+            catch (ArgumentException)
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+
             PosterType posterType = _repository.Get(id);
             if (posterType != null)
             {

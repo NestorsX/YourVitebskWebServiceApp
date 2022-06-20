@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using YourVitebskWebServiceApp.APIServiceInterfaces;
 using System;
 using YourVitebskWebServiceApp.APIModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace YourVitebskWebServiceApp.APIControllers
 {
@@ -65,8 +67,24 @@ namespace YourVitebskWebServiceApp.APIControllers
             }
         }
 
+        // Restore password
+        [HttpGet("restorepassword")]
+        public async Task<ActionResult<ResponseModel>> RestorePassword(string email, string firstName)
+        {
+            try
+            {
+                await _authService.RestorePassword(email, firstName);
+                return Ok();
+            }
+            catch (ArgumentException e)
+            {
+                return BadRequest(ResponseModel.CreateResponseWithError(e.Message));
+            }
+        }
+
         // Update user
         [HttpPost("update")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<ResponseModel>> Update(User user)
         {
             if (string.IsNullOrEmpty(user.Email))

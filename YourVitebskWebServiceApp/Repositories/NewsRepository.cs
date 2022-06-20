@@ -9,7 +9,7 @@ using YourVitebskWebServiceApp.Models;
 
 namespace YourVitebskWebServiceApp.Repositories
 {
-    public class NewsRepository : IImageRepository<News>
+    public class NewsRepository : INewsRepository
     {
         private readonly YourVitebskDBContext _context;
         private readonly ImageService _imageService;
@@ -28,12 +28,12 @@ namespace YourVitebskWebServiceApp.Repositories
             return _roleManager.HasPermission(userEmail, permission);
         }
 
-        public IEnumerable<IViewModel> Get()
+        public IEnumerable<News> Get()
         {
-            return _context.News.ToList().OrderByDescending(x => x.NewsId);
+            return _context.News.ToList();
         }
 
-        public IViewModel Get(int id)
+        public News Get(int id)
         {
             return _context.News.FirstOrDefault(x => x.NewsId == id);
         }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using YourVitebskWebServiceApp.Helpers.Filterers;
 using YourVitebskWebServiceApp.Helpers.Sorters;
@@ -25,6 +26,18 @@ namespace YourVitebskWebServiceApp.Controllers
 
         public ActionResult Index(string search, RoleSortStates sort = RoleSortStates.RoleIdAsc, int page = 1)
         {
+            try
+            {
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.RolesGet)))
+                {
+                    return RedirectToAction("AccessDenied", "Home");
+                }
+            }
+            catch (ArgumentException)
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+
             var roles = _repository.Get();
             if (!string.IsNullOrWhiteSpace(search))
             {
@@ -65,6 +78,18 @@ namespace YourVitebskWebServiceApp.Controllers
 
         public ActionResult Create()
         {
+            try
+            {
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.RolesCreate)))
+                {
+                    return RedirectToAction("AccessDenied", "Home");
+                }
+            }
+            catch (ArgumentException)
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+
             return View();
         }
 
@@ -87,6 +112,18 @@ namespace YourVitebskWebServiceApp.Controllers
 
         public ActionResult Edit(int id)
         {
+            try
+            {
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.RolesUpdate)))
+                {
+                    return RedirectToAction("AccessDenied", "Home");
+                }
+            }
+            catch (ArgumentException)
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+
             if (id == 1 || id == 2)
             {
                 return RedirectToAction("Index");
@@ -123,6 +160,18 @@ namespace YourVitebskWebServiceApp.Controllers
         [ActionName("Delete")]
         public ActionResult ConfirmDelete(int id)
         {
+            try
+            {
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.RolesDelete)))
+                {
+                    return RedirectToAction("AccessDenied", "Home");
+                }
+            }
+            catch (ArgumentException)
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+
             if (id == 1 || id == 2)
             {
                 return RedirectToAction("Index");

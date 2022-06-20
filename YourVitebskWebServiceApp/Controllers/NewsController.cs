@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using YourVitebskWebServiceApp.Helpers.Filterers;
@@ -15,22 +16,33 @@ namespace YourVitebskWebServiceApp.Controllers
     [Authorize]
     public class NewsController : Controller
     {
-        private readonly IImageRepository<News> _repository;
+        private readonly INewsRepository _repository;
 
-        public NewsController(IImageRepository<News> repository)
+        public NewsController(INewsRepository repository)
         {
             _repository = repository;
         }
 
         public ActionResult Index(string search, NewsSortStates sort = NewsSortStates.NewsIdAsc, int page = 1)
         {
-            var news = (IEnumerable<News>)_repository.Get();
+            try
+            {
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.NewsGet)))
+                {
+                    return RedirectToAction("AccessDenied", "Home");
+                }
+            }
+            catch (ArgumentException)
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+
+            var news = _repository.Get();
             if (!string.IsNullOrWhiteSpace(search))
             {
                 news = news.Where(x => x.NewsId.ToString().Contains(search) ||
-                                         x.Title.ToLower().Contains(search.ToLower()) ||
-                                         x.Description.ToLower().Contains(search.ToLower()) ||
-                                         x.ExternalLink.ToLower().Contains(search.ToLower()));
+                                       x.Title.ToLower().Contains(search.ToLower()) ||
+                                       x.Description.ToLower().Contains(search.ToLower()));
             }
 
             news = sort switch
@@ -63,6 +75,18 @@ namespace YourVitebskWebServiceApp.Controllers
 
         public ActionResult Create()
         {
+            try
+            {
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.NewsCreate)))
+                {
+                    return RedirectToAction("AccessDenied", "Home");
+                }
+            }
+            catch (ArgumentException)
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+
             return View();
         }
 
@@ -88,6 +112,18 @@ namespace YourVitebskWebServiceApp.Controllers
 
         public ActionResult Edit(int id)
         {
+            try
+            {
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.NewsUpdate)))
+                {
+                    return RedirectToAction("AccessDenied", "Home");
+                }
+            }
+            catch (ArgumentException)
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+
             News news = (News)_repository.Get(id);
             if (news != null)
             {
@@ -117,6 +153,18 @@ namespace YourVitebskWebServiceApp.Controllers
         [ActionName("Delete")]
         public ActionResult ConfirmDelete(int id)
         {
+            try
+            {
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.NewsDelete)))
+                {
+                    return RedirectToAction("AccessDenied", "Home");
+                }
+            }
+            catch (ArgumentException)
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+
             News news = (News)_repository.Get(id);
             if (news != null)
             {

@@ -10,12 +10,12 @@ namespace YourVitebskWebServiceApp.Helpers.Filterers
         {
             cafeTypes.Insert(0, new CafeType { CafeTypeId = 0, Name = "Все виды заведений" });
             CafeTypes = new SelectList(cafeTypes, "CafeTypeId", "Name", cafeType);
-            SelectedRole = cafeType;
+            SelectedCafeType = cafeType;
             SearchLine = searchLine;
         }
 
         public SelectList CafeTypes { get; private set; }
-        public int? SelectedRole { get; private set; }
+        public int? SelectedCafeType { get; private set; }
         public string SearchLine { get; private set; }
     }
 }

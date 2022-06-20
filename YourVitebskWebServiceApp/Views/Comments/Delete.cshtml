@@ -17,6 +17,7 @@
             <th>Сервис</th>
             <th>Объект</th>
             <th>Комментарий</th>
+            <th>Рекомендует</th>
             <th>Дата</th>
         </tr>
         <tr>
@@ -27,6 +28,7 @@
             <td>
                 <span class="d-inline-block text-truncate" style="max-width: 300px;">@Model.Message</span>
             </td>
+            <td>@Model.IsRecommend</td>
             <td>@Model.PublishDate</td>
     </table>
 </div>

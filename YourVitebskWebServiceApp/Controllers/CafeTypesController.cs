@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using YourVitebskWebServiceApp.Helpers.Filterers;
@@ -25,6 +26,18 @@ namespace YourVitebskWebServiceApp.Controllers
 
         public ActionResult Index(string search, CafeTypeSortStates sort = CafeTypeSortStates.CafeTypeIdAsc, int page = 1)
         {
+            try
+            {
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.CafesGet)))
+                {
+                    return RedirectToAction("AccessDenied", "Home");
+                }
+            }
+            catch (ArgumentException)
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+
             var cafeTypes = (IEnumerable<CafeType>)_repository.Get();
             if (!string.IsNullOrWhiteSpace(search))
             {
@@ -64,6 +77,18 @@ namespace YourVitebskWebServiceApp.Controllers
 
         public ActionResult Create()
         {
+            try
+            {
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.CafesCreate)))
+                {
+                    return RedirectToAction("AccessDenied", "Home");
+                }
+            }
+            catch (ArgumentException)
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+
             return View();
         }
 
@@ -92,6 +117,18 @@ namespace YourVitebskWebServiceApp.Controllers
 
         public ActionResult Edit(int id)
         {
+            try
+            {
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.CafesUpdate)))
+                {
+                    return RedirectToAction("AccessDenied", "Home");
+                }
+            }
+            catch (ArgumentException)
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+
             CafeType cafeType = _repository.Get(id);
             if (cafeType != null)
                 return View(cafeType);
@@ -121,6 +158,18 @@ namespace YourVitebskWebServiceApp.Controllers
         [ActionName("Delete")]
         public ActionResult ConfirmDelete(int id)
         {
+            try
+            {
+                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.CafesDelete)))
+                {
+                    return RedirectToAction("AccessDenied", "Home");
+                }
+            }
+            catch (ArgumentException)
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+
             CafeType cafeType = _repository.Get(id);
             if (cafeType != null)
             {

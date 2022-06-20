@@ -17,7 +17,7 @@
        <div class="mb-3">
             <label asp-for="PosterTypeId" class="form-label">Вид события<i>*</i></label>
             <select asp-for="PosterTypeId" class="form-control form-control-sm" required >
-                <option value="">Выберите тип искусства</option>
+                <option value="">Выберите вид события</option>
                 @foreach (PosterType posterType in ViewBag.PosterTypes)
                 {
                     <option value="@posterType.PosterTypeId">@posterType.Name</option>
