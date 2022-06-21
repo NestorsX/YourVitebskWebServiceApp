@@ -23,7 +23,7 @@ namespace YourVitebskWebServiceApp.APIServices
         public async Task<IEnumerable<APIModels.Poster>> GetAll()
         {
             var result = new List<APIModels.Poster>();
-            IEnumerable<Models.Poster> posters = (await _context.Posters.ToListAsync()).OrderBy(x => x.DateTime);
+            IEnumerable<Models.Poster> posters = (await _context.Posters.ToListAsync()).OrderByDescending(x => x.PosterId);
             foreach (Models.Poster poster in posters)
             {
                 result.Add(await GetById((int)poster.PosterId));

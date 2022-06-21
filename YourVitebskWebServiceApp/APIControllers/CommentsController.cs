@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System;
 using YourVitebskWebServiceApp.APIModels;
-using System.Linq;
 
 namespace YourVitebskWebServiceApp.APIControllers
 {
@@ -24,9 +23,9 @@ namespace YourVitebskWebServiceApp.APIControllers
 
         // Gets all comments by service item
         [HttpGet("all")]
-        public async Task<IEnumerable<Comment>> GetAll(int serviceId, int itemId, int offset, int count)
+        public async Task<IEnumerable<Comment>> GetAll(int serviceId, int itemId)
         {
-            return (await _commentService.GetAll(serviceId, itemId)).Skip(offset).Take(count);
+            return await _commentService.GetAll(serviceId, itemId);
         }
 
         // Gets news by id

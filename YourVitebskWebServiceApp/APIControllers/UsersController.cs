@@ -23,9 +23,9 @@ namespace YourVitebskWebServiceApp.APIControllers
 
         // Gets all users except the caller
         [HttpGet("all/{id}")]
-        public async Task<IEnumerable<UsersListItem>> GetAllUsers(int id, int offset, int count)
+        public async Task<IEnumerable<UsersListItem>> GetAllUsers(int id)
         {
-            return (await _usersService.GetAllUsers(id)).Skip(offset).Take(count);
+            return await _usersService.GetAllUsers(id);
         }
     }
 }

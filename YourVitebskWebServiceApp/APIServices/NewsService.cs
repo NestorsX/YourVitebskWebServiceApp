@@ -22,19 +22,11 @@ namespace YourVitebskWebServiceApp.APIServices
 
         public async Task<IEnumerable<APIModels.News>> GetAll()
         {
-            IEnumerable<APIModels.News> result = new List<APIModels.News>();
+            var result = new List<APIModels.News>();
             IEnumerable<Models.News> newsList = (await _context.News.ToListAsync()).OrderByDescending(x => x.NewsId);
-            foreach (Models.News news in newsList)
+            foreach (var news in newsList)
             {
-                result = result.Append(new APIModels.News()
-                {
-                    NewsId = (int)news.NewsId,
-                    Title = news.Title,
-                    Description = news.Description,
-                    ExternalLink = news.ExternalLink,
-                    TitleImage = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/news/{news.NewsId}").Select(x => Path.GetFileName(x)).First(),
-                    Images = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/news/{news.NewsId}").Select(x => Path.GetFileName(x))
-                });
+                result.Add(await GetById((int)news.NewsId));
             }
 
             return result;

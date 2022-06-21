@@ -21,7 +21,7 @@ namespace YourVitebskWebServiceApp.APIServices
         public async Task<IEnumerable<Comment>> GetAll(int serviceId, int itemId)
         {
             var result = new List<Comment>();
-            IEnumerable<Models.Comment> comments = (await _context.Comments.Where(x => x.ServiceId == serviceId && x.ItemId == itemId).ToListAsync()).OrderByDescending(x => x.PublishDate);
+            IEnumerable<Models.Comment> comments = (await _context.Comments.Where(x => x.ServiceId == serviceId && x.ItemId == itemId).ToListAsync()).OrderByDescending(x => x.PublishDate).ThenByDescending(x => x.CommentId);
             foreach (Models.Comment comment in comments)
             {
                 result.Add(new Comment()

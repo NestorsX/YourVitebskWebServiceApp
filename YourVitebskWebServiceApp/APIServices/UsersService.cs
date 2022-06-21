@@ -21,7 +21,7 @@ namespace YourVitebskWebServiceApp.APIServices
 
         public async Task<IEnumerable<APIModels.UsersListItem>> GetAllUsers(int id)
         {
-            IEnumerable<APIModels.UsersListItem> result = new List<APIModels.UsersListItem>();
+            var result = new List<APIModels.UsersListItem>();
             IEnumerable<Models.User> users = await _context.Users.Where(x => x.IsVisible == true && x.UserId != id).ToListAsync();
             foreach (var user in users)
             {
@@ -31,7 +31,7 @@ namespace YourVitebskWebServiceApp.APIServices
                     image = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/users/{user.UserId}").Select(x => Path.GetFileName(x)).First();
                 }
 
-                result = result.Append(new APIModels.UsersListItem()
+                result.Add(new APIModels.UsersListItem()
                 {
                     UserId = (int)user.UserId,
                     FirstName = user.FirstName,
