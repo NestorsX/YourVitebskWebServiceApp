@@ -1,6 +1,220 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-<h2>Главная страница</h2>
+﻿@model YourVitebskWebServiceApp.ViewModels.IndexViewModels.HomeIndexViewModel
+
+<div class="container">
+    <h2>Добрый день, @Model.FirstName!</h2>
+    <h4>Ваша роль - <b>&laquo;@Model.RoleName&raquo;</b></h4>
+
+    <div class="row g-4">
+        <div class="col-sm-12">
+            <div class="card mb-3">
+                <div class="card-header bg-dark text-white text-center text-uppercase">
+                    <b>Возможности, доступные вашей роли:</b>
+                </div>
+                <div class="card-body text-center">
+                    <div class="row align-items-start">
+                        <div class="col-sm mb-3 text-start">
+                            <h5 class="text-center">Пользователи:</h5>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="UsersGet" id="UsersGet" disabled class="form-check-input" />
+                                <label asp-for="UsersGet" class="form-label">Просмотр</label>
+                            </div>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="UsersCreate" id="UsersCreate" disabled class="form-check-input" />
+                                <label asp-for="UsersCreate" class="form-label">Добавление</label>
+                            </div>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="UsersUpdate" id="UsersUpdate" disabled class="form-check-input" />
+                                <label asp-for="UsersUpdate" class="form-label">Изменение</label>
+                            </div>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="UsersDelete" id="UsersDelete" disabled class="form-check-input" />
+                                <label asp-for="UsersDelete" class="form-label">Удаление</label>
+                            </div>
+                        </div>
+                        <div class="col-sm mb-3 text-start">
+                            <h5 class="text-center">Роли:</h5>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="RolesGet" id="RolesGet" disabled class="form-check-input" />
+                                <label asp-for="RolesGet" class="form-label">Просмотр</label>
+                            </div>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="RolesCreate" id="RolesCreate" disabled class="form-check-input" />
+                                <label asp-for="RolesCreate" class="form-label">Добавление</label>
+                            </div>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="RolesUpdate" id="RolesUpdate" disabled class="form-check-input" />
+                                <label asp-for="RolesUpdate" class="form-label">Изменение</label>
+                            </div>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="RolesDelete" id="RolesDelete" disabled class="form-check-input" />
+                                <label asp-for="RolesDelete" class="form-label">Удаление</label>
+                            </div>
+                        </div>
+                         <div class="col-sm mb-3 text-start">
+                            <h5 class="text-center">Новости:</h5>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="NewsGet" id="NewsGet" disabled class="form-check-input" />
+                                <label asp-for="NewsGet" class="form-label">Просмотр</label>
+                            </div>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="NewsCreate" id="NewsCreate" disabled class="form-check-input" />
+                                <label asp-for="NewsCreate" class="form-label">Добавление</label>
+                            </div>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="NewsUpdate" id="NewsUpdate" disabled class="form-check-input" />
+                                <label asp-for="NewsUpdate" class="form-label">Изменение</label>
+                            </div>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="NewsDelete" id="NewsDelete" disabled class="form-check-input" />
+                                <label asp-for="NewsDelete" class="form-label">Удаление</label>
+                            </div>
+                        </div>
+                         <div class="col-sm mb-3 text-start">
+                            <h5 class="text-center">Заведения:</h5>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="CafesGet" id="CafesGet" disabled class="form-check-input" />
+                                <label asp-for="CafesGet" class="form-label">Просмотр</label>
+                            </div>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="CafesCreate" id="CafesCreate" disabled class="form-check-input" />
+                                <label asp-for="CafesCreate" class="form-label">Добавление</label>
+                            </div>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="CafesUpdate" id="CafesUpdate" disabled class="form-check-input" />
+                                <label asp-for="CafesUpdate" class="form-label">Изменение</label>
+                            </div>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="CafesDelete" id="CafesDelete" disabled class="form-check-input" />
+                                <label asp-for="CafesDelete" class="form-label">Удаление</label>
+                            </div>
+                        </div>
+                         <div class="col-sm mb-3 text-start">
+                            <h5 class="text-center">Афиша:</h5>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="PostersGet" id="PostersGet" disabled class="form-check-input" />
+                                <label asp-for="PostersGet" class="form-label">Просмотр</label>
+                            </div>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="PostersCreate" id="PostersCreate" disabled class="form-check-input" />
+                                <label asp-for="PostersCreate" class="form-label">Добавление</label>
+                            </div>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="PostersUpdate" id="PostersUpdate" disabled class="form-check-input" />
+                                <label asp-for="PostersUpdate" class="form-label">Изменение</label>
+                            </div>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="PostersDelete" id="PostersDelete" disabled class="form-check-input" />
+                                <label asp-for="PostersDelete" class="form-label">Удаление</label>
+                            </div>
+                        </div>
+                         <div class="col-sm mb-3 text-start">
+                            <h5 class="text-center">Вакансии:</h5>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="VacanciesGet" id="VacanciesGet" disabled class="form-check-input" />
+                                <label asp-for="VacanciesGet" class="form-label">Просмотр</label>
+                            </div>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="VacanciesCreate" id="VacanciesCreate" disabled class="form-check-input" />
+                                <label asp-for="VacanciesCreate" class="form-label">Добавление</label>
+                            </div>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="VacanciesUpdate" id="VacanciesUpdate" disabled class="form-check-input" />
+                                <label asp-for="VacanciesUpdate" class="form-label">Изменение</label>
+                            </div>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="VacanciesDelete" id="VacanciesDelete" disabled class="form-check-input" />
+                                <label asp-for="VacanciesDelete" class="form-label">Удаление</label>
+                            </div>
+                        </div>
+                        <div class="col-sm mb-3 text-start">
+                            <h5 class="text-center">Комментарии:</h5>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="CommentsGet" id="CommentsGet" disabled class="form-check-input" />
+                                <label asp-for="CommentsGet" class="form-label">Просмотр</label>
+                            </div>
+                            <div class="form-check-inline form-switch">
+                                <input type="checkbox" asp-for="CommentsDelete" id="CommentsDelete" disabled class="form-check-input" />
+                                <label asp-for="CommentsDelete" class="form-label">Удаление</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card mb-3">
+                <div class="card-header bg-dark text-white text-center text-uppercase">
+                    <b>пользователей:</b>
+                </div>
+                <div class="card-body text-center">
+                    <h2 class="card-title">@Model.TotalUsers</h2>
+                </div>
+                <a asp-controller="Users" asp-action="Index" class="btn-outline-danger text-decoration-none">
+                    <div class="card-footer">
+                        Подробнее...
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card mb-3">
+                <div class="card-header bg-dark text-white text-center text-uppercase">
+                    <b>заведений:</b>
+                </div>
+                <div class="card-body text-center">
+                    <h2 class="card-title">@Model.TotalCafes</h2>
+                </div>
+                <a asp-controller="Cafes" asp-action="Index" class="btn-outline-danger text-decoration-none">
+                    <div class="card-footer">
+                        Подробнее...
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card mb-3">
+                <div class="card-header bg-dark text-white text-center text-uppercase">
+                    <b>Всего афиш:</b>
+                </div>
+                <div class="card-body text-center">
+                    <h2 class="card-title">@Model.TotalPosters</h2>
+                </div>
+                <a asp-controller="Posters" asp-action="Index" class="btn-outline-danger text-decoration-none">
+                    <div class="card-footer">
+                        Подробнее...
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card mb-3">
+                <div class="card-header bg-dark text-white text-center text-uppercase">
+                    <b>Всего вакансий:</b>
+                </div>
+                <div class="card-body text-center">
+                    <h2 class="card-title">@Model.TotalVacancies</h2>
+                </div>
+                <a asp-controller="Vacancies" asp-action="Index" class="btn-outline-danger text-decoration-none">
+                    <div class="card-footer">
+                        Подробнее...
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card mb-3">
+                <div class="card-header bg-dark text-white text-center text-uppercase">
+                    <b>Всего комментариев:</b>
+                </div>
+                <div class="card-body text-center">
+                    <h2 class="card-title">@Model.TotalComments</h2>
+                </div>
+                <a asp-controller="Comments" asp-action="Index" class="btn-outline-danger text-decoration-none">
+                    <div class="card-footer">
+                        Подробнее...
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
