@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using YourVitebskWebServiceApp.APIModels;
 using YourVitebskWebServiceApp.APIServiceInterfaces;
 
 namespace YourVitebskWebServiceApp.APIServices
@@ -42,6 +45,17 @@ namespace YourVitebskWebServiceApp.APIServices
             }
 
             return result;
+        }
+
+        public async Task<string> GetCommentsCount(int id)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserId == id);
+            if (user == null)
+            {
+                throw new ArgumentException("Неверный id");
+            }
+
+            return _context.Comments.Where(x => x.UserId == user.UserId).Count().ToString();
         }
     }
 }

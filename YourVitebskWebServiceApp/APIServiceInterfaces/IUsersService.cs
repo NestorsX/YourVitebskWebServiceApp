@@ -6,6 +6,7 @@ namespace YourVitebskWebServiceApp.APIServiceInterfaces
 {
     public interface IUsersService
     {
-        public Task<IEnumerable<UsersListItem>> GetAllUsers(int id);
+        Task<IEnumerable<UsersListItem>> GetAllUsers(int id);
+        Task<string> GetCommentsCount(int id);
     }
 }
