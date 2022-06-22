@@ -4,6 +4,7 @@
     {
         public int CommentId { get; set; }
         public int UserId { get; set; }
+        public string Image { get; set; }
         public string UserFirstName { get; set; }
         public string IsRecommend { get; set; }
         public string Message { get; set; }

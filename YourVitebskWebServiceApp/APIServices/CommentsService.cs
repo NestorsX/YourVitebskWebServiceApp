@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using YourVitebskWebServiceApp.APIModels;
@@ -12,10 +14,12 @@ namespace YourVitebskWebServiceApp.APIServices
     public class CommentsService : ICommentService
     {
         private readonly YourVitebskDBContext _context;
+        private readonly IWebHostEnvironment _appEnvironment;
 
-        public CommentsService(YourVitebskDBContext context)
+        public CommentsService(YourVitebskDBContext context, IWebHostEnvironment appEnvironment)
         {
             _context = context;
+            _appEnvironment = appEnvironment;
         }
 
         public async Task<IEnumerable<Comment>> GetAll(int serviceId, int itemId)
@@ -24,11 +28,19 @@ namespace YourVitebskWebServiceApp.APIServices
             IEnumerable<Models.Comment> comments = (await _context.Comments.Where(x => x.ServiceId == serviceId && x.ItemId == itemId).ToListAsync()).OrderByDescending(x => x.PublishDate).ThenByDescending(x => x.CommentId);
             foreach (Models.Comment comment in comments)
             {
+                var user = await _context.Users.FirstAsync(x => x.UserId == comment.UserId);
+                string image = "";
+                if (Directory.Exists($"{_appEnvironment.WebRootPath}/images/users/{user.UserId}"))
+                {
+                    image = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/users/{user.UserId}").Select(x => Path.GetFileName(x)).First();
+                }
+
                 result.Add(new Comment()
                 {
                     CommentId = (int)comment.CommentId,
                     UserId = comment.UserId,
-                    UserFirstName = (await _context.Users.FirstAsync(x => x.UserId == comment.UserId)).FirstName,
+                    Image = image,
+                    UserFirstName = user.FirstName,
                     IsRecommend = comment.IsRecommend ? "Рекомендует" : "Не рекомендует",
                     Message = comment.Message,
                     PublishDate = comment.PublishDate.ToString("D", new CultureInfo("ru-RU")) + comment.PublishDate.ToString(" HH:mm")
