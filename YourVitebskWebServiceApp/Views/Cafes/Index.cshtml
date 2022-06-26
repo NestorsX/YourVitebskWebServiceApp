@@ -44,18 +44,18 @@
         @foreach (var item in Model.Data)
         {
             <tr>
-                <td>@item.CafeId</td>
-                <td>@item.CafeType</td>
-                <td>@item.Title</td>
-                <td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.CafeId">@item.CafeId</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.CafeType">@item.CafeType</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.Title">@item.Title</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.Description">
                     <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.Description</span>
                 </td>
-                <td>
-                    <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.WorkingTime</span>
+                <td style="max-width: 300px;" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.WorkingTime">
+                    <span class="d-inline-block text-truncate">@item.WorkingTime</span>
                 </td>
-                <td>@item.Address</td>
-                <td>
-                    <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.ExternalLink</span>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.Address">@item.Address</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@(item.ExternalLink != null ? item.ExternalLink : "Ссылка не указана")">
+                    <span class="d-inline-block text-truncate" style="max-width: 300px;"><a href="@item.ExternalLink">@item.ExternalLink</a></span>
                 </td>
                 <td>
                     <div class="btn-group float-end" role="group">

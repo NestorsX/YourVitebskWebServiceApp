@@ -61,12 +61,12 @@
         @foreach (var item in Model.Data)
         {
             <tr>
-                <td>@item.UserId</td>
-                <td>@item.Email</td>
-                <td>@item.Role</td>
-                <td>@item.FirstName</td>
-                <td>@item.LastName</td>
-                <td>@item.PhoneNumber</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.UserId">@item.UserId</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.Email">@item.Email</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.Role">@item.Role</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.FirstName">@item.FirstName</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.LastName">@item.LastName</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@(item.PhoneNumber != "" ? item.PhoneNumber : "Номер не указан")">@item.PhoneNumber</td>
                 @if (item.IsVisible)
                 {
                     <td>Да</td>

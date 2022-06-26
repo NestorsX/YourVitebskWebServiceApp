@@ -45,24 +45,24 @@
         @foreach (var item in Model.Data)
         {
             <tr>
-                <td>@item.VacancyId</td>
-                <td>@item.Title</td>
-                <td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.VacancyId">@item.VacancyId</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.Title">@item.Title</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.Description">
                     <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.Description</span>
                 </td>
-                <td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.Requirements">
                     <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.Requirements</span>
                 </td>
-                <td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.Conditions">
                     <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.Conditions</span>
                 </td>
-                <td>@item.Salary</td>
-                <td>@item.CompanyName</td>
-                <td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.Salary">@item.Salary</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.CompanyName">@item.CompanyName</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.Contacts">
                     <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.Contacts</span>
                 </td>
-                <td>@item.Address</td>
-                <td>@item.PublishDate.ToString("D", new System.Globalization.CultureInfo("ru-RU"))</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.Address">@item.Address</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.PublishDate.ToString("D", new System.Globalization.CultureInfo("ru-RU"))">@item.PublishDate.ToString("D", new System.Globalization.CultureInfo("ru-RU"))</td>
                 <td>
                     <div class="btn-group float-end" role="group">
                         <a class="btn btn-outline-dark" asp-controller="Vacancies" asp-action="Edit" asp-route-id="@item.VacancyId">Изменить</a>

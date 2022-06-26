@@ -33,8 +33,8 @@
         @foreach (var item in Model.Data)
         {
             <tr>
-                <td>@item.RoleId</td>
-                <td>@item.Name</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.RoleId">@item.RoleId</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.Name">@item.Name</td>
                 <td>
                     @foreach (var permission in item.Permissions)
                     {

@@ -32,8 +32,8 @@
         @foreach (var item in Model.Data)
         {
             <tr>
-                <td>@item.CafeTypeId</td>
-                <td>@item.Name</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.CafeTypeId">@item.CafeTypeId</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.Name">@item.Name</td>
                 <td>
                     <div class="btn-group float-end" role="group">
                         <a class="btn btn-outline-dark" asp-controller="CafeTypes" asp-action="Edit" asp-route-id="@item.CafeTypeId">Изменить</a>

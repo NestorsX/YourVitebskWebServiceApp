@@ -31,15 +31,15 @@
         @foreach (var item in Model.Data)
         {
             <tr>
-                <td>@item.NewsId</td>
-                <td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.NewsId">@item.NewsId</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.Title">
                     <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.Title</span>
                 </td>
-                <td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.Description">
                     <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.Description</span>
                 </td>
-                <td>
-                    <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.ExternalLink</span>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@(item.ExternalLink != null ? item.ExternalLink : "Ссылка не указана")">
+                    <span class="d-inline-block text-truncate" style="max-width: 300px;"><a href="@item.ExternalLink">@item.ExternalLink</a></span>
                 </td>
                 <td>
                     <div class="btn-group float-end" role="group">

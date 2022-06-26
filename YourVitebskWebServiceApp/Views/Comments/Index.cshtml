@@ -58,15 +58,15 @@
         @foreach (var item in Model.Data)
         {
             <tr>
-                <td>@item.CommentId</td>
-                <td>@item.UserEmail</td>
-                <td>@item.Service</td>
-                <td>@item.ItemName</td>
-                <td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.CommentId">@item.CommentId</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.UserEmail">@item.UserEmail</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.Service">@item.Service</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.ItemName">@item.ItemName</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.Message">
                     <span class="d-inline-block text-truncate" style="max-width: 300px;">@item.Message</span>
                 </td>
-                <td>@item.IsRecommend</td>
-                <td>@item.PublishDate</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.IsRecommend">@item.IsRecommend</td>
+                <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.PublishDate">@item.PublishDate</td>
                 <td>
                     <div class="btn-group float-end" role="group">
                         <a class="btn btn-outline-danger" asp-controller="Comments" asp-action="Delete" asp-route-id="@item.CommentId">Удалить</a>
