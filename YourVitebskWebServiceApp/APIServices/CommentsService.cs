@@ -35,6 +35,8 @@ namespace YourVitebskWebServiceApp.APIServices
                     image = Directory.GetFiles($"{_appEnvironment.WebRootPath}/images/users/{user.UserId}").Select(x => Path.GetFileName(x)).First();
                 }
 
+                var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Belarus Standard Time");
+                var dateTime = TimeZoneInfo.ConvertTimeFromUtc(comment.PublishDate, timeZone);
                 result.Add(new Comment()
                 {
                     CommentId = (int)comment.CommentId,
@@ -43,7 +45,7 @@ namespace YourVitebskWebServiceApp.APIServices
                     UserFirstName = user.FirstName,
                     IsRecommend = comment.IsRecommend ? "Рекомендует" : "Не рекомендует",
                     Message = comment.Message,
-                    PublishDate = comment.PublishDate.ToString("D", new CultureInfo("ru-RU")) + comment.PublishDate.ToString(" HH:mm")
+                    PublishDate = dateTime.ToString("D", new CultureInfo("ru-RU")) + dateTime.ToString(" HH:mm")
                 });
             }
 
