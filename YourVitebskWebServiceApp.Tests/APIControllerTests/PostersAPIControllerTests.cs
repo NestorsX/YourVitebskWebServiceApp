@@ -32,14 +32,14 @@ namespace YourVitebskWebServiceApp.Tests.APIControllerTests
         [Fact]
         public async void GetAll_ReturnsCorrectType()
         {
-            var result = await _controller.GetAll(0, 10);
+            var result = await _controller.GetAll();
             Assert.IsAssignableFrom<IEnumerable<Poster>>(result);
         }
 
         [Fact]
         public async void GetAll_ReturnsExactNumberOfObjects()
         {
-            var result = await _controller.GetAll(0, 10);
+            var result = await _controller.GetAll();
             var objects = Assert.IsAssignableFrom<IEnumerable<Poster>>(result);
             Assert.Single(objects);
         }

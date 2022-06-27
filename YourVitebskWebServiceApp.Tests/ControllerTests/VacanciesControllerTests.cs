@@ -2,51 +2,54 @@
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using System.Collections.Generic;
 using Xunit;
 using System;
+using YourVitebskWebServiceApp.ViewModels.IndexViewModels;
+using System.Linq;
 
 namespace YourVitebskWebServiceApp.Tests.ControllerTests
 {
     public class VacanciesControllerTests
     {
-        private readonly Mock<IRepository<Vacancy>> _mockRepo;
+        private readonly Mock<IVacancyRepository> _mockRepo;
         private readonly VacanciesController _controller;
 
         public VacanciesControllerTests()
         {
-            _mockRepo = new Mock<IRepository<Vacancy>>();
-            var optionsBuilder = new DbContextOptionsBuilder<YourVitebskDBContext>();
-            var options = optionsBuilder.UseSqlServer(DBSettings.DBConnection).Options;
-            _controller = new VacanciesController(new YourVitebskDBContext(options), _mockRepo.Object);
+            _mockRepo = new Mock<IVacancyRepository>();
+            _controller = new VacanciesController(_mockRepo.Object);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.VacanciesGet))).Returns(true);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.VacanciesCreate))).Returns(true);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.VacanciesUpdate))).Returns(true);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.VacanciesDelete))).Returns(true);
             _mockRepo.Setup(repo => repo.Get()).Returns(new List<Vacancy>()
             {
                 new Vacancy
                 {
                     VacancyId = 1,
-                    Title = "TestTitle1",
-                    Description = "TestDescription1",
-                    Address = "TestAddress1",
-                    CompanyName = "TestCompanyName1",
-                    Requirements = "TestRequirements1",
-                    Conditions = "TestConditions1",
-                    Contacts = "TestContacts1",
-                    Salary = "TestSalary1",
+                    Title = "Title1",
+                    Description = "Description1",
+                    Address = "Address1",
+                    CompanyName = "CompanyName1",
+                    Requirements = "Requirements1",
+                    Conditions = "Conditions1",
+                    Contacts = "Contacts1",
+                    Salary = "Salary1",
                     PublishDate = DateTime.Now
                 },
                 new Vacancy
                 {
                     VacancyId = 2,
-                    Title = "TestTitle2",
-                    Description = "TestDescription2",
-                    Address = "TestAddress2",
-                    CompanyName = "TestCompanyName2",
-                    Requirements = "TestRequirements2",
-                    Conditions = "TestConditions2",
-                    Contacts = "TestContacts2",
-                    Salary = "TestSalary2",
+                    Title = "Title2",
+                    Description = "Description2",
+                    Address = "Address2",
+                    CompanyName = "CompanyName2",
+                    Requirements = "Requirements2",
+                    Conditions = "Conditions2",
+                    Contacts = "Contacts2",
+                    Salary = "Salary2",
                     PublishDate = DateTime.Now
                 }
             });
@@ -54,14 +57,14 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
             _mockRepo.Setup(repo => repo.Get(2)).Returns(new Vacancy
             {
                 VacancyId = 2,
-                Title = "TestTitle2",
-                Description = "TestDescription2",
-                Address = "TestAddress2",
-                CompanyName = "TestCompanyName2",
-                Requirements = "TestRequirements2",
-                Conditions = "TestConditions2",
-                Contacts = "TestContacts2",
-                Salary = "TestSalary2",
+                Title = "Title2",
+                Description = "Description2",
+                Address = "Address2",
+                CompanyName = "CompanyName2",
+                Requirements = "Requirements2",
+                Conditions = "Conditions2",
+                Contacts = "Contacts2",
+                Salary = "Salary2",
                 PublishDate = DateTime.Now
             });
         }
@@ -69,17 +72,17 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
         [Fact]
         public void Index_ReturnsView()
         {
-            var result = _controller.Index();
+            var result = _controller.Index(null);
             Assert.IsType<ViewResult>(result);
         }
 
         [Fact]
         public void Index_ReturnsExactNumberOfObjects()
         {
-            var result = _controller.Index();
+            var result = _controller.Index(null);
             var viewResult = Assert.IsType<ViewResult>(result);
-            var objects = Assert.IsType<List<Vacancy>>(viewResult.Model);
-            Assert.Equal(2, objects.Count);
+            var objects = Assert.IsType<VacancyIndexViewModel>(viewResult.Model);
+            Assert.Equal(2, objects.Data.Count());
         }
 
         [Fact]

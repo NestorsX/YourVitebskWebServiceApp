@@ -2,23 +2,27 @@
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using System.Collections.Generic;
 using Xunit;
+using YourVitebskWebServiceApp.ViewModels.IndexViewModels;
+using System.Linq;
 
 namespace YourVitebskWebServiceApp.Tests.ControllerTests
 {
     public class NewsControllerTests
     {
-        private readonly Mock<IImageRepository<News>> _mockRepo;
+        private readonly Mock<INewsRepository> _mockRepo;
         private readonly NewsController _controller;
 
         public NewsControllerTests()
         {
-            _mockRepo = new Mock<IImageRepository<News>>();
-            var optionsBuilder = new DbContextOptionsBuilder<YourVitebskDBContext>();
+            _mockRepo = new Mock<INewsRepository>();
             _controller = new NewsController(_mockRepo.Object);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.NewsGet))).Returns(true);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.NewsCreate))).Returns(true);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.NewsUpdate))).Returns(true);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.NewsDelete))).Returns(true);
             _mockRepo.Setup(repo => repo.Get()).Returns(new List<News>()
             {
                 new News
@@ -49,17 +53,17 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
         [Fact]
         public void Index_ReturnsView()
         {
-            var result = _controller.Index();
+            var result = _controller.Index(null);
             Assert.IsType<ViewResult>(result);
         }
 
         [Fact]
         public void Index_ReturnsExactNumberOfObjects()
         {
-            var result = _controller.Index();
+            var result = _controller.Index(null);
             var viewResult = Assert.IsType<ViewResult>(result);
-            var objects = Assert.IsType<List<News>>(viewResult.Model);
-            Assert.Equal(2, objects.Count);
+            var objects = Assert.IsType<NewsIndexViewModel>(viewResult.Model);
+            Assert.Equal(2, objects.Data.Count());
         }
 
         [Fact]

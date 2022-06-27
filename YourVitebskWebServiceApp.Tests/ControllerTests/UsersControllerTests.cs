@@ -1,36 +1,40 @@
 ﻿using YourVitebskWebServiceApp.Controllers;
 using YourVitebskWebServiceApp.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using System.Collections.Generic;
 using Xunit;
 using YourVitebskWebServiceApp.ViewModels;
 using System.Linq;
 using YourVitebskWebServiceApp.Helpers.SortStates;
+using YourVitebskWebServiceApp.ViewModels.IndexViewModels;
 
 namespace YourVitebskWebServiceApp.Tests.ControllerTests
 {
     public class UsersControllerTests
     {
-        private readonly Mock<IImageRepository<UserViewModel>> _mockRepo;
+        private readonly Mock<IUserRepository> _mockRepo;
+        private readonly Mock<IRoleRepository> _roleMockRepo;
         private readonly UsersController _controller;
 
         public UsersControllerTests()
         {
-            _mockRepo = new Mock<IImageRepository<UserViewModel>>();
-            var optionsBuilder = new DbContextOptionsBuilder<YourVitebskDBContext>();
-            var options = optionsBuilder.UseSqlServer(DBSettings.DBConnection).Options;
-            _controller = new UsersController(new YourVitebskDBContext(options), _mockRepo.Object);
+            _mockRepo = new Mock<IUserRepository>();
+            _roleMockRepo = new Mock<IRoleRepository>();
+            _controller = new UsersController(_mockRepo.Object, _roleMockRepo.Object);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.UsersGet))).Returns(true);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.UsersCreate))).Returns(true);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.UsersUpdate))).Returns(true);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.UsersDelete))).Returns(true);
             _mockRepo.Setup(repo => repo.Get()).Returns(new List<UserViewModel>()
             {
                 new UserViewModel
                 {
                     UserId = 1,
-                    Email = "test1@mail.com",
-                    Password = "testPassword1",
-                    FirstName = "testFirstName1",
-                    LastName = "testLastName1",
+                    Email = "1@mail.com",
+                    Password = "Password1",
+                    FirstName = "FirstName1",
+                    LastName = "LastName1",
                     PhoneNumber = "+375(29)333-57-34",
                     RoleId = 1,
                     IsVisible = true
@@ -38,10 +42,10 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
                 new UserViewModel
                 {
                     UserId = 2,
-                    Email = "test2@mail.com",
-                    Password = "testPassword2",
-                    FirstName = "testFirstName2",
-                    LastName = "testLastName2",
+                    Email = "2@mail.com",
+                    Password = "Password2",
+                    FirstName = "FirstName2",
+                    LastName = "LastName2",
                     PhoneNumber = "+375(29)333-47-34",
                     RoleId = 2,
                     IsVisible = false
@@ -51,10 +55,10 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
             _mockRepo.Setup(repo => repo.Get(2)).Returns(new UserViewModel
             {
                 UserId = 2,
-                Email = "test2@mail.com",
-                Password = "testPassword2",
-                FirstName = "testFirstName2",
-                LastName = "testLastName2",
+                Email = "2@mail.com",
+                Password = "Password2",
+                FirstName = "FirstName2",
+                LastName = "LastName2",
                 PhoneNumber = "+375(29)333-47-34",
                 RoleId = 2,
                 IsVisible = false
@@ -73,8 +77,8 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
         {
             var result = _controller.Index(null, null, UserSortStates.UserIdAsc, 1);
             var viewResult = Assert.IsType<ViewResult>(result);
-            var objects = Assert.IsType<List<UserViewModel>>(viewResult.Model);
-            Assert.Equal(2, objects.Count);
+            var objects = Assert.IsType<UserIndexViewModel>(viewResult.Model);
+            Assert.Equal(2, objects.Data.Count());
         }
 
         [Fact]
@@ -91,10 +95,10 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
             var obj = new UserViewModel
             {
                 UserId = 0,
-                Email = "test2@mail.com",
-                Password = "testPassword3",
-                FirstName = "testFirstName3",
-                LastName = "testLastName3",
+                Email = "2@mail.com",
+                Password = "Password3",
+                FirstName = "FirstName3",
+                LastName = "LastName3",
                 PhoneNumber = "+375(29)333-55-30",
                 RoleId = 2,
                 IsVisible = true
@@ -112,10 +116,10 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
             var obj = new UserViewModel
             {
                 UserId = 0,
-                Email = "test3@mail.com",
-                Password = "testPassword3",
-                FirstName = "testFirstName3",
-                LastName = "testLastName3",
+                Email = "3@mail.com",
+                Password = "Password3",
+                FirstName = "FirstName3",
+                LastName = "LastName3",
                 PhoneNumber = "+375(29)333-55-30",
                 RoleId = 2,
                 IsVisible = true
@@ -140,10 +144,10 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
             var newObj = new UserViewModel
             {
                 UserId = 2,
-                Email = "test1@mail.com",
-                Password = "testPassword3",
-                FirstName = "testFirstName3",
-                LastName = "testLastName3",
+                Email = "1@mail.com",
+                Password = "Password3",
+                FirstName = "FirstName3",
+                LastName = "LastName3",
                 PhoneNumber = "+375(29)333-55-30",
                 RoleId = 2,
                 IsVisible = true
@@ -168,10 +172,10 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
             var newObj = new UserViewModel
             {
                 UserId = 2,
-                Email = "test3@mail.com",
-                Password = "testPassword3",
-                FirstName = "testFirstName3",
-                LastName = "testLastName3",
+                Email = "3@mail.com",
+                Password = "Password3",
+                FirstName = "FirstName3",
+                LastName = "LastName3",
                 PhoneNumber = "+375(29)333-55-67",
                 RoleId = 2,
                 IsVisible = true

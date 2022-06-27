@@ -6,40 +6,49 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using System.Collections.Generic;
 using Xunit;
+using YourVitebskWebServiceApp.ViewModels;
+using YourVitebskWebServiceApp.ViewModels.IndexViewModels;
+using System.Linq;
 
 namespace YourVitebskWebServiceApp.Tests.ControllerTests
 {
     public class PostersControllerTests
     {
-        private readonly Mock<IImageRepository<Poster>> _mockRepo;
+        private readonly Mock<IPosterRepository> _mockRepo;
+        private readonly Mock<IPosterTypeRepository> _posterTypeMockRepo;
         private readonly PostersController _controller;
 
         public PostersControllerTests()
         {
-            _mockRepo = new Mock<IImageRepository<Poster>>();
-            var optionsBuilder = new DbContextOptionsBuilder<YourVitebskDBContext>();
-            var options = optionsBuilder.UseSqlServer(DBSettings.DBConnection).Options;
-            _controller = new PostersController(new YourVitebskDBContext(options), _mockRepo.Object);
-            _mockRepo.Setup(repo => repo.Get()).Returns(new List<Poster>()
+            _mockRepo = new Mock<IPosterRepository>();
+            _posterTypeMockRepo = new Mock<IPosterTypeRepository>();
+            _controller = new PostersController(_mockRepo.Object, _posterTypeMockRepo.Object);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.PostersGet))).Returns(true);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.PostersCreate))).Returns(true);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.PostersUpdate))).Returns(true);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.PostersDelete))).Returns(true);
+            _mockRepo.Setup(repo => repo.Get()).Returns(new List<PosterViewModel>()
             {
-                new Poster
+                new PosterViewModel
                 {
                     PosterId = 1,
                     PosterTypeId = 1,
-                    Title = "TestTitle1",
-                    Description = "TestDescription1",
-                    Address = "TestAddress1",
-                    DateTime = "TestDateTime1",
+                    PosterType = "PosterType1",
+                    Title = "Title1",
+                    Description = "Description1",
+                    Address = "Address1",
+                    DateTime = "DateTime1",
                     ExternalLink = null
                 },
-                new Poster
+                new PosterViewModel
                 {
                     PosterId = 2,
                     PosterTypeId = 2,
-                    Title = "TestTitle2",
-                    Description = "TestDescription2",
-                    Address = "TestAddress2",
-                    DateTime = "TestDateTime2",
+                    PosterType = "PosterType2",
+                    Title = "Title2",
+                    Description = "Description2",
+                    Address = "Address2",
+                    DateTime = "DateTime2",
                     ExternalLink = null
                 }
             });
@@ -48,28 +57,35 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
             {
                 PosterId = 2,
                 PosterTypeId = 2,
-                Title = "TestTitle2",
-                Description = "TestDescription2",
-                Address = "TestAddress2",
-                DateTime = "TestDateTime2",
+                Title = "Title2",
+                Description = "Description2",
+                Address = "Address2",
+                DateTime = "DateTime2",
                 ExternalLink = null
+            });
+
+            _posterTypeMockRepo.Setup(repo => repo.Get()).Returns(new List<PosterType>()
+            {
+                new PosterType { PosterTypeId = 1, Name = "PosterType1" },
+                new PosterType { PosterTypeId = 2, Name = "PosterType2" },
+                new PosterType { PosterTypeId = 3, Name = "PosterType3" }
             });
         }
 
         [Fact]
         public void Index_ReturnsView()
         {
-            var result = _controller.Index();
+            var result = _controller.Index(null, null);
             Assert.IsType<ViewResult>(result);
         }
 
         [Fact]
         public void Index_ReturnsExactNumberOfObjects()
         {
-            var result = _controller.Index();
+            var result = _controller.Index(null, null);
             var viewResult = Assert.IsType<ViewResult>(result);
-            var objects = Assert.IsType<List<Poster>>(viewResult.Model);
-            Assert.Equal(2, objects.Count);
+            var objects = Assert.IsType<PosterIndexViewModel>(viewResult.Model);
+            Assert.Equal(2, objects.Data.Count());
         }
 
         [Fact]

@@ -2,24 +2,27 @@
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using System.Collections.Generic;
 using Xunit;
+using YourVitebskWebServiceApp.ViewModels.IndexViewModels;
+using System.Linq;
 
 namespace YourVitebskWebServiceApp.Tests.ControllerTests
 {
     public class PosterTypesControllerTests
     {
-        private readonly Mock<IRepository<PosterType>> _mockRepo;
+        private readonly Mock<IPosterTypeRepository> _mockRepo;
         private readonly PosterTypesController _controller;
 
         public PosterTypesControllerTests()
         {
-            _mockRepo = new Mock<IRepository<PosterType>>();
-            var optionsBuilder = new DbContextOptionsBuilder<YourVitebskDBContext>();
-            var options = optionsBuilder.UseSqlServer(DBSettings.DBConnection).Options;
-            _controller = new PosterTypesController(new YourVitebskDBContext(options), _mockRepo.Object);
+            _mockRepo = new Mock<IPosterTypeRepository>();
+            _controller = new PosterTypesController(_mockRepo.Object); 
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.PostersGet))).Returns(true);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.PostersCreate))).Returns(true);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.PostersUpdate))).Returns(true);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.PostersDelete))).Returns(true);
             _mockRepo.Setup(repo => repo.Get()).Returns(new List<PosterType>()
             {
                 new PosterType
@@ -44,17 +47,17 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
         [Fact]
         public void Index_ReturnsView()
         {
-            var result = _controller.Index();
+            var result = _controller.Index(null);
             Assert.IsType<ViewResult>(result);
         }
 
         [Fact]
         public void Index_ReturnsExactNumberOfObjects()
         {
-            var result = _controller.Index();
+            var result = _controller.Index(null);
             var viewResult = Assert.IsType<ViewResult>(result);
-            var objects = Assert.IsType<List<PosterType>>(viewResult.Model);
-            Assert.Equal(2, objects.Count);
+            var objects = Assert.IsType<PosterTypeIndexViewModel>(viewResult.Model);
+            Assert.Equal(2, objects.Data.Count());
         }
 
         [Fact]
@@ -86,7 +89,7 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
             var obj = new PosterType
             {
                 PosterTypeId = null,
-                Name = "TestName2"
+                Name = "TestName3"
             };
 
             var result = _controller.Create(obj);

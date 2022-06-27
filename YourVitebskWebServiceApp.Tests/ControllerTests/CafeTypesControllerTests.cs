@@ -2,24 +2,27 @@
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using System.Collections.Generic;
 using Xunit;
+using YourVitebskWebServiceApp.ViewModels.IndexViewModels;
+using System.Linq;
 
 namespace YourVitebskWebServiceApp.Tests.ControllerTests
 {
     public class CafeTypesControllerTests
     {
-        private readonly Mock<IRepository<CafeType>> _mockRepo;
+        private readonly Mock<ICafeTypeRepository> _mockRepo;
         private readonly CafeTypesController _controller;
 
         public CafeTypesControllerTests()
         {
-            _mockRepo = new Mock<IRepository<CafeType>>();
-            var optionsBuilder = new DbContextOptionsBuilder<YourVitebskDBContext>();
-            var options = optionsBuilder.UseSqlServer(DBSettings.DBConnection).Options;
-            _controller = new CafeTypesController(new YourVitebskDBContext(options), _mockRepo.Object);
+            _mockRepo = new Mock<ICafeTypeRepository>();
+            _controller = new CafeTypesController(_mockRepo.Object);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.CafesGet))).Returns(true);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.CafesCreate))).Returns(true);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.CafesUpdate))).Returns(true);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.CafesDelete))).Returns(true);
             _mockRepo.Setup(repo => repo.Get()).Returns(new List<CafeType>()
             {
                 new CafeType
@@ -44,17 +47,17 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
         [Fact]
         public void Index_ReturnsView()
         {
-            var result = _controller.Index();
+            var result = _controller.Index(null);
             Assert.IsType<ViewResult>(result);
         }
 
         [Fact]
         public void Index_ReturnsExactNumberOfObjects()
         {
-            var result = _controller.Index();
+            var result = _controller.Index(null);
             var viewResult = Assert.IsType<ViewResult>(result);
-            var objects = Assert.IsType<List<CafeType>>(viewResult.Model);
-            Assert.Equal(2, objects.Count);
+            var objects = Assert.IsType<CafeTypeIndexViewModel>(viewResult.Model);
+            Assert.Equal(2, objects.Data.Count());
         }
 
         [Fact]
@@ -86,7 +89,7 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
             var obj = new CafeType
             {
                 CafeTypeId = null,
-                Name = "TestName2"
+                Name = "TestName3"
             };
 
             var result = _controller.Create(obj);

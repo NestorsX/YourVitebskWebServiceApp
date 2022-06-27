@@ -2,45 +2,53 @@
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using System.Collections.Generic;
 using Xunit;
+using YourVitebskWebServiceApp.ViewModels;
+using YourVitebskWebServiceApp.ViewModels.IndexViewModels;
+using System.Linq;
 
 namespace YourVitebskWebServiceApp.Tests.ControllerTests
 {
     public class CafesControllerTests
     {
-        private readonly Mock<IImageRepository<Cafe>> _mockRepo;
+        private readonly Mock<ICafeRepository> _mockRepo;
+        private readonly Mock<ICafeTypeRepository> _cafeTypeMockRepo;
         private readonly CafesController _controller;
 
         public CafesControllerTests()
         {
-            _mockRepo = new Mock<IImageRepository<Cafe>>();
-            var optionsBuilder = new DbContextOptionsBuilder<YourVitebskDBContext>();
-            var options = optionsBuilder.UseSqlServer(DBSettings.DBConnection).Options;
-            _controller = new CafesController(new YourVitebskDBContext(options), _mockRepo.Object);
-            _mockRepo.Setup(repo => repo.Get()).Returns(new List<Cafe>()
+            _mockRepo = new Mock<ICafeRepository>();
+            _cafeTypeMockRepo = new Mock<ICafeTypeRepository>();
+            _controller = new CafesController(_mockRepo.Object, _cafeTypeMockRepo.Object);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.CafesGet))).Returns(true);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.CafesCreate))).Returns(true);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.CafesUpdate))).Returns(true);
+            _mockRepo.Setup(repo => repo.CheckRolePermission(nameof(Helpers.RolePermission.CafesDelete))).Returns(true);
+            _mockRepo.Setup(repo => repo.Get()).Returns(new List<CafeViewModel>()
             {
-                new Cafe
-                {
+                new CafeViewModel 
+                { 
                     CafeId = 1,
                     CafeTypeId = 1,
-                    Title = "TestTitle1",
-                    Description = "TestDescription1",
-                    Address = "TestAddress1",
-                    WorkingTime = "TestWorkingTime1",
-                    ExternalLink = null
+                    CafeType = "CafeType1",
+                    Title = "Title1",
+                    Description = "Description1",
+                    WorkingTime = "WorkingTime1",
+                    Address = "Address1",
+                    ExternalLink = "Link1"
                 },
-                new Cafe
+                new CafeViewModel
                 {
                     CafeId = 2,
                     CafeTypeId = 2,
-                    Title = "TestTitle2",
-                    Description = "TestDescription2",
-                    Address = "TestAddress2",
-                    WorkingTime = "TestWorkingTime2",
-                    ExternalLink = null
+                    CafeType = "CafeType2",
+                    Title = "Title2",
+                    Description = "Description2",
+                    WorkingTime = "WorkingTime2",
+                    Address = "Address2",
+                    ExternalLink = "Link2"
                 }
             });
 
@@ -48,28 +56,35 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
             {
                 CafeId = 2,
                 CafeTypeId = 2,
-                Title = "TestTitle2",
-                Description = "TestDescription2",
-                Address = "TestAddress2",
-                WorkingTime = "TestWorkingTime2",
-                ExternalLink = null
+                Title = "Title2",
+                Description = "Description2",
+                WorkingTime = "WorkingTime2",
+                Address = "Address2",
+                ExternalLink = "Link2"
+            });
+
+            _cafeTypeMockRepo.Setup(repo => repo.Get()).Returns(new List<CafeType>()
+            {
+                new CafeType { CafeTypeId = 1, Name = "CafeType1" },
+                new CafeType { CafeTypeId = 2, Name = "CafeType2" },
+                new CafeType { CafeTypeId = 3, Name = "CafeType3" }
             });
         }
 
         [Fact]
         public void Index_ReturnsView()
         {
-            var result = _controller.Index();
+            var result = _controller.Index(null, null);
             Assert.IsType<ViewResult>(result);
         }
 
         [Fact]
         public void Index_ReturnsExactNumberOfObjects()
         {
-            var result = _controller.Index();
+            var result = _controller.Index(null, null);
             var viewResult = Assert.IsType<ViewResult>(result);
-            var objects = Assert.IsType<List<Cafe>>(viewResult.Model);
-            Assert.Equal(2, objects.Count);
+            var objects = Assert.IsType<CafeIndexViewModel>(viewResult.Model);
+            Assert.Equal(2, objects.Data.Count());
         }
 
         [Fact]
@@ -83,17 +98,7 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
         public void Create_InvalidModelState_ReturnsView()
         {
             _controller.ModelState.AddModelError("Title", "Заведение с таким именем уже используется");
-            var obj = new Cafe
-            {
-                CafeId = 0,
-                CafeTypeId = 1,
-                Title = "TestTitle1",
-                Description = "TestDescription1",
-                Address = "TestAddress1",
-                WorkingTime = "TestWorkingTime1",
-                ExternalLink = null
-            };
-
+            var obj = new Cafe { };
             var result = _controller.Create(obj, null);
             var viewResult = Assert.IsType<ViewResult>(result);
             var testObj = Assert.IsType<Cafe>(viewResult.Model);
@@ -103,17 +108,7 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
         [Fact]
         public void Create_RedirectsToIndex()
         {
-            var obj = new Cafe
-            {
-                CafeId = 0,
-                CafeTypeId = 1,
-                Title = "TestTitle3",
-                Description = "TestDescription3",
-                Address = "TestAddress3",
-                WorkingTime = "TestWorkingTime3",
-                ExternalLink = null
-            };
-
+            var obj = new Cafe { };
             var result = _controller.Create(obj, null);
             var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectToActionResult.ActionName);
@@ -133,12 +128,6 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
             var newObj = new Cafe
             {
                 CafeId = 2,
-                CafeTypeId = 1,
-                Title = "TestTitle1",
-                Description = "TestDescription2",
-                Address = "TestAddress2",
-                WorkingTime = "TestWorkingTime2",
-                ExternalLink = null
             };
 
             var result = _controller.Edit(newObj, null);
@@ -160,12 +149,6 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
             var newObj = new Cafe
             {
                 CafeId = 2,
-                CafeTypeId = 1,
-                Title = "TestTitle3",
-                Description = "TestDescription2",
-                Address = "TestAddress2",
-                WorkingTime = "TestWorkingTime2",
-                ExternalLink = null
             };
 
             var result = _controller.Edit(newObj, null);
