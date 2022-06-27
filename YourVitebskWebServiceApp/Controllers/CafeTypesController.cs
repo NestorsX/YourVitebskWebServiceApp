@@ -60,7 +60,6 @@ namespace YourVitebskWebServiceApp.Controllers
             var pager = new Pager(count, page, pageSize);
             int skip = (page - 1) * pageSize;
             cafeTypes = cafeTypes.Skip(skip).Take(pager.PageSize);
-
             var viewModel = new CafeTypeIndexViewModel()
             {
                 Pager = pager,
@@ -94,7 +93,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             if (_repository.Get().FirstOrDefault(x => x.Name == newCafeType.Name) != null)
             {
-                ModelState.AddModelError("Name", "Такой тип заведения уже существует");
+                ModelState.AddModelError("Name", "Такой вид заведения уже существует");
             }
 
             if (ModelState.IsValid)
@@ -128,8 +127,11 @@ namespace YourVitebskWebServiceApp.Controllers
 
             CafeType cafeType = _repository.Get(id);
             if (cafeType != null)
+            {
                 return View(cafeType);
-            return NotFound();
+            }
+
+            return RedirectToAction("NotFound", "Home");
         }
 
         [HttpPost]
@@ -138,7 +140,7 @@ namespace YourVitebskWebServiceApp.Controllers
             CafeType cafeType = _repository.Get((int)newCafeType.CafeTypeId);
             if (_repository.Get().FirstOrDefault(x => x.Name == newCafeType.Name && cafeType.Name != newCafeType.Name) != null)
             {
-                ModelState.AddModelError("Name", "Такой тип заведения уже существует");
+                ModelState.AddModelError("Name", "Такой вид заведения уже существует");
             }
 
             if (ModelState.IsValid)
@@ -173,7 +175,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return View(cafeType);
             }
 
-            return NotFound();
+            return RedirectToAction("NotFound", "Home");
         }
 
         [HttpPost]

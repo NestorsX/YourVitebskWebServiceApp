@@ -62,7 +62,6 @@ namespace YourVitebskWebServiceApp.Controllers
             var pager = new Pager(count, page, pageSize);
             int skip = (page - 1) * pageSize;
             roles = roles.Skip(skip).Take(pager.PageSize);
-
             var viewModel = new RoleIndexViewModel()
             {
                 Pager = pager,

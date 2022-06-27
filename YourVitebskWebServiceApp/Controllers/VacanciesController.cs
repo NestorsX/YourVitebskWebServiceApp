@@ -70,7 +70,6 @@ namespace YourVitebskWebServiceApp.Controllers
             var pager = new Pager(count, page, pageSize);
             int skip = (page - 1) * pageSize;
             vacancies = vacancies.Skip(skip).Take(pager.PageSize);
-
             var viewModel = new VacancyIndexViewModel()
             {
                 Pager = pager,
@@ -145,7 +144,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return View(vacancy);
             }
 
-            return NotFound();
+            return RedirectToAction("NotFound", "Home");
         }
 
         [HttpPost]
@@ -190,7 +189,8 @@ namespace YourVitebskWebServiceApp.Controllers
             {
                 return View(vacancy);
             }
-            return NotFound();
+
+            return RedirectToAction("NotFound", "Home");
         }
 
         [HttpPost]

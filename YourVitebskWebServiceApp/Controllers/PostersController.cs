@@ -72,7 +72,6 @@ namespace YourVitebskWebServiceApp.Controllers
             var pager = new Pager(count, page, pageSize);
             int skip = (page - 1) * pageSize;
             posters = posters.Skip(skip).Take(pager.PageSize);
-
             var viewModel = new PosterIndexViewModel()
             {
                 Pager = pager,
@@ -152,7 +151,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return View(poster);
             }
 
-            return NotFound();
+            return RedirectToAction("NotFound", "Home");
         }
 
         [HttpPost]
@@ -196,13 +195,14 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Logout", "Account");
             }
 
-            Poster poster = (Poster)_repository.Get(id);
+            Poster poster = _repository.Get(id);
             if (poster != null)
             {
                 ViewBag.PosterType = _posterTypeRepository.Get().First(x => x.PosterTypeId == poster.PosterTypeId).Name;
                 return View(poster);
             }
-            return NotFound();
+
+            return RedirectToAction("NotFound", "Home");
         }
 
         [HttpPost]

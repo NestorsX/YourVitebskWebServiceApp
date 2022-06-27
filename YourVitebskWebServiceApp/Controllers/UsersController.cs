@@ -84,7 +84,6 @@ namespace YourVitebskWebServiceApp.Controllers
             var pager = new Pager(count, page, pageSize);
             int skip = (page - 1) * pageSize;
             users = users.Skip(skip).Take(pager.PageSize);
-
             var viewModel = new UserIndexViewModel()
             {
                 Pager = pager,
@@ -182,7 +181,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return View(user);
             }
 
-            return NotFound();
+            return RedirectToAction("NotFound", "Home");
         }
 
         [HttpPost]
@@ -254,7 +253,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return View(user);
             }
 
-            return NotFound();
+            return RedirectToAction("NotFound", "Home");
         }
 
         [HttpPost]

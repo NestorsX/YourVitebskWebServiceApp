@@ -5,6 +5,6 @@ namespace YourVitebskWebServiceApp.Interfaces
 {
     public interface IHomeRepository : IDisposable
     {
-        HomeIndexViewModel Get(string email);
+        HomeIndexViewModel Get();
     }
 }

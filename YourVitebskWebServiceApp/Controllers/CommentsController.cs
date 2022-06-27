@@ -78,7 +78,6 @@ namespace YourVitebskWebServiceApp.Controllers
             var pager = new Pager(count, page, pageSize);
             int skip = (page - 1) * pageSize;
             comments = comments.Skip(skip).Take(pager.PageSize);
-
             var viewModel = new CommentIndexViewModel()
             {
                 Pager = pager,
@@ -112,7 +111,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return View(comment);
             }
 
-            return NotFound();
+            return RedirectToAction("NotFound", "Home");
         }
 
         [HttpPost]

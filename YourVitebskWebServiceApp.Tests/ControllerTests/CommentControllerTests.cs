@@ -58,7 +58,7 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
         public void Delete_InvalidId_ReturnsNotFoundResult()
         {
             var result = _controller.ConfirmDelete(-1);
-            Assert.IsType<NotFoundResult>(result);
+            Assert.IsType<RedirectToActionResult>(result);
         }
 
         [Fact]

@@ -101,6 +101,11 @@ namespace YourVitebskWebServiceApp.Repositories
         public RoleViewModel GetForView(int id)
         {
             Role role = _context.Roles.FirstOrDefault(x => x.RoleId == id);
+            if (role == null)
+            {
+                return null;
+            }
+
             var permissionList = new List<string>();
             foreach (var permission in _permissionLinks.Where(x => x.RoleId == id))
             {
@@ -120,6 +125,11 @@ namespace YourVitebskWebServiceApp.Repositories
         public RoleDTOViewModel GetForEdit(int id)
         {
             Role role = _context.Roles.FirstOrDefault(x => x.RoleId == id);
+            if (role == null)
+            {
+                return null;
+            }
+
             var result = new RoleDTOViewModel()
             {
                 RoleId = role.RoleId,

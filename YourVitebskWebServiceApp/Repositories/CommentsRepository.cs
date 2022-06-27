@@ -44,6 +44,11 @@ namespace YourVitebskWebServiceApp.Repositories
         public CommentViewModel Get(int id)
         {
             Comment comment = _context.Comments.FirstOrDefault(x => x.CommentId == id);
+            if (comment == null)
+            {
+                return null;
+            }
+
             object service = null;
             string serviceTypeName = null;
             var itemName = "";
@@ -73,14 +78,9 @@ namespace YourVitebskWebServiceApp.Repositories
             };
         }
 
-        public Comment GetComment(int id)
-        {
-            return _context.Comments.FirstOrDefault(x => x.CommentId == id);
-        }
-
         public void Delete(int id)
         {
-            _context.Comments.Remove(GetComment(id));
+            _context.Comments.Remove(_context.Comments.FirstOrDefault(x => x.CommentId == id));
             _context.SaveChanges();
         }
 

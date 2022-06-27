@@ -61,7 +61,6 @@ namespace YourVitebskWebServiceApp.Controllers
             var pager = new Pager(count, page, pageSize);
             int skip = (page - 1) * pageSize;
             news = news.Skip(skip).Take(pager.PageSize);
-
             var viewModel = new NewsIndexViewModel()
             {
                 Pager = pager,
@@ -130,7 +129,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return View(news);
             }
 
-            return NotFound();
+            return RedirectToAction("NotFound", "Home");
         }
 
         [HttpPost]
@@ -171,7 +170,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return View(news);
             }
 
-            return NotFound();
+            return RedirectToAction("NotFound", "Home");
         }
 
         [HttpPost]

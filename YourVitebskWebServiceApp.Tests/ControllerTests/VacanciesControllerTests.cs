@@ -125,7 +125,7 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
         public void Edit_InvalidId_ReturnsNotFoundResult()
         {
             var result = _controller.Edit(-1);
-            Assert.IsType<NotFoundResult>(result);
+            Assert.IsType<RedirectToActionResult>(result);
         }
 
         [Fact]
@@ -161,7 +161,7 @@ namespace YourVitebskWebServiceApp.Tests.ControllerTests
         public void Delete_InvalidId_ReturnsNotFoundResult()
         {
             var result = _controller.ConfirmDelete(-1);
-            Assert.IsType<NotFoundResult>(result);
+            Assert.IsType<RedirectToActionResult>(result);
         }
 
         [Fact]

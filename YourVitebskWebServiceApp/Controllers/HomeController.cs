@@ -9,14 +9,14 @@ namespace YourVitebskWebServiceApp.Controllers
     {
         private readonly IHomeRepository _repository;
 
-        public HomeController(YourVitebskDBContext context, IHomeRepository repository)
+        public HomeController(IHomeRepository repository)
         {
             _repository = repository;
         }
 
         public ActionResult Index()
         {
-            return View(_repository.Get(HttpContext.User.Identity.Name));
+            return View(_repository.Get());
         }
 
         public ActionResult AccessDenied()

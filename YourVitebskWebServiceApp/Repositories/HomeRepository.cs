@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Linq;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
@@ -9,11 +10,13 @@ namespace YourVitebskWebServiceApp.Repositories
     public class HomeRepository : IHomeRepository
     {
         private readonly YourVitebskDBContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private bool _disposed = false;
 
-        public HomeRepository(YourVitebskDBContext context)
+        public HomeRepository(YourVitebskDBContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         private bool HasPermission(int roleId, Helpers.RolePermission permission)
@@ -28,9 +31,9 @@ namespace YourVitebskWebServiceApp.Repositories
             return true;
         }
 
-        public HomeIndexViewModel Get(string email)
+        public HomeIndexViewModel Get()
         {
-            User currentUser = _context.Users.First(x => x.Email == email);
+            User currentUser = _context.Users.First(x => x.Email == _httpContextAccessor.HttpContext.User.Identity.Name);
             Role role = _context.Roles.First(x => x.RoleId == currentUser.RoleId);
             return new HomeIndexViewModel()
             {

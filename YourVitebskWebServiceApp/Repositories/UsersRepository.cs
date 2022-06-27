@@ -57,6 +57,11 @@ namespace YourVitebskWebServiceApp.Repositories
         public UserViewModel Get(int id)
         {
             User user = _context.Users.FirstOrDefault(x => x.UserId == id);
+            if (user == null)
+            {
+                return null;
+            }
+
             var result = new UserViewModel()
             {
                 UserId = (int)user.UserId,
