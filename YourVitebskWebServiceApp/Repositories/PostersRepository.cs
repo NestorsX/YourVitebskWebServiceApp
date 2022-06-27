@@ -10,26 +10,28 @@ using YourVitebskWebServiceApp.ViewModels;
 
 namespace YourVitebskWebServiceApp.Repositories
 {
-    public class PostersRepository : IImageRepository<Poster>
+    public class PostersRepository : IPosterRepository
     {
         private readonly YourVitebskDBContext _context;
         private readonly ImageService _imageService;
         private readonly RolePermissionManager _roleManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private bool _disposed = false;
 
-        public PostersRepository(YourVitebskDBContext context, IWebHostEnvironment appEnvironment)
+        public PostersRepository(YourVitebskDBContext context, IWebHostEnvironment appEnvironment, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _imageService = new ImageService(appEnvironment);
             _roleManager = new RolePermissionManager(_context);
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public bool CheckRolePermission(string userEmail, string permission)
+        public bool CheckRolePermission(string permission)
         {
-            return _roleManager.HasPermission(userEmail, permission);
+            return _roleManager.HasPermission(_httpContextAccessor.HttpContext.User.Identity.Name, permission);
         }
 
-        public IEnumerable<IViewModel> Get()
+        public IEnumerable<PosterViewModel> Get()
         {
             var result = new List<PosterViewModel>();
             IEnumerable<Poster> posters = _context.Posters.ToList();
@@ -51,7 +53,7 @@ namespace YourVitebskWebServiceApp.Repositories
             return result.ToList();
         }
 
-        public IViewModel Get(int id)
+        public Poster Get(int id)
         {
             return _context.Posters.FirstOrDefault(x => x.PosterId == id);
         }
@@ -72,7 +74,7 @@ namespace YourVitebskWebServiceApp.Repositories
 
         public void Delete(int id)
         {
-            _context.Posters.Remove((Poster)Get(id));
+            _context.Posters.Remove(Get(id));
             _context.SaveChanges();
             _imageService.DeleteImages("posters", id);
         }

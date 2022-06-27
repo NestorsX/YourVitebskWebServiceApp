@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
-using YourVitebskWebServiceApp.Models;
+using YourVitebskWebServiceApp.ViewModels;
 
 namespace YourVitebskWebServiceApp.Helpers.Filterers
 {
     public class UserFilterer
     {
-        public UserFilterer(List<Role> roles, int? role, string searchLine)
+        public UserFilterer(List<RoleViewModel> roles, int? role, string searchLine)
         {
-            roles.Insert(0, new Role { RoleId = 0, Name = "Все роли" });
+            roles.Insert(0, new RoleViewModel { RoleId = 0, Name = "Все роли" });
             Roles = new SelectList(roles, "RoleId", "Name", role);
             SelectedRole = role;
             SearchLine = searchLine;

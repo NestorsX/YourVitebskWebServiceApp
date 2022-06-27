@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using YourVitebskWebServiceApp.Helpers.Filterers;
 using YourVitebskWebServiceApp.Helpers.Sorters;
@@ -15,12 +14,10 @@ namespace YourVitebskWebServiceApp.Controllers
     [Authorize]
     public class CafeTypesController : Controller
     {
-        private readonly YourVitebskDBContext _context;
-        private readonly IRepository<CafeType> _repository;
+        private readonly ICafeTypeRepository _repository;
 
-        public CafeTypesController(YourVitebskDBContext context, IRepository<CafeType> repository)
+        public CafeTypesController(ICafeTypeRepository repository)
         {
-            _context = context;
             _repository = repository;
         }
 
@@ -28,7 +25,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.CafesGet)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.CafesGet)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -38,7 +35,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Logout", "Account");
             }
 
-            var cafeTypes = (IEnumerable<CafeType>)_repository.Get();
+            var cafeTypes = _repository.Get();
             if (!string.IsNullOrWhiteSpace(search))
             {
                 cafeTypes = cafeTypes.Where(x => x.CafeTypeId.ToString().Contains(search) ||
@@ -79,7 +76,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.CafesCreate)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.CafesCreate)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -95,7 +92,7 @@ namespace YourVitebskWebServiceApp.Controllers
         [HttpPost]
         public ActionResult Create(CafeType newCafeType)
         {
-            if (_context.CafeTypes.FirstOrDefault(x => x.Name == newCafeType.Name) != null)
+            if (_repository.Get().FirstOrDefault(x => x.Name == newCafeType.Name) != null)
             {
                 ModelState.AddModelError("Name", "Такой тип заведения уже существует");
             }
@@ -119,7 +116,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.CafesUpdate)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.CafesUpdate)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -139,7 +136,7 @@ namespace YourVitebskWebServiceApp.Controllers
         public ActionResult Edit(CafeType newCafeType)
         {
             CafeType cafeType = _repository.Get((int)newCafeType.CafeTypeId);
-            if (_context.CafeTypes.FirstOrDefault(x => x.Name == newCafeType.Name && cafeType.Name != newCafeType.Name) != null)
+            if (_repository.Get().FirstOrDefault(x => x.Name == newCafeType.Name && cafeType.Name != newCafeType.Name) != null)
             {
                 ModelState.AddModelError("Name", "Такой тип заведения уже существует");
             }
@@ -160,7 +157,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.CafesDelete)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.CafesDelete)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }

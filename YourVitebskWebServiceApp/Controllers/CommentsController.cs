@@ -26,7 +26,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.CommentsGet)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.CommentsGet)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -96,7 +96,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.CommentsDelete)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.CommentsDelete)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }

@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using YourVitebskWebServiceApp.Helpers.Filterers;
 using YourVitebskWebServiceApp.Helpers.Sorters;
 using YourVitebskWebServiceApp.Helpers.SortStates;
@@ -17,22 +17,20 @@ namespace YourVitebskWebServiceApp.Controllers
     [Authorize]
     public class UsersController : Controller
     {
-        private readonly YourVitebskDBContext _context;
-        private readonly IImageRepository<UserViewModel> _repository;
-        private readonly AccountController _account;
+        private readonly IUserRepository _repository;
+        private readonly IRoleRepository _roleRepository;
 
-        public UsersController(YourVitebskDBContext context, IImageRepository<UserViewModel> repository)
+        public UsersController(IUserRepository repository, IRoleRepository roleRepository)
         {
-            _context = context;
             _repository = repository;
-            _account = new AccountController(context);
+            _roleRepository = roleRepository;
         }
 
         public ActionResult Index(int? role, string search, UserSortStates sort = UserSortStates.UserIdAsc, int page = 1)
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.UsersGet)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.UsersGet)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -42,8 +40,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Logout", "Account");
             }
 
-            var users = (IEnumerable<UserViewModel>)_repository.Get();
-
+            var users = _repository.Get();
             if (role != null && role != 0)
             {
                 users = users.Where(x => x.RoleId == role);
@@ -92,7 +89,7 @@ namespace YourVitebskWebServiceApp.Controllers
             {
                 Pager = pager,
                 Sorter = new UserSorter(sort),
-                Filterer = new UserFilterer(_context.Roles.ToList(), role, search),
+                Filterer = new UserFilterer(_roleRepository.Get().ToList(), role, search),
                 Data = users.ToList()
             };
 
@@ -103,7 +100,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.UsersCreate)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.UsersCreate)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -113,21 +110,36 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Logout", "Account");
             }
 
-            ViewBag.Roles = _context.Roles;
+            ViewBag.Roles = _roleRepository.Get();
             return View();
         }
 
         [HttpPost]
         public ActionResult Create(UserViewModel newUser, IFormFileCollection uploadedFiles)
         {
-            if (_context.Users.FirstOrDefault(x => x.Email == newUser.Email) != null)
+            if (!Regex.IsMatch(newUser.Email, @"^((\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)\s*)+$"))
+            {
+                ModelState.AddModelError("Email", "Неверный формат email");
+            }
+
+            if (_repository.Get().FirstOrDefault(x => x.Email == newUser.Email) != null)
             {
                 ModelState.AddModelError("Email", "Email уже используется");
             }
 
-            if (!string.IsNullOrEmpty(newUser.PhoneNumber))
+            if (!string.IsNullOrWhiteSpace(newUser.Password) && newUser.Password.Length < 6)
             {
-                if (_context.Users.FirstOrDefault(x => x.PhoneNumber == newUser.PhoneNumber) != null)
+                ModelState.AddModelError("Password", "Пароль должен быть не короче 6 символов");
+            }
+
+            if (!string.IsNullOrWhiteSpace(newUser.PhoneNumber))
+            {
+                if (!Regex.IsMatch(newUser.PhoneNumber, @"^\+375\((33|29|44|25)\)(\d{3})\-(\d{2})\-(\d{2})"))
+                {
+                    ModelState.AddModelError("PhoneNumber", "Неверный номер");
+                }
+
+                if (_repository.Get().FirstOrDefault(x => x.PhoneNumber == newUser.PhoneNumber) != null)
                 {
                     ModelState.AddModelError("PhoneNumber", "Такой номер телефона уже используется");
                 }
@@ -139,7 +151,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Roles = _context.Roles;
+            ViewBag.Roles = _roleRepository.Get();
             return View(newUser);
         }
 
@@ -147,7 +159,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.UsersUpdate)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.UsersUpdate)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -162,11 +174,11 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            UserViewModel user = (UserViewModel)_repository.Get(id);
+            UserViewModel user = _repository.Get(id);
             if (user != null)
             {
                 user.Password = null;
-                ViewBag.Roles = _context.Roles;
+                ViewBag.Roles = _roleRepository.Get();
                 return View(user);
             }
 
@@ -176,17 +188,32 @@ namespace YourVitebskWebServiceApp.Controllers
         [HttpPost]
         public ActionResult Edit(UserViewModel newUser, IFormFileCollection uploadedFiles)
         {
-            UserViewModel currentUser = (UserViewModel)_repository.Get(newUser.UserId);
-            if (_context.Users.FirstOrDefault(x => x.Email == newUser.Email && newUser.Email != currentUser.Email) != null)
+            UserViewModel currentUser = _repository.Get(newUser.UserId);
+            if (!Regex.IsMatch(newUser.Email, @"^((\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)\s*)+$"))
+            {
+                ModelState.AddModelError("Email", "Неверный формат email");
+            }
+
+            if (_repository.Get().FirstOrDefault(x => x.Email == newUser.Email && newUser.Email != currentUser.Email) != null)
             {
                 ModelState.AddModelError("Email", "Email уже используется");
             }
 
+            if (!string.IsNullOrWhiteSpace(newUser.Password) && newUser.Password.Length < 6)
+            {
+                ModelState.AddModelError("Password", "Пароль должен быть не короче 6 символов");
+            }
+
             if (!string.IsNullOrWhiteSpace(newUser.PhoneNumber))
             {
-                if (_context.Users.FirstOrDefault(x => x.PhoneNumber == newUser.PhoneNumber && newUser.PhoneNumber != currentUser.PhoneNumber) != null)
+                if (!Regex.IsMatch(newUser.PhoneNumber, @"^\+375\((33|29|44|25)\)(\d{3})\-(\d{2})\-(\d{2})"))
                 {
-                    ModelState.AddModelError("UserDatum.PhoneNumber", "Такой номер телефона уже используется");
+                    ModelState.AddModelError("PhoneNumber", "Неверный номер");
+                }
+
+                if (_repository.Get().FirstOrDefault(x => x.PhoneNumber == newUser.PhoneNumber && newUser.PhoneNumber != currentUser.PhoneNumber) != null)
+                {
+                    ModelState.AddModelError("PhoneNumber", "Такой номер телефона уже используется");
                 }
             }
 
@@ -196,7 +223,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Roles = _context.Roles;
+            ViewBag.Roles = _roleRepository.Get();
             return View(newUser);
         }
 
@@ -206,7 +233,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.UsersDelete)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.UsersDelete)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -221,7 +248,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            UserViewModel user = (UserViewModel)_repository.Get(id);
+            UserViewModel user = _repository.Get(id);
             if (user != null)
             {
                 return View(user);

@@ -2,14 +2,12 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using YourVitebskWebServiceApp.Helpers.Filterers;
 using YourVitebskWebServiceApp.Helpers.Sorters;
 using YourVitebskWebServiceApp.Helpers.SortStates;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
-using YourVitebskWebServiceApp.ViewModels;
 using YourVitebskWebServiceApp.ViewModels.IndexViewModels;
 
 namespace YourVitebskWebServiceApp.Controllers
@@ -17,20 +15,20 @@ namespace YourVitebskWebServiceApp.Controllers
     [Authorize]
     public class CafesController : Controller
     {
-        private readonly YourVitebskDBContext _context;
-        private readonly IImageRepository<Cafe> _repository;
+        private readonly ICafeRepository _repository;
+        private readonly ICafeTypeRepository _cafeTypesRepository;
 
-        public CafesController(YourVitebskDBContext context, IImageRepository<Cafe> repository)
+        public CafesController(ICafeRepository repository, ICafeTypeRepository cafeTypesRepository)
         {
-            _context = context;
             _repository = repository;
+            _cafeTypesRepository = cafeTypesRepository;
         }
 
         public ActionResult Index(int? cafeType, string search, CafeSortStates sort = CafeSortStates.CafeIdAsc, int page = 1)
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.CafesGet)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.CafesGet)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -40,8 +38,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Logout", "Account");
             }
 
-            var cafes = (IEnumerable<CafeViewModel>)_repository.Get();
-
+            var cafes = _repository.Get();
             if (cafeType != null && cafeType != 0)
             {
                 cafes = cafes.Where(x => x.CafeTypeId == cafeType);
@@ -80,7 +77,7 @@ namespace YourVitebskWebServiceApp.Controllers
             {
                 Pager = pager,
                 Sorter = new CafeSorter(sort),
-                Filterer = new CafeFilterer(_context.CafeTypes.ToList(), cafeType, search),
+                Filterer = new CafeFilterer(_cafeTypesRepository.Get().ToList(), cafeType, search),
                 Data = cafes.ToList()
             };
 
@@ -91,7 +88,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.CafesCreate)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.CafesCreate)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -101,14 +98,14 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Logout", "Account");
             }
 
-            ViewBag.CafeTypes = _context.CafeTypes;
+            ViewBag.CafeTypes = _cafeTypesRepository.Get();
             return View();
         }
 
         [HttpPost]
         public ActionResult Create(Cafe newCafe, IFormFileCollection uploadedFiles)
         {
-            if (_context.Cafes.FirstOrDefault(x => x.Title == newCafe.Title) != null)
+            if (_repository.Get().FirstOrDefault(x => x.Title == newCafe.Title) != null)
             {
                 ModelState.AddModelError("Title", "Заведение с таким именем уже используется");
             }
@@ -130,7 +127,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CafeTypes = _context.CafeTypes;
+            ViewBag.CafeTypes = _cafeTypesRepository.Get();
             return View(newCafe);
         }
 
@@ -138,7 +135,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.CafesUpdate)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.CafesUpdate)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -148,10 +145,10 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Logout", "Account");
             }
 
-            Cafe cafe = (Cafe)_repository.Get(id);
+            Cafe cafe = _repository.Get(id);
             if (cafe != null)
             {
-                ViewBag.CafeTypes = _context.CafeTypes;
+                ViewBag.CafeTypes = _cafeTypesRepository.Get();
                 return View(cafe);
             }
 
@@ -161,8 +158,8 @@ namespace YourVitebskWebServiceApp.Controllers
         [HttpPost]
         public ActionResult Edit(Cafe newCafe, IFormFileCollection uploadedFiles)
         {
-            Cafe cafe = (Cafe)_repository.Get((int)newCafe.CafeId);
-            if (_context.Cafes.FirstOrDefault(x => x.Title == newCafe.Title && newCafe.Title != cafe.Title) != null)
+            Cafe cafe = _repository.Get((int)newCafe.CafeId);
+            if (_repository.Get().FirstOrDefault(x => x.Title == newCafe.Title && newCafe.Title != cafe.Title) != null)
             {
                 ModelState.AddModelError("Title", "Заведение с таким именем уже существует");
             }
@@ -179,7 +176,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CafeTypes = _context.CafeTypes;
+            ViewBag.CafeTypes = _cafeTypesRepository.Get();
             return View(newCafe);
         }
 
@@ -189,7 +186,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.CafesDelete)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.CafesDelete)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -199,10 +196,10 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Logout", "Account");
             }
 
-            Cafe cafe = (Cafe)_repository.Get(id);
+            Cafe cafe = _repository.Get(id);
             if (cafe != null)
             {
-                ViewBag.CafeType = _context.CafeTypes.First(x => x.CafeTypeId == cafe.CafeTypeId).Name;
+                ViewBag.CafeType = _cafeTypesRepository.Get().First(x => x.CafeTypeId == cafe.CafeTypeId).Name;
                 return View(cafe);
             }
 

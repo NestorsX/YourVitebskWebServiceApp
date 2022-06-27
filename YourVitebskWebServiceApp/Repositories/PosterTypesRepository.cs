@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using YourVitebskWebServiceApp.Helpers;
@@ -7,24 +8,26 @@ using YourVitebskWebServiceApp.Models;
 
 namespace YourVitebskWebServiceApp.Repositories
 {
-    public class PosterTypesRepository : IRepository<PosterType>
+    public class PosterTypesRepository : IPosterTypeRepository
     {
         private readonly YourVitebskDBContext _context;
         private readonly RolePermissionManager _roleManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private bool _disposed = false;
 
-        public PosterTypesRepository(YourVitebskDBContext context)
+        public PosterTypesRepository(YourVitebskDBContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _roleManager = new RolePermissionManager(_context);
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public bool CheckRolePermission(string userEmail, string permission)
+        public bool CheckRolePermission(string permission)
         {
-            return _roleManager.HasPermission(userEmail, permission);
+            return _roleManager.HasPermission(_httpContextAccessor.HttpContext.User.Identity.Name, permission);
         }
 
-        public IEnumerable<IViewModel> Get()
+        public IEnumerable<PosterType> Get()
         {
             return _context.PosterTypes.ToList();
         }

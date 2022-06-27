@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using YourVitebskWebServiceApp.Helpers.Filterers;
 using YourVitebskWebServiceApp.Helpers.Sorters;
@@ -15,12 +14,10 @@ namespace YourVitebskWebServiceApp.Controllers
     [Authorize]
     public class VacanciesController : Controller
     {
-        private readonly YourVitebskDBContext _context;
-        private readonly IRepository<Vacancy> _repository;
+        private readonly IVacancyRepository _repository;
 
-        public VacanciesController(YourVitebskDBContext context, IRepository<Vacancy> repository)
+        public VacanciesController(IVacancyRepository repository)
         {
-            _context = context;
             _repository = repository;
         }
 
@@ -28,7 +25,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.VacanciesGet)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.VacanciesGet)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -38,7 +35,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Logout", "Account");
             }
 
-            var vacancies = (IEnumerable<Vacancy>)_repository.Get();
+            var vacancies = _repository.Get();
             if (!string.IsNullOrWhiteSpace(search))
             {
                 vacancies = vacancies.Where(x => x.VacancyId.ToString().Contains(search) ||
@@ -89,7 +86,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.VacanciesCreate)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.VacanciesCreate)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -132,7 +129,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.VacanciesUpdate)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.VacanciesUpdate)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -178,7 +175,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.VacanciesDelete)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.VacanciesDelete)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }

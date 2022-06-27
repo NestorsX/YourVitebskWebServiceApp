@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using YourVitebskWebServiceApp.Interfaces;
 
 namespace YourVitebskWebServiceApp.ViewModels
 {
-    public class PosterViewModel : IViewModel
+    public class PosterViewModel
     {
         [Key]
         public int? PosterId { get; set; }

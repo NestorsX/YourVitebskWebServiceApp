@@ -14,18 +14,20 @@ namespace YourVitebskWebServiceApp.Repositories
         private readonly YourVitebskDBContext _context;
         private readonly ImageService _imageService;
         private readonly RolePermissionManager _roleManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private bool _disposed = false;
 
-        public NewsRepository(YourVitebskDBContext context, IWebHostEnvironment appEnvironment)
+        public NewsRepository(YourVitebskDBContext context, IWebHostEnvironment appEnvironment, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _imageService = new ImageService(appEnvironment);
             _roleManager = new RolePermissionManager(_context);
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public bool CheckRolePermission(string userEmail, string permission)
+        public bool CheckRolePermission(string permission)
         {
-            return _roleManager.HasPermission(userEmail, permission);
+            return _roleManager.HasPermission(_httpContextAccessor.HttpContext.User.Identity.Name, permission);
         }
 
         public IEnumerable<News> Get()

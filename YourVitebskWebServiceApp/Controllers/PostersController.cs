@@ -2,14 +2,12 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using YourVitebskWebServiceApp.Helpers.Filterers;
 using YourVitebskWebServiceApp.Helpers.Sorters;
 using YourVitebskWebServiceApp.Helpers.SortStates;
 using YourVitebskWebServiceApp.Interfaces;
 using YourVitebskWebServiceApp.Models;
-using YourVitebskWebServiceApp.ViewModels;
 using YourVitebskWebServiceApp.ViewModels.IndexViewModels;
 
 namespace YourVitebskWebServiceApp.Controllers
@@ -17,20 +15,20 @@ namespace YourVitebskWebServiceApp.Controllers
     [Authorize]
     public class PostersController : Controller
     {
-        private readonly YourVitebskDBContext _context;
-        private readonly IImageRepository<Poster> _repository;
+        private readonly IPosterRepository _repository;
+        private readonly IPosterTypeRepository _posterTypeRepository;
 
-        public PostersController(YourVitebskDBContext context, IImageRepository<Poster> repository)
+        public PostersController(IPosterRepository repository, IPosterTypeRepository posterTypeRepository)
         {
-            _context = context;
             _repository = repository;
+            _posterTypeRepository = posterTypeRepository;
         }
 
         public ActionResult Index(int? cafeType, string search, PosterSortStates sort = PosterSortStates.PosterIdAsc, int page = 1)
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.PostersGet)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.PostersGet)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -40,7 +38,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Logout", "Account");
             }
 
-            var posters = (IEnumerable<PosterViewModel>)_repository.Get();
+            var posters = _repository.Get();
             if (cafeType != null && cafeType != 0)
             {
                 posters = posters.Where(x => x.PosterTypeId == cafeType);
@@ -79,7 +77,7 @@ namespace YourVitebskWebServiceApp.Controllers
             {
                 Pager = pager,
                 Sorter = new PosterSorter(sort),
-                Filterer = new PosterFilterer(_context.PosterTypes.ToList(), cafeType, search),
+                Filterer = new PosterFilterer(_posterTypeRepository.Get().ToList(), cafeType, search),
                 Data = posters.ToList()
             };
 
@@ -90,7 +88,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.PostersCreate)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.PostersCreate)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -100,14 +98,14 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Logout", "Account");
             }
 
-            ViewBag.PosterTypes = _context.PosterTypes;
+            ViewBag.PosterTypes = _posterTypeRepository.Get();
             return View();
         }
 
         [HttpPost]
         public ActionResult Create(Poster newPoster, IFormFileCollection uploadedFiles)
         {
-            if (_context.Posters.FirstOrDefault(x => x.Title == newPoster.Title) != null)
+            if (_repository.Get().FirstOrDefault(x => x.Title == newPoster.Title) != null)
             {
                 ModelState.AddModelError("Title", "Афиша с таким именем уже используется");
             }
@@ -129,7 +127,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.PosterTypes = _context.PosterTypes;
+            ViewBag.PosterTypes = _posterTypeRepository.Get();
             return View(newPoster);
         }
 
@@ -137,7 +135,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.PostersUpdate)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.PostersUpdate)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -147,10 +145,10 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Logout", "Account");
             }
 
-            Poster poster = (Poster)_repository.Get(id);
+            Poster poster = _repository.Get(id);
             if (poster != null)
             {
-                ViewBag.PosterTypes = _context.PosterTypes;
+                ViewBag.PosterTypes = _posterTypeRepository.Get();
                 return View(poster);
             }
 
@@ -160,8 +158,8 @@ namespace YourVitebskWebServiceApp.Controllers
         [HttpPost]
         public ActionResult Edit(Poster newPoster, IFormFileCollection uploadedFiles)
         {
-            Poster poster = (Poster)_repository.Get((int)newPoster.PosterId);
-            if (_context.Posters.FirstOrDefault(x => x.Title == newPoster.Title && newPoster.Title != poster.Title) != null)
+            Poster poster = _repository.Get((int)newPoster.PosterId);
+            if (_repository.Get().FirstOrDefault(x => x.Title == newPoster.Title && newPoster.Title != poster.Title) != null)
             {
                 ModelState.AddModelError("Title", "Афиша с таким именем уже используется");
             }
@@ -178,7 +176,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.PosterTypes = _context.PosterTypes;
+            ViewBag.PosterTypes = _posterTypeRepository.Get();
             return View(newPoster);
         }
 
@@ -188,7 +186,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.PostersDelete)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.PostersDelete)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -201,7 +199,7 @@ namespace YourVitebskWebServiceApp.Controllers
             Poster poster = (Poster)_repository.Get(id);
             if (poster != null)
             {
-                ViewBag.PosterType = _context.PosterTypes.First(x => x.PosterTypeId == poster.PosterTypeId).Name;
+                ViewBag.PosterType = _posterTypeRepository.Get().First(x => x.PosterTypeId == poster.PosterTypeId).Name;
                 return View(poster);
             }
             return NotFound();

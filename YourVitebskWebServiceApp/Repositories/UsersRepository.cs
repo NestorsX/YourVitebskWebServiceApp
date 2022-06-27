@@ -11,26 +11,28 @@ using YourVitebskWebServiceApp.ViewModels;
 
 namespace YourVitebskWebServiceApp.Repositories
 {
-    public class UsersRepository : IImageRepository<UserViewModel>
+    public class UsersRepository : IUserRepository
     {
         private readonly YourVitebskDBContext _context;
         private readonly ImageService _imageService;
         private readonly RolePermissionManager _roleManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private bool _disposed = false;
 
-        public UsersRepository(YourVitebskDBContext context, IWebHostEnvironment appEnvironment)
+        public UsersRepository(YourVitebskDBContext context, IWebHostEnvironment appEnvironment, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _imageService = new ImageService(appEnvironment);
             _roleManager = new RolePermissionManager(_context);
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public bool CheckRolePermission(string userEmail, string permission)
+        public bool CheckRolePermission(string permission)
         {
-            return _roleManager.HasPermission(userEmail, permission);
+            return _roleManager.HasPermission(_httpContextAccessor.HttpContext.User.Identity.Name, permission);
         }
 
-        public IEnumerable<IViewModel> Get()
+        public IEnumerable<UserViewModel> Get()
         {
             IEnumerable<UserViewModel> result = new List<UserViewModel>();
             IEnumerable<User> users = _context.Users.ToList().OrderBy(x => x.UserId);
@@ -52,7 +54,7 @@ namespace YourVitebskWebServiceApp.Repositories
             return result;
         }
 
-        public IViewModel Get(int id)
+        public UserViewModel Get(int id)
         {
             User user = _context.Users.FirstOrDefault(x => x.UserId == id);
             var result = new UserViewModel()

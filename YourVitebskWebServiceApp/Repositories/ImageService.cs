@@ -6,7 +6,7 @@ namespace YourVitebskWebServiceApp.Repositories
 {
     public class ImageService
     {
-        IWebHostEnvironment _appEnvironment;
+        private readonly IWebHostEnvironment _appEnvironment;
 
         public ImageService(IWebHostEnvironment appEnvironment)
         {

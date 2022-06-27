@@ -2,6 +2,6 @@
 {
     public interface IPermissionChecker
     {
-        bool CheckRolePermission(string userEmail, string permission);
+        bool CheckRolePermission(string permission);
     }
 }

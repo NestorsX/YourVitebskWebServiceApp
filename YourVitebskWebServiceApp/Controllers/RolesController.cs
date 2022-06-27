@@ -15,12 +15,10 @@ namespace YourVitebskWebServiceApp.Controllers
     [Authorize]
     public class RolesController : Controller
     {
-        private readonly YourVitebskDBContext _context;
         private readonly IRoleRepository _repository;
 
-        public RolesController(YourVitebskDBContext context, IRoleRepository repository)
+        public RolesController(IRoleRepository repository)
         {
-            _context = context;
             _repository = repository;
         }
 
@@ -28,7 +26,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.RolesGet)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.RolesGet)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -80,7 +78,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.RolesCreate)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.RolesCreate)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -96,7 +94,7 @@ namespace YourVitebskWebServiceApp.Controllers
         [HttpPost]
         public ActionResult Create(RoleDTOViewModel newRole)
         {
-            if (_context.Roles.FirstOrDefault(x => x.Name == newRole.Name) != null)
+            if (_repository.Get().FirstOrDefault(x => x.Name == newRole.Name) != null)
             {
                 ModelState.AddModelError("Name", "Такая роль уже существует");
             }
@@ -114,7 +112,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.RolesUpdate)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.RolesUpdate)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -141,8 +139,8 @@ namespace YourVitebskWebServiceApp.Controllers
         [HttpPost]
         public ActionResult Edit(RoleDTOViewModel newRole)
         {
-            Role role = _context.Roles.First(x => x.RoleId == newRole.RoleId);
-            if (_context.Roles.FirstOrDefault(x => x.Name == newRole.Name && role.Name != newRole.Name) != null)
+            RoleViewModel role = _repository.Get().First(x => x.RoleId == newRole.RoleId);
+            if (_repository.Get().FirstOrDefault(x => x.Name == newRole.Name && role.Name != newRole.Name) != null)
             {
                 ModelState.AddModelError("Name", "Такая роль уже существует");
             }
@@ -162,7 +160,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.RolesDelete)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.RolesDelete)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }

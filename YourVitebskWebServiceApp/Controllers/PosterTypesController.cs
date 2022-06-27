@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using YourVitebskWebServiceApp.Helpers.Filterers;
 using YourVitebskWebServiceApp.Helpers.Sorters;
@@ -15,12 +14,10 @@ namespace YourVitebskWebServiceApp.Controllers
     [Authorize]
     public class PosterTypesController : Controller
     {
-        private readonly YourVitebskDBContext _context;
-        private readonly IRepository<PosterType> _repository;
+        private readonly IPosterTypeRepository _repository;
 
-        public PosterTypesController(YourVitebskDBContext context, IRepository<PosterType> repository)
+        public PosterTypesController(IPosterTypeRepository repository)
         {
-            _context = context;
             _repository = repository;
         }
 
@@ -28,7 +25,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.PostersGet)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.PostersGet)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -38,7 +35,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Logout", "Account");
             }
 
-            var posterTypes = (IEnumerable<PosterType>)_repository.Get();
+            var posterTypes = _repository.Get();
             if (!string.IsNullOrWhiteSpace(search))
             {
                 posterTypes = posterTypes.Where(x => x.PosterTypeId.ToString().Contains(search) || x.Name.ToLower().Contains(search.ToLower()));
@@ -78,7 +75,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.PostersCreate)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.PostersCreate)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -94,7 +91,7 @@ namespace YourVitebskWebServiceApp.Controllers
         [HttpPost]
         public ActionResult Create(PosterType newPosterType)
         {
-            if (_context.PosterTypes.FirstOrDefault(x => x.Name == newPosterType.Name) != null)
+            if (_repository.Get().FirstOrDefault(x => x.Name == newPosterType.Name) != null)
             {
                 ModelState.AddModelError("Name", "Такой тип искусства уже существует");
             }
@@ -118,7 +115,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.PostersUpdate)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.PostersUpdate)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -138,7 +135,7 @@ namespace YourVitebskWebServiceApp.Controllers
         public ActionResult Edit(PosterType newPosterType)
         {
             PosterType posterType = _repository.Get((int)newPosterType.PosterTypeId);
-            if (_context.PosterTypes.FirstOrDefault(x => x.Name == newPosterType.Name && posterType.Name != newPosterType.Name) != null)
+            if (_repository.Get().FirstOrDefault(x => x.Name == newPosterType.Name && posterType.Name != newPosterType.Name) != null)
             {
                 ModelState.AddModelError("Name", "Такой тип искусства уже существует");
             }
@@ -159,7 +156,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.PostersDelete)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.PostersDelete)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }

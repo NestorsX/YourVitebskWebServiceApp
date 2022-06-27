@@ -27,7 +27,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.NewsGet)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.NewsGet)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -77,7 +77,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.NewsCreate)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.NewsCreate)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -114,7 +114,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.NewsUpdate)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.NewsUpdate)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -124,7 +124,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Logout", "Account");
             }
 
-            News news = (News)_repository.Get(id);
+            News news = _repository.Get(id);
             if (news != null)
             {
                 return View(news);
@@ -136,7 +136,7 @@ namespace YourVitebskWebServiceApp.Controllers
         [HttpPost]
         public ActionResult Edit(News newNews, IFormFileCollection uploadedFiles)
         {
-            News news = (News)_repository.Get((int)newNews.NewsId);
+            News news = _repository.Get((int)newNews.NewsId);
             if (ModelState.IsValid)
             {
                 news.Title = newNews.Title;
@@ -155,7 +155,7 @@ namespace YourVitebskWebServiceApp.Controllers
         {
             try
             {
-                if (!_repository.CheckRolePermission(HttpContext.User.Identity.Name, nameof(Helpers.RolePermission.NewsDelete)))
+                if (!_repository.CheckRolePermission(nameof(Helpers.RolePermission.NewsDelete)))
                 {
                     return RedirectToAction("AccessDenied", "Home");
                 }
@@ -165,7 +165,7 @@ namespace YourVitebskWebServiceApp.Controllers
                 return RedirectToAction("Logout", "Account");
             }
 
-            News news = (News)_repository.Get(id);
+            News news = _repository.Get(id);
             if (news != null)
             {
                 return View(news);

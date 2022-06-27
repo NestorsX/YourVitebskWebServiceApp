@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using YourVitebskWebServiceApp.Interfaces;
@@ -11,14 +12,16 @@ namespace YourVitebskWebServiceApp.Repositories
     {
         private readonly YourVitebskDBContext _context;
         private readonly Helpers.RolePermissionManager _roleManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private bool _disposed = false;
         private readonly List<RolePermissionLink> _permissionLinks;
         private readonly List<RolePermission> _permissions;
 
-        public RolesRepository(YourVitebskDBContext context)
+        public RolesRepository(YourVitebskDBContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _roleManager = new Helpers.RolePermissionManager(_context);
+            _httpContextAccessor = httpContextAccessor;
             _permissionLinks = _context.RolePermissionLinks.ToList();
             _permissions = _context.RolePermissions.ToList();
         }
@@ -78,9 +81,9 @@ namespace YourVitebskWebServiceApp.Repositories
             _context.SaveChanges();
         }
 
-        public bool CheckRolePermission(string userEmail, string permission)
+        public bool CheckRolePermission(string permission)
         {
-            return _roleManager.HasPermission(userEmail, permission);
+            return _roleManager.HasPermission(_httpContextAccessor.HttpContext.User.Identity.Name, permission);
         }
 
         public IEnumerable<RoleViewModel> Get()

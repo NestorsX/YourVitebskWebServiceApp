@@ -1,8 +1,6 @@
-﻿using YourVitebskWebServiceApp.Interfaces;
-
-namespace YourVitebskWebServiceApp.ViewModels
+﻿namespace YourVitebskWebServiceApp.ViewModels
 {
-    public class RoleDTOViewModel : IViewModel
+    public class RoleDTOViewModel
     {
         public int? RoleId { get; set; }
         public string Name { get; set; }

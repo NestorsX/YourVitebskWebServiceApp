@@ -12,9 +12,7 @@ using System.Text;
 using YourVitebskWebServiceApp.APIServiceInterfaces;
 using YourVitebskWebServiceApp.APIServices;
 using YourVitebskWebServiceApp.Interfaces;
-using YourVitebskWebServiceApp.Models;
 using YourVitebskWebServiceApp.Repositories;
-using YourVitebskWebServiceApp.ViewModels;
 
 namespace YourVitebskWebServiceApp
 {
@@ -38,14 +36,14 @@ namespace YourVitebskWebServiceApp
             services.AddScoped<ICommentService, CommentsService>();
 
             services.AddScoped<IHomeRepository, HomeRepository>();
-            services.AddScoped<IImageRepository<UserViewModel>, UsersRepository>();
+            services.AddScoped<IUserRepository, UsersRepository>();
             services.AddScoped<IRoleRepository, RolesRepository>();
             services.AddScoped<INewsRepository, NewsRepository>();
-            services.AddScoped<IImageRepository<Poster>, PostersRepository>();
-            services.AddScoped<IRepository<PosterType>, PosterTypesRepository>();
-            services.AddScoped<IImageRepository<Cafe>, CafesRepository>();
-            services.AddScoped<IRepository<CafeType>, CafeTypesRepository>();
-            services.AddScoped<IRepository<Vacancy>, VacanciesRepository>();
+            services.AddScoped<IPosterRepository, PostersRepository>();
+            services.AddScoped<IPosterTypeRepository, PosterTypesRepository>();
+            services.AddScoped<ICafeRepository, CafesRepository>();
+            services.AddScoped<ICafeTypeRepository, CafeTypesRepository>();
+            services.AddScoped<IVacancyRepository, VacanciesRepository>();
             services.AddScoped<ICommentRepository, CommentsRepository>();
             services.AddDbContext<YourVitebskDBContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -65,6 +63,7 @@ namespace YourVitebskWebServiceApp
                 });
 
             services.AddControllersWithViews();
+            services.AddHttpContextAccessor();
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "YourVitebskWebServiceApp", Version = "v1" });

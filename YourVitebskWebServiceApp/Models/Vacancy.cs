@@ -1,10 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using YourVitebskWebServiceApp.Interfaces;
 
 namespace YourVitebskWebServiceApp.Models
 {
-    public class Vacancy : IViewModel
+    public class Vacancy
     {
         [Key]
         public int? VacancyId { get; set; }

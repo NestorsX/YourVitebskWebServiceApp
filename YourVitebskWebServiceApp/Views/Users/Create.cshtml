@@ -28,7 +28,7 @@
             <label asp-for="RoleId" class="form-label">Роль<i>*</i></label>
             <select asp-for="RoleId" class="form-control form-control-sm" required >
                 <option value="">Выберите роль</option>
-                @foreach (YourVitebskWebServiceApp.Models.Role role in ViewBag.Roles)
+                @foreach (var role in ViewBag.Roles)
                 {
                     <option value="@role.RoleId">@role.Name</option>
                 }
@@ -49,7 +49,8 @@
         </div>
         <div class="mb-3">
             <label asp-for="PhoneNumber" class="form-label">Телефон</label>
-            <input type="text" asp-for="PhoneNumber" class="form-control form-control-sm" placeholder="+375(__)___-__-__" id="Phone" />
+            <input type="text" asp-for="PhoneNumber" class="form-control form-control-sm" aria-describedby="phoneNumberNotify" placeholder="+375(__)___-__-__" id="Phone" />
+            <div id="phoneNumberNotify" class="form-text">Коды операторов: 25, 29, 33, 44</div>
             <span class="badge bg-danger" asp-validation-for="PhoneNumber"></span>
         </div>
         <div class="mb-3">
