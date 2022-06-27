@@ -23,10 +23,10 @@ namespace YourVitebskWebServiceApp.APIControllers
         [HttpPost("register")]
         public async Task<ActionResult<ResponseModel>> Register(UserRegisterDTO user)
         {
-            if (string.IsNullOrEmpty(user.Email) 
-                || string.IsNullOrEmpty(user.Password) 
-                || string.IsNullOrEmpty(user.FirstName) 
-                || string.IsNullOrEmpty(user.LastName))
+            if (string.IsNullOrWhiteSpace(user.Email) 
+                || string.IsNullOrWhiteSpace(user.Password) 
+                || string.IsNullOrWhiteSpace(user.FirstName) 
+                || string.IsNullOrWhiteSpace(user.LastName))
             {
                 return BadRequest(ResponseModel.CreateResponseWithError("Заполните все обязательные поля"));
             }
@@ -46,12 +46,12 @@ namespace YourVitebskWebServiceApp.APIControllers
         [HttpPost("login")]
         public async Task<ActionResult<ResponseModel>> Login(UserLoginDTO user)
         {
-            if (string.IsNullOrEmpty(user.Email))
+            if (string.IsNullOrWhiteSpace(user.Email))
             {
                 return BadRequest(ResponseModel.CreateResponseWithError("Введите email"));
             }
 
-            if (string.IsNullOrEmpty(user.Password))
+            if (string.IsNullOrWhiteSpace(user.Password))
             {
                 return BadRequest(ResponseModel.CreateResponseWithError("Введите пароль"));
             }
@@ -87,19 +87,19 @@ namespace YourVitebskWebServiceApp.APIControllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<ResponseModel>> Update(User user)
         {
-            if (string.IsNullOrEmpty(user.Email))
+            if (string.IsNullOrWhiteSpace(user.Email))
             {
                 return BadRequest(ResponseModel.CreateResponseWithError("Введите email"));
             }
 
-            if (string.IsNullOrEmpty(user.FirstName))
+            if (string.IsNullOrWhiteSpace(user.FirstName))
             {
                 return BadRequest(ResponseModel.CreateResponseWithError("Введите имя"));
             }
 
-            if (string.IsNullOrEmpty(user.LastName))
+            if (string.IsNullOrWhiteSpace(user.LastName))
             {
-                return BadRequest(ResponseModel.CreateResponseWithError("Введите фамилия"));
+                return BadRequest(ResponseModel.CreateResponseWithError("Введите фамилию"));
             }
 
             try
