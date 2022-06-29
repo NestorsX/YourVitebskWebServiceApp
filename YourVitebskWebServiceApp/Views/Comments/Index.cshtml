@@ -24,33 +24,33 @@
             <th><a asp-action="Index" 
                  asp-route-sort="@Model.Sorter.IdSort"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedService">ID</a>
+                 asp-route-service="@Model.Filterer.SelectedService">ID</a>
             </th>
             <th><a asp-action="Index" 
                  asp-route-sort="@Model.Sorter.UserSort"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedService">Пользователь</a>
+                 asp-route-service="@Model.Filterer.SelectedService">Пользователь</a>
             </th>
             <th><a asp-action="Index" 
                  asp-route-sort="@Model.Sorter.ServiceSort"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedService">Сервис</a>
+                 asp-route-service="@Model.Filterer.SelectedService">Сервис</a>
             </th>
             <th><a asp-action="Index" 
                  asp-route-sort="@Model.Sorter.ItemSort"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedService">Объект</a>
+                 asp-route-service="@Model.Filterer.SelectedService">Объект</a>
             </th>
             <th>Комментарий</th>
             <th><a asp-action="Index" 
                  asp-route-sort="@Model.Sorter.IsRecommendSort"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedService">Рекомендует</a>
+                 asp-route-service="@Model.Filterer.SelectedService">Рекомендует</a>
             </th>
             <th><a asp-action="Index" 
                  asp-route-sort="@Model.Sorter.DateSort"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedService">Дата</a>
+                 asp-route-service="@Model.Filterer.SelectedService">Дата</a>
             </th>
             <th></th>
         </tr>
@@ -68,7 +68,7 @@
                 <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.IsRecommend">@item.IsRecommend</td>
                 <td data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-content="@item.PublishDate">@item.PublishDate</td>
                 <td>
-                    <div class="btn-group float-end" role="group">
+                    <div class="btn-group float-end" service="group">
                         <a class="btn btn-outline-danger" asp-controller="Comments" asp-action="Delete" asp-route-id="@item.CommentId">Удалить</a>
                     </div>
                 </td>
@@ -86,14 +86,14 @@
                  asp-route-page="@(Model.Pager.CurrentPage - 1)"
                  asp-route-sort="@Model.Sorter.Current"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedService">&lt;</a>
+                 asp-route-service="@Model.Filterer.SelectedService">&lt;</a>
             </li>
             <li class="page-item">
                 <a class="page-link" asp-action="Index" 
                  asp-route-page="@(Model.Pager.StartPage)"
                  asp-route-sort="@Model.Sorter.Current"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedService">@(Model.Pager.StartPage)</a>
+                 asp-route-service="@Model.Filterer.SelectedService">@(Model.Pager.StartPage)</a>
             </li>
             <li class="page-item">
                 ...
@@ -103,7 +103,7 @@
                  asp-route-page="@(Model.Pager.CurrentPage - 1)"
                  asp-route-sort="@Model.Sorter.Current"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedService">@(Model.Pager.CurrentPage - 1)</a>
+                 asp-route-service="@Model.Filterer.SelectedService">@(Model.Pager.CurrentPage - 1)</a>
             </li>
         }
         else if (Model.Pager.CurrentPage - 1 == Model.Pager.StartPage)
@@ -113,14 +113,14 @@
                  asp-route-page="@(Model.Pager.CurrentPage - 1)"
                  asp-route-sort="@Model.Sorter.Current"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedService">&lt;</a>
+                 asp-route-service="@Model.Filterer.SelectedService">&lt;</a>
             </li>
             <li class="page-item">
                 <a class="page-link" asp-action="Index" 
                  asp-route-page="@(Model.Pager.CurrentPage - 1)"
                  asp-route-sort="@Model.Sorter.Current"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedService">@(Model.Pager.CurrentPage - 1)</a>
+                 asp-route-service="@Model.Filterer.SelectedService">@(Model.Pager.CurrentPage - 1)</a>
             </li>
         }
 
@@ -129,7 +129,7 @@
              asp-route-page="@Model.Pager.CurrentPage"
              asp-route-sort="@Model.Sorter.Current"
              asp-route-search="@Model.Filterer.SearchLine"
-             asp-route-role="@Model.Filterer.SelectedService">@Model.Pager.CurrentPage</a>
+             asp-route-service="@Model.Filterer.SelectedService">@Model.Pager.CurrentPage</a>
         </li>
 
         @if (Model.Pager.CurrentPage + 1 == Model.Pager.EndPage)
@@ -139,14 +139,14 @@
                  asp-route-page="@(Model.Pager.CurrentPage + 1)"
                  asp-route-sort="@Model.Sorter.Current"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedService">@(Model.Pager.CurrentPage + 1)</a>
+                 asp-route-service="@Model.Filterer.SelectedService">@(Model.Pager.CurrentPage + 1)</a>
             </li>
             <li class="page-item">
                 <a class="page-link" asp-action="Index" 
                  asp-route-page="@(Model.Pager.CurrentPage + 1)"
                  asp-route-sort="@Model.Sorter.Current"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedService">&gt;</a>
+                 asp-route-service="@Model.Filterer.SelectedService">&gt;</a>
             </li>
         }
         else if (Model.Pager.CurrentPage + 1 < Model.Pager.EndPage)
@@ -156,7 +156,7 @@
                  asp-route-page="@(Model.Pager.CurrentPage + 1)"
                  asp-route-sort="@Model.Sorter.Current"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedService">@(Model.Pager.CurrentPage + 1)</a>
+                 asp-route-service="@Model.Filterer.SelectedService">@(Model.Pager.CurrentPage + 1)</a>
             </li>
             <li class="page-item">
                 ...
@@ -166,14 +166,14 @@
                  asp-route-page="@(Model.Pager.EndPage)"
                  asp-route-sort="@Model.Sorter.Current"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedService">@(Model.Pager.EndPage)</a>
+                 asp-route-service="@Model.Filterer.SelectedService">@(Model.Pager.EndPage)</a>
             </li>
             <li class="page-item">
                 <a class="page-link" asp-action="Index" 
                  asp-route-page="@(Model.Pager.CurrentPage + 1)"
                  asp-route-sort="@Model.Sorter.Current"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedService">&gt;</a>
+                 asp-route-service="@Model.Filterer.SelectedService">&gt;</a>
             </li>
         }
     </ul>

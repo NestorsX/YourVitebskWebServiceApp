@@ -24,16 +24,16 @@
             <th><a asp-action="Index" 
                  asp-route-sort="@Model.Sorter.IdSort"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedCafeType">ID</a>
+                 asp-route-cafeType="@Model.Filterer.SelectedCafeType">ID</a>
             </th>
             <th><a asp-action="Index" 
                  asp-route-sort="@Model.Sorter.CafeTypeSort"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedCafeType">Вид заведения</a></th>
+                 asp-route-cafeType="@Model.Filterer.SelectedCafeType">Вид заведения</a></th>
             <th><a asp-action="Index" 
                  asp-route-sort="@Model.Sorter.TitleSort"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedCafeType">Название</a></th>
+                 asp-route-cafeType="@Model.Filterer.SelectedCafeType">Название</a></th>
             <th>Описание</th>
             <th>Время работы</th>
             <th>Адрес</th>
@@ -58,7 +58,7 @@
                     <span class="d-inline-block text-truncate" style="max-width: 300px;"><a href="@item.ExternalLink">@item.ExternalLink</a></span>
                 </td>
                 <td>
-                    <div class="btn-group float-end" role="group">
+                    <div class="btn-group float-end" cafeType="group">
                         <a class="btn btn-outline-dark" asp-controller="Cafes" asp-action="Edit" asp-route-id="@item.CafeId">Изменить</a>
                         <a class="btn btn-outline-danger" asp-controller="Cafes" asp-action="Delete" asp-route-id="@item.CafeId">Удалить</a>
                     </div>
@@ -77,14 +77,14 @@
                  asp-route-page="@(Model.Pager.CurrentPage - 1)"
                  asp-route-sort="@Model.Sorter.Current"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedCafeType">&lt;</a>
+                 asp-route-cafeType="@Model.Filterer.SelectedCafeType">&lt;</a>
             </li>
             <li class="page-item">
                 <a class="page-link" asp-action="Index" 
                  asp-route-page="@(Model.Pager.StartPage)"
                  asp-route-sort="@Model.Sorter.Current"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedCafeType">@(Model.Pager.StartPage)</a>
+                 asp-route-cafeType="@Model.Filterer.SelectedCafeType">@(Model.Pager.StartPage)</a>
             </li>
             <li class="page-item">
                 ...
@@ -94,7 +94,7 @@
                  asp-route-page="@(Model.Pager.CurrentPage - 1)"
                  asp-route-sort="@Model.Sorter.Current"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedCafeType">@(Model.Pager.CurrentPage - 1)</a>
+                 asp-route-cafeType="@Model.Filterer.SelectedCafeType">@(Model.Pager.CurrentPage - 1)</a>
             </li>
         }
         else if (Model.Pager.CurrentPage - 1 == Model.Pager.StartPage)
@@ -104,14 +104,14 @@
                  asp-route-page="@(Model.Pager.CurrentPage - 1)"
                  asp-route-sort="@Model.Sorter.Current"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedCafeType">&lt;</a>
+                 asp-route-cafeType="@Model.Filterer.SelectedCafeType">&lt;</a>
             </li>
             <li class="page-item">
                 <a class="page-link" asp-action="Index" 
                  asp-route-page="@(Model.Pager.CurrentPage - 1)"
                  asp-route-sort="@Model.Sorter.Current"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedCafeType">@(Model.Pager.CurrentPage - 1)</a>
+                 asp-route-cafeType="@Model.Filterer.SelectedCafeType">@(Model.Pager.CurrentPage - 1)</a>
             </li>
         }
 
@@ -120,7 +120,7 @@
              asp-route-page="@Model.Pager.CurrentPage"
              asp-route-sort="@Model.Sorter.Current"
              asp-route-search="@Model.Filterer.SearchLine"
-             asp-route-role="@Model.Filterer.SelectedCafeType">@Model.Pager.CurrentPage</a>
+             asp-route-cafeType="@Model.Filterer.SelectedCafeType">@Model.Pager.CurrentPage</a>
         </li>
 
         @if (Model.Pager.CurrentPage + 1 == Model.Pager.EndPage)
@@ -130,14 +130,14 @@
                  asp-route-page="@(Model.Pager.CurrentPage + 1)"
                  asp-route-sort="@Model.Sorter.Current"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedCafeType">@(Model.Pager.CurrentPage + 1)</a>
+                 asp-route-cafeType="@Model.Filterer.SelectedCafeType">@(Model.Pager.CurrentPage + 1)</a>
             </li>
             <li class="page-item">
                 <a class="page-link" asp-action="Index" 
                  asp-route-page="@(Model.Pager.CurrentPage + 1)"
                  asp-route-sort="@Model.Sorter.Current"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedCafeType">&gt;</a>
+                 asp-route-cafeType="@Model.Filterer.SelectedCafeType">&gt;</a>
             </li>
         }
         else if (Model.Pager.CurrentPage + 1 < Model.Pager.EndPage)
@@ -147,7 +147,7 @@
                  asp-route-page="@(Model.Pager.CurrentPage + 1)"
                  asp-route-sort="@Model.Sorter.Current"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedCafeType">@(Model.Pager.CurrentPage + 1)</a>
+                 asp-route-cafeType="@Model.Filterer.SelectedCafeType">@(Model.Pager.CurrentPage + 1)</a>
             </li>
             <li class="page-item">
                 ...
@@ -157,14 +157,14 @@
                  asp-route-page="@(Model.Pager.EndPage)"
                  asp-route-sort="@Model.Sorter.Current"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedCafeType">@(Model.Pager.EndPage)</a>
+                 asp-route-cafeType="@Model.Filterer.SelectedCafeType">@(Model.Pager.EndPage)</a>
             </li>
             <li class="page-item">
                 <a class="page-link" asp-action="Index" 
                  asp-route-page="@(Model.Pager.CurrentPage + 1)"
                  asp-route-sort="@Model.Sorter.Current"
                  asp-route-search="@Model.Filterer.SearchLine"
-                 asp-route-role="@Model.Filterer.SelectedCafeType">&gt;</a>
+                 asp-route-cafeType="@Model.Filterer.SelectedCafeType">&gt;</a>
             </li>
         }
     </ul>
