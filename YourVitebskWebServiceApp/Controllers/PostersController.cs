@@ -24,7 +24,7 @@ namespace YourVitebskWebServiceApp.Controllers
             _posterTypeRepository = posterTypeRepository;
         }
 
-        public ActionResult Index(int? cafeType, string search, PosterSortStates sort = PosterSortStates.PosterIdAsc, int page = 1)
+        public ActionResult Index(int? posterType, string search, PosterSortStates sort = PosterSortStates.PosterIdAsc, int page = 1)
         {
             try
             {
@@ -39,9 +39,9 @@ namespace YourVitebskWebServiceApp.Controllers
             }
 
             var posters = _repository.Get();
-            if (cafeType != null && cafeType != 0)
+            if (posterType != null && posterType != 0)
             {
-                posters = posters.Where(x => x.PosterTypeId == cafeType);
+                posters = posters.Where(x => x.PosterTypeId == posterType);
             }
 
             if (!string.IsNullOrWhiteSpace(search))
@@ -76,7 +76,7 @@ namespace YourVitebskWebServiceApp.Controllers
             {
                 Pager = pager,
                 Sorter = new PosterSorter(sort),
-                Filterer = new PosterFilterer(_posterTypeRepository.Get().ToList(), cafeType, search),
+                Filterer = new PosterFilterer(_posterTypeRepository.Get().ToList(), posterType, search),
                 Data = posters.ToList()
             };
 
